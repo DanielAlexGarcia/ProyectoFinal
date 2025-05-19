@@ -2,17 +2,22 @@ package Vista;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.PopupMenu;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.beans.PropertyVetoException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.*;
+import javax.swing.text.MaskFormatter;
 
 import ConexionBD.ConexionBD;
 
@@ -34,39 +39,44 @@ class GUI extends JFrame implements ActionListener{
 	JInternalFrame InicioSecion;
 	JInternalFrame Donadores;
 	JPanel añadi, modi, consultOP, consultAll, elimi;
-	JTextField colonia, calle, numExt, numInt, telefono, email;
-	JTextField ID, PhoneNum;
+	JTextField colonia, calle, numExt, numInt, email;
+	JTextField ID;
+	JFormattedTextField telefono;
 	JComboBox RelacionUni, tipoDonador, clase, progDona;
-	JTextField colonia2, calle2, numExt2, numInt2, telefono2, email2;
-	JTextField ID2, PhoneNum2;
+	JTextField colonia2, calle2, numExt2, numInt2, email2;
+	JTextField ID2;
+	JFormattedTextField telefono2;
 	JComboBox RelacionUni2, tipoDonador2, clase2, progDona2;
-	JTextField colonia3, calle3, numExt3, numInt3, telefono3, email3;
-	JTextField ID3, PhoneNum3;
+	JTextField colonia3, calle3, numExt3, numInt3, email3;
+	JTextField ID3;
+	JFormattedTextField telefono3;
 	JComboBox RelacionUni3, tipoDonador3, clase3, progDona3;
-	JTextField colonia4, calle4, numExt4, numInt4, telefono4, email4;
-	JTextField ID4, PhoneNum4;
+	JTextField colonia4, calle4, numExt4, numInt4, email4;
+	JTextField ID4;
+	JFormattedTextField telefono4;
 	JComboBox RelacionUni4, tipoDonador4, clase4, progDona4;
 	List<JComponent> ordenTabulacion1 = new ArrayList<>();
 	JPanel opcionesPaneles = new JPanel(new CardLayout());
 	
-	String[][] RelacionesUni = {{"Facultad de Ingenieria ", "1"},
+	String[][] RelacionesUni = {{"Selecciona","0"},
+			{"Facultad de Ingenieria ", "1"},
 			{"Facultad de Ciencias Sociales ","2"},
 			{"Personal Administrativo ","3"},
 			{"Egresado Posgrado ", "4"},
 			{"Amigo de la Universidad ", "5"}};
-	String[][] tiposDonadores = {
+	String[][] tiposDonadores = {{"Selecciona","0"},
 		    {"Exalumno", "1"},
 		    {"Empresa", "2"},
 		    {"Fundacion", "3"},
 		    {"Empleado", "4"},
 		    {"Publico General", "5"}};
-	String[][] clases = {
+	String[][] clases = {{"Selecciona","0"},
 		    {"2020 - 2024", "11"},
 		    {"2021 - 2025", "12"},
 		    {"2022 - 2026", "13"},
 		    {"2019 - 2023", "14"},
 		    {"2023 - 2027", "15"}};
-	String[][] programasDonacion = {
+	String[][] programasDonacion = {{"Selecciona","0"},
 		    {"Programa General de Apoyo", "1"},
 		    {"Becas para Estudiantes", "2"},
 		    {"Fondo de Investigacion", "3"},
@@ -207,16 +217,94 @@ class GUI extends JFrame implements ActionListener{
         	ordenTabulacion1.add(numInt);
         	agregarComponente(Donadores, numInt, 1, 6, 1, 1);
         	
-        	agregarComponente(Donadores, new JLabel("Telefono de contacto"), 0, 7, 1, 1);
-        	telefono = new JTextField(10);
+        	agregarComponente(Donadores, new JLabel("Teléfono de contacto:"), 0, 7, 1, 1);
+
+        	try {
+        	    MaskFormatter formatter = new MaskFormatter("+## ##########");
+        	    formatter.setPlaceholder("+52 _________"); // Texto de guía
+        	    formatter.setPlaceholderCharacter('_');
+        	    formatter.setAllowsInvalid(false);
+        	    formatter.setOverwriteMode(true); // Sobrescribe al escribir
+        	    
+        	    telefono = new JFormattedTextField(formatter);
+        	    telefono.setColumns(15);
+        	    
+        	    // Validación cuando pierde el foco
+        	   
+        	    
+        	} catch (ParseException e) {
+        	    telefono = new JFormattedTextField();
+        	    JOptionPane.showMessageDialog(this, 
+        	        "Error en formato de teléfono", 
+        	        "Error", 
+        	        JOptionPane.ERROR_MESSAGE);
+        	}
+
         	ordenTabulacion1.add(telefono);
         	agregarComponente(Donadores, telefono, 1, 7, 1, 1);
         	
-        	agregarComponente(Donadores, new JLabel("Email"), 0, 8, 1, 1);
-        	email = new JTextField(10);
+        	// En la sección de declaración de componentes
+        	
+
+        	// Dentro de tu método de inicialización
+        	agregarComponente(Donadores, new JLabel("Email:"), 0, 8, 1, 1);
+        	email = new JTextField(25);
         	ordenTabulacion1.add(email);
         	agregarComponente(Donadores, email, 1, 8, 1, 1);
+
+        	// Configuración de validación
+        	email.setInputVerifier(new InputVerifier() {
+        	    @Override
+        	    public boolean verify(JComponent input) {
+        	        String email = ((JTextField) input).getText();
+        	        return email.isEmpty() || isValidEmail(email);
+        	    }
+        	    
+        	    @Override
+        	    public boolean shouldYieldFocus(JComponent input) {
+        	        String text = ((JTextField) input).getText();
+        	        
+        	        if (!text.isEmpty() && !isValidEmail(text)) {
+        	            input.setBackground(new Color(255, 200, 200)); // Rojo claro para inválido
+        	        } else {
+        	            input.setBackground(Color.WHITE); // Blanco para válido/vacío
+        	        }
+        	        
+        	        return true; // Siempre permite cambiar de foco
+        	    }
+        	});
         	
+        	agregarComponente(Donadores, new JLabel("Relacion con la universidad: "), 0, 9, 1, 1);
+        	RelacionUni = new JComboBox<String>();
+        	for (String[] n : RelacionesUni) {
+        		RelacionUni.addItem(n[0]);
+        	}
+        	ordenTabulacion1.add(RelacionUni);
+        	agregarComponente(Donadores, RelacionUni, 1, 9, 1, 1);
+        	
+        	agregarComponente(Donadores, new JLabel("Tipo de donador"), 0, 10, 1, 1);
+        	tipoDonador = new JComboBox<String>();
+        	for (String[] n : tiposDonadores) {
+        		tipoDonador.addItem(n[0]);
+        	}
+        	ordenTabulacion1.add(tipoDonador);
+        	agregarComponente(Donadores, tipoDonador, 1, 10, 1, 1);
+        	
+        	agregarComponente(Donadores, new JLabel("Clase: "), 0, 11, 1, 1);
+        	clase = new JComboBox<String>();
+        	for (String[] n : clases) {
+        		clase.addItem(n[0]);
+        	}
+        	ordenTabulacion1.add(RelacionUni);
+        	agregarComponente(Donadores, clase, 1, 11, 1, 1);
+        	
+        	agregarComponente(Donadores, new JLabel("Programa de donacion: "), 0, 12, 1, 1);
+        	progDona = new JComboBox<String>();
+        	for (String[] n : programasDonacion) {
+        		progDona.addItem(n[0]);
+        	}
+        	ordenTabulacion1.add(RelacionUni);
+        	agregarComponente(Donadores, progDona, 1, 12, 1, 1);
         	
         	
         opcionesPaneles.add(añadi, "Añadir");
@@ -224,6 +312,10 @@ class GUI extends JFrame implements ActionListener{
         
         add(panel);
         
+	}
+	private boolean isValidEmail(String email) {
+	    String regex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+	    return email.matches(regex) && email.length() <= 70; // 70 es el varchar de tu tabla
 	}
 	private void agregarComponente(JPanel InterFrame, JComponent componente, int x, int y, int w, int h) {
 		gbc.gridx = x;
