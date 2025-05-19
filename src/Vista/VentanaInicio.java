@@ -57,6 +57,7 @@ class GUI extends JFrame implements ActionListener{
 	JComboBox RelacionUni4, tipoDonador4, clase4, progDona4;
 	List<JComponent> ordenTabulacion1 = new ArrayList<>();
 	JPanel opcionesPaneles = new JPanel(new CardLayout());
+	JButton añadire, eliminare, modificare, consultares, consultar;
 	
 	String[][] RelacionesUni = {{"Selecciona","0"},
 			{"Facultad de Ingenieria ", "1"},
@@ -221,16 +222,13 @@ class GUI extends JFrame implements ActionListener{
 
         	try {
         	    MaskFormatter formatter = new MaskFormatter("+## ##########");
-        	    formatter.setPlaceholder("+52 _________"); // Texto de guía
+        	    formatter.setPlaceholder("+__ _________");
         	    formatter.setPlaceholderCharacter('_');
         	    formatter.setAllowsInvalid(false);
-        	    formatter.setOverwriteMode(true); // Sobrescribe al escribir
+        	    formatter.setOverwriteMode(true); 
         	    
         	    telefono = new JFormattedTextField(formatter);
         	    telefono.setColumns(15);
-        	    
-        	    // Validación cuando pierde el foco
-        	   
         	    
         	} catch (ParseException e) {
         	    telefono = new JFormattedTextField();
@@ -243,38 +241,39 @@ class GUI extends JFrame implements ActionListener{
         	ordenTabulacion1.add(telefono);
         	agregarComponente(Donadores, telefono, 1, 7, 1, 1);
         	
-        	// En la sección de declaración de componentes
-        	
-
-        	// Dentro de tu método de inicialización
         	agregarComponente(Donadores, new JLabel("Email:"), 0, 8, 1, 1);
         	email = new JTextField(25);
         	ordenTabulacion1.add(email);
         	agregarComponente(Donadores, email, 1, 8, 1, 1);
 
-        	// Configuración de validación
         	email.setInputVerifier(new InputVerifier() {
         	    @Override
         	    public boolean verify(JComponent input) {
         	        String email = ((JTextField) input).getText();
-        	        return email.isEmpty() || isValidEmail(email);
+        	        return email.isEmpty() || email.equalsIgnoreCase("S/N") || isValidEmail(email);
         	    }
         	    
         	    @Override
-        	    public boolean shouldYieldFocus(JComponent input) {
+        	    public boolean shouldYieldFocus(JComponent input) { // metodo que hace la validacion y permite el cambiar de foco o no
         	        String text = ((JTextField) input).getText();
         	        
         	        if (!text.isEmpty() && !isValidEmail(text)) {
-        	            input.setBackground(new Color(255, 200, 200)); // Rojo claro para inválido
+        	        	 if (text.equalsIgnoreCase("S/N")) {
+        	                 input.setBackground(new Color(220, 255, 220));
+        	             } else if (!isValidEmail(text)) {
+        	                 input.setBackground(new Color(255, 200, 200));
+        	             } else {
+        	                 input.setBackground(Color.WHITE);
+        	             }
         	        } else {
-        	            input.setBackground(Color.WHITE); // Blanco para válido/vacío
+        	            input.setBackground(Color.WHITE); 
         	        }
         	        
-        	        return true; // Siempre permite cambiar de foco
+        	        return true;
         	    }
         	});
         	
-        	agregarComponente(Donadores, new JLabel("Relacion con la universidad: "), 0, 9, 1, 1);
+        	agregarComponente(Donadores, new JLabel("Relacion con la universidad (opcional): "), 0, 9, 1, 1);
         	RelacionUni = new JComboBox<String>();
         	for (String[] n : RelacionesUni) {
         		RelacionUni.addItem(n[0]);
@@ -290,7 +289,7 @@ class GUI extends JFrame implements ActionListener{
         	ordenTabulacion1.add(tipoDonador);
         	agregarComponente(Donadores, tipoDonador, 1, 10, 1, 1);
         	
-        	agregarComponente(Donadores, new JLabel("Clase: "), 0, 11, 1, 1);
+        	agregarComponente(Donadores, new JLabel("Clase (opcional): "), 0, 11, 1, 1);
         	clase = new JComboBox<String>();
         	for (String[] n : clases) {
         		clase.addItem(n[0]);
@@ -298,13 +297,17 @@ class GUI extends JFrame implements ActionListener{
         	ordenTabulacion1.add(RelacionUni);
         	agregarComponente(Donadores, clase, 1, 11, 1, 1);
         	
-        	agregarComponente(Donadores, new JLabel("Programa de donacion: "), 0, 12, 1, 1);
+        	agregarComponente(Donadores, new JLabel("Programa de donacion (opcional): "), 0, 12, 1, 1);
         	progDona = new JComboBox<String>();
         	for (String[] n : programasDonacion) {
         		progDona.addItem(n[0]);
         	}
         	ordenTabulacion1.add(RelacionUni);
         	agregarComponente(Donadores, progDona, 1, 12, 1, 1);
+        	
+        	añadire = new JButton("Añadir donador");
+        	añadire.addActionListener(this);
+        	agregarComponente(Donadores, añadire, 0, 13, 3, 1);
         	
         	
         opcionesPaneles.add(añadi, "Añadir");
