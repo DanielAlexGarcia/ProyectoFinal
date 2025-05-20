@@ -93,13 +93,14 @@ class GUI extends JFrame implements ActionListener{
 		boolean Secion = false;
 		FondoPanel fondo = new FondoPanel("/imagenes/fondo.jpg");
 		fondo.setLayout(new BorderLayout());
+		JFrame frame = new JFrame();
 		
-		getContentPane().setLayout(new BorderLayout());
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setTitle("Gestor Universidad");
-        setSize(1020, 740);
-        setLocationRelativeTo(null);
-        setVisible(true);
+		frame.getContentPane().setLayout(new BorderLayout());
+        frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        frame.setTitle("Gestor Universidad");
+        frame.setSize(1020, 740);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
         
         opcionesd = new JToolBar();
         
@@ -124,7 +125,7 @@ class GUI extends JFrame implements ActionListener{
         Opciones.add(cargaOpcion);
         Opciones.add(cargaAll);
         menubar.add(Opciones);
-        setFocusTraversalPolicyProvider(true);
+        frame.setFocusTraversalPolicyProvider(true);
         
         problema1.setHorizontalAlignment(SwingConstants.RIGHT);
         problema2.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -327,7 +328,7 @@ class GUI extends JFrame implements ActionListener{
         opcionesPaneles.add(añadi, "Añadir");
         
         
-        add(panel);
+        frame.add(panel);
         
 	}
 	
@@ -522,7 +523,6 @@ public class VentanaInicio {
 	public static void main (String[] args) {
 		
 		SwingUtilities.invokeLater(new Runnable() {
-				ConexionBD conexion = new ConexionBD();
             @Override
             public void run() {
                 new GUI();
