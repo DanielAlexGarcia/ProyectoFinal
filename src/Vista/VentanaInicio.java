@@ -24,6 +24,8 @@ import ConexionBD.ConexionBD;
 
 
 class GUI extends JFrame implements ActionListener{
+	ArrayList<String> errores = new ArrayList<String>();
+	
 	ConexionBD conexionBD;
 	GridBagLayout gbl = new GridBagLayout();
 	GridBagConstraints gbc = new GridBagConstraints();
@@ -40,19 +42,19 @@ class GUI extends JFrame implements ActionListener{
 	JInternalFrame Donadores;
 	JPanel añadi, modi, consultOP, consultAll, elimi;
 	JTextField colonia, calle, numExt, numInt, email;
-	JTextField ID;
+	JFormattedTextField ID;
 	JFormattedTextField telefono;
 	JComboBox RelacionUni, tipoDonador, clase, progDona;
 	JTextField colonia2, calle2, numExt2, numInt2, email2;
-	JTextField ID2;
+	JFormattedTextField ID2;
 	JFormattedTextField telefono2;
 	JComboBox RelacionUni2, tipoDonador2, clase2, progDona2;
 	JTextField colonia3, calle3, numExt3, numInt3, email3;
-	JTextField ID3;
+	JFormattedTextField ID3;
 	JFormattedTextField telefono3;
 	JComboBox RelacionUni3, tipoDonador3, clase3, progDona3;
 	JTextField colonia4, calle4, numExt4, numInt4, email4;
-	JTextField ID4;
+	JFormattedTextField ID4;
 	JFormattedTextField telefono4;
 	JComboBox RelacionUni4, tipoDonador4, clase4, progDona4;
 	List<JComponent> ordenTabulacion1 = new ArrayList<>();
@@ -192,7 +194,23 @@ class GUI extends JFrame implements ActionListener{
         	agregarComponente(añadi, tituloAñadi, 0, 0, 5, 1);
         	
         	agregarComponente(Donadores, new JLabel("ID (opcional)"), 0, 1, 1, 1);
-        	ID = new JTextField(10);
+        	try {
+        	    MaskFormatter formatter = new MaskFormatter("##########");
+        	    formatter.setPlaceholder("");
+        	    formatter.setPlaceholderCharacter(' ');
+        	    formatter.setAllowsInvalid(false);
+        	    formatter.setOverwriteMode(true); 
+        	    
+        	    ID = new JFormattedTextField(formatter);
+        	    ID.setColumns(10);
+        	    
+        	} catch (ParseException e) {
+        	    telefono = new JFormattedTextField();
+        	    JOptionPane.showMessageDialog(this, 
+        	        "Error en formato de teléfono", 
+        	        "Error", 
+        	        JOptionPane.ERROR_MESSAGE);
+        	}
         	ordenTabulacion1.add(ID);
         	agregarComponente(Donadores, ID, 1, 1, 1, 1);
         	
@@ -213,7 +231,7 @@ class GUI extends JFrame implements ActionListener{
         	ordenTabulacion1.add(numExt);
         	agregarComponente(Donadores, numExt, 1, 5, 1, 1);
         	
-        	agregarComponente(Donadores, new JLabel("Numero interior"), 0, 6, 1, 1);
+        	agregarComponente(Donadores, new JLabel("Numero interior ('S/N' si no aplica):"), 0, 6, 1, 1);
         	numInt = new JTextField(10);
         	ordenTabulacion1.add(numInt);
         	agregarComponente(Donadores, numInt, 1, 6, 1, 1);
@@ -222,7 +240,6 @@ class GUI extends JFrame implements ActionListener{
 
         	try {
         	    MaskFormatter formatter = new MaskFormatter("+## ##########");
-        	    formatter.setPlaceholder("+__ _________");
         	    formatter.setPlaceholderCharacter('_');
         	    formatter.setAllowsInvalid(false);
         	    formatter.setOverwriteMode(true); 
@@ -316,6 +333,55 @@ class GUI extends JFrame implements ActionListener{
         add(panel);
         
 	}
+	
+	//verifica que solo los datos que no aceptan nulo extan correctamente completos
+	
+	public boolean verificadorDatos(JTextField col, JTextField call, JTextField numext, JTextField numint, JFormattedTextField telefon, JTextField email5, JComboBox<String> tipoDona) {
+		int hayError = 0;
+		errores.clear();
+		 if (col.getText().isEmpty() || col.getText().length() >45) {
+			 col.setBackground(new Color(255, 200, 200));
+			 errores.add("campo colonia obligatorio, maximo 45 caracteres");
+			 hayError ++;
+		 }
+		 if(call.getText().isEmpty() || call.getText().length() > 45) {
+			 call.setBackground(new Color(255, 200, 200));
+			 errores.add("campo calle obligatorio, maximo 45 caracteres");
+			 hayError ++;
+		 }
+		 if (numext.getText().isEmpty() || numext.getText().length() >45) {
+			 numext.setBackground(new Color(255, 200, 200));
+			 errores.add("campo numero exterior obligatorio, maximo 45 caracteres");
+			 hayError ++;
+		 }
+		 if (numint.getText().isEmpty() || numint.getText().length() > 45) {
+			 numint.setBackground(new Color(255, 200, 200));
+			 errores.add("campo numero interior obligatorio, maximo 45 caracteres o 'S/N' si no aplica");
+			 hayError ++;
+		 }
+		 if (telefon.getText().equalsIgnoreCase("+__ __________")) {
+			 telefon.setBackground(new Color(255, 200, 200));
+			 errores.add("campo telefono obligatorio, numero de telefono con codigo de pais");
+			 hayError ++;
+		 }
+		 if (email5.getText().isEmpty() || email5.getText().length() > 70) {
+			 email5.setBackground(new Color(255, 200, 200));
+			 errores.add("campo Email obligatorio, maximo 70 caracteres");
+			 hayError ++;
+		 }
+		 if (tipoDona.getSelectedIndex() == 0) {
+			 tipoDona.setBackground(new Color(255, 200, 200));
+			 errores.add("opcion tipo de donador obligatorio, elige una opcion diferente");
+			 hayError ++;
+		 }
+		 
+		 if(hayError > 0) {
+			 return false;
+		 }
+		
+		return true;
+	}
+	
 	private boolean isValidEmail(String email) {
 	    String regex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
 	    return email.matches(regex) && email.length() <= 70; // 70 es el varchar de tu tabla
@@ -373,6 +439,36 @@ class GUI extends JFrame implements ActionListener{
 				añadirOpciones();
 			}
 
+		}else if (e.getSource() == añadire) {
+			if (!verificadorDatos(colonia, calle, numExt, numInt, telefono, email, tipoDonador)) {
+				String m = "";
+				for (String n : errores) {
+					m = m + n + "\n";
+				}
+				System.out.println(telefono.getText());
+				JOptionPane.showMessageDialog(this, 
+				        m, 
+				        "Error", 
+				        JOptionPane.ERROR_MESSAGE);
+			}else {
+				
+				
+				
+				
+				
+				//añadir funcionalidad para guardar en la base de datos
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			}
+			
 		}
 		
 		
