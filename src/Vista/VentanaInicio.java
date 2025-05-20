@@ -42,7 +42,7 @@ class GUI extends JFrame implements ActionListener{
 	JButton boton1;
 	JInternalFrame InicioSecion;
 	JInternalFrame Donadores;
-	JPanel añadi, modi, consultOP, consultAll, elimi;
+	JPanel añadi, modi, consultOP, consultAll, elimini;
 	JTextField colonia, calle, numExt, numInt, email;
 	JFormattedTextField ID;
 	JFormattedTextField telefono;
@@ -63,6 +63,8 @@ class GUI extends JFrame implements ActionListener{
 	JPanel opcionesPaneles = new JPanel(new CardLayout());
 	JButton añadire, eliminare, modificare, consultares, consultar;
 	JToolBar opcionesd;
+	JFrame frame = new JFrame();
+	JButton Restor1, Restor2, Restor3, Restor4;
 	
 	String[][] RelacionesUni = {{"Selecciona","0"},
 			{"Facultad de Ingenieria ", "1"},
@@ -93,7 +95,7 @@ class GUI extends JFrame implements ActionListener{
 		boolean Secion = false;
 		FondoPanel fondo = new FondoPanel("/imagenes/fondo.jpg");
 		fondo.setLayout(new BorderLayout());
-		JFrame frame = new JFrame();
+		
 		
 		frame.getContentPane().setLayout(new BorderLayout());
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -177,12 +179,11 @@ class GUI extends JFrame implements ActionListener{
         
         panel.add(InicioSecion);
         
-        
-        
+        // ventana Donadores
         Donadores = new JInternalFrame();
         Donadores.setResizable(true);  
         Donadores.setSize(500,500);
-        Donadores.setLayout(gbl);
+        Donadores.setLayout(new BorderLayout()); // ¡Cambiado a BorderLayout!
         int x1 = (panel.getHeight() - InicioSecion.getHeight());
         int y1 = (panel.getWidth() - InicioSecion.getWidth());
         int yy1 = (y * (-1)) /5;
@@ -196,141 +197,341 @@ class GUI extends JFrame implements ActionListener{
         
         panel.add(Donadores);
         
+        // Preparamos los paneles para CardLayout
         añadi = new JPanel();
-        	JLabel tituloAñadi = new JLabel("Añadir Donador");
-        	tituloAñadi.setHorizontalAlignment(SwingConstants.CENTER);
-        	agregarComponente(añadi, tituloAñadi, 0, 0, 5, 1);
-        	
-        	agregarComponente(Donadores, new JLabel("ID (opcional)"), 0, 1, 1, 1);
-        	try {
-        	    MaskFormatter formatter = new MaskFormatter("##########");
-        	    formatter.setPlaceholder("");
-        	    formatter.setPlaceholderCharacter(' ');
-        	    formatter.setAllowsInvalid(false);
-        	    formatter.setOverwriteMode(true); 
-        	    
-        	    ID = new JFormattedTextField(formatter);
-        	    ID.setColumns(10);
-        	    
-        	} catch (ParseException e) {
-        	    telefono = new JFormattedTextField();
-        	    JOptionPane.showMessageDialog(this, 
-        	        "Error en formato de teléfono", 
-        	        "Error", 
-        	        JOptionPane.ERROR_MESSAGE);
-        	}
-        	agregarComponente(Donadores, ID, 1, 1, 1, 1);
-        	
-        	agregarComponente(Donadores, new JLabel("Datos direccion"), 0, 2, 2, 1);
-        	
-        	agregarComponente(Donadores, new JLabel("Colonia: "), 0, 3, 1, 1);
-        	colonia = new JTextField(10);
-        	agregarComponente(Donadores, colonia, 1, 3, 1, 1);
-        	
-        	agregarComponente(Donadores, new JLabel("Calle: "), 0, 4, 1, 1);
-        	calle = new JTextField(10);
-        	agregarComponente(Donadores, calle, 1, 4, 1, 1);
-        	
-        	agregarComponente(Donadores, new JLabel("Numero exterior: "), 0, 5, 1, 1);
-        	numExt = new JTextField(10);
-        	agregarComponente(Donadores, numExt, 1, 5, 1, 1);
-        	
-        	agregarComponente(Donadores, new JLabel("Numero interior ('S/N' si no aplica):"), 0, 6, 1, 1);
-        	numInt = new JTextField(10);
-        	agregarComponente(Donadores, numInt, 1, 6, 1, 1);
-        	
-        	agregarComponente(Donadores, new JLabel("Teléfono de contacto:"), 0, 7, 1, 1);
-
-        	try {
-        	    MaskFormatter formatter = new MaskFormatter("+## ##########");
-        	    formatter.setPlaceholderCharacter('_');
-        	    formatter.setAllowsInvalid(false);
-        	    formatter.setOverwriteMode(true); 
-        	    
-        	    telefono = new JFormattedTextField(formatter);
-        	    telefono.setColumns(15);
-        	    
-        	} catch (ParseException e) {
-        	    telefono = new JFormattedTextField();
-        	    JOptionPane.showMessageDialog(this, 
-        	        "Error en formato de teléfono", 
-        	        "Error", 
-        	        JOptionPane.ERROR_MESSAGE);
-        	}
-
-        	ordenTabulacion1.add(telefono);
-        	agregarComponente(Donadores, telefono, 1, 7, 1, 1);
-        	
-        	agregarComponente(Donadores, new JLabel("Email:"), 0, 8, 1, 1);
-        	email = new JTextField(25);
-        	agregarComponente(Donadores, email, 1, 8, 1, 1);
-
-        	email.setInputVerifier(new InputVerifier() {
-        	    @Override
-        	    public boolean verify(JComponent input) {
-        	        String email = ((JTextField) input).getText();
-        	        return email.isEmpty() || email.equalsIgnoreCase("S/N") || isValidEmail(email);
-        	    }
-        	    
-        	    @Override
-        	    public boolean shouldYieldFocus(JComponent input) { // metodo que hace la validacion y permite el cambiar de foco o no
-        	        String text = ((JTextField) input).getText();
-        	        
-        	        if (!text.isEmpty() && !isValidEmail(text)) {
-        	        	 if (text.equalsIgnoreCase("S/N")) {
-        	                 input.setBackground(new Color(220, 255, 220));
-        	             } else if (!isValidEmail(text)) {
-        	                 input.setBackground(new Color(255, 200, 200));
-        	             } else {
-        	                 input.setBackground(Color.WHITE);
-        	             }
-        	        } else {
-        	            input.setBackground(Color.WHITE); 
-        	        }
-        	        
-        	        return true;
-        	    }
-        	});
-        	
-        	agregarComponente(Donadores, new JLabel("Relacion con la universidad (opcional): "), 0, 9, 1, 1);
-        	RelacionUni = new JComboBox<String>();
-        	for (String[] n : RelacionesUni) {
-        		RelacionUni.addItem(n[0]);
-        	}
-        	agregarComponente(Donadores, RelacionUni, 1, 9, 1, 1);
-        	
-        	agregarComponente(Donadores, new JLabel("Tipo de donador"), 0, 10, 1, 1);
-        	tipoDonador = new JComboBox<String>();
-        	for (String[] n : tiposDonadores) {
-        		tipoDonador.addItem(n[0]);
-        	}
-        	agregarComponente(Donadores, tipoDonador, 1, 10, 1, 1);
-        	
-        	agregarComponente(Donadores, new JLabel("Clase (opcional): "), 0, 11, 1, 1);
-        	clase = new JComboBox<String>();
-        	for (String[] n : clases) {
-        		clase.addItem(n[0]);
-        	}
-        	agregarComponente(Donadores, clase, 1, 11, 1, 1);
-        	
-        	agregarComponente(Donadores, new JLabel("Programa de donacion (opcional): "), 0, 12, 1, 1);
-        	progDona = new JComboBox<String>();
-        	for (String[] n : programasDonacion) {
-        		progDona.addItem(n[0]);
-        	}
-        	agregarComponente(Donadores, progDona, 1, 12, 1, 1);
-        	
-        	añadire = new JButton("Añadir donador");
-        	añadire.addActionListener(this);
-        	agregarComponente(Donadores, añadire, 0, 13, 3, 1);
-        	
-        	
-        opcionesPaneles.add(añadi, "Añadir");
+        añadi.setLayout(gbl);
+        modi = new JPanel();
+        modi.setLayout(gbl);
+        consultOP = new JPanel();
+        consultOP.setLayout(gbl);
+        consultAll = new JPanel();
+        consultAll.setLayout(gbl);
+        elimini = new JPanel();
+        elimini.setLayout(gbl);
         
+        // Añadir todos los paneles al CardLayout
+        opcionesPaneles.add(añadi, "Añadir");
+        opcionesPaneles.add(modi, "Modificar");
+        opcionesPaneles.add(consultOP, "ConsultarOpcion");
+        opcionesPaneles.add(consultAll, "ConsultarTodo");
+        opcionesPaneles.add(elimini, "Eliminar");
+        
+        // Agregar el panel de opciones al frame Donadores
+        Donadores.add(opcionesPaneles, BorderLayout.CENTER);
+        
+        // CardLayout de añadir
+        JLabel tituloAñadi = new JLabel("Añadir Donador");
+        tituloAñadi.setHorizontalAlignment(SwingConstants.CENTER);
+        agregarComponente(añadi, tituloAñadi, 0, 0, 5, 1);
+        
+        agregarComponente(añadi, new JLabel("ID (opcional)"), 0, 1, 1, 1);
+        try {
+            MaskFormatter formatter = new MaskFormatter("##########");
+            formatter.setPlaceholder("");
+            formatter.setAllowsInvalid(false);
+            formatter.setOverwriteMode(true); 
+            
+            ID = new JFormattedTextField(formatter);
+            ID.setColumns(10);
+            
+        } catch (ParseException e) {
+            telefono = new JFormattedTextField();
+            JOptionPane.showMessageDialog(this, 
+                "Error en formato de teléfono", 
+                "Error", 
+                JOptionPane.ERROR_MESSAGE);
+        }
+        agregarComponente(añadi, ID, 1, 1, 1, 1);
+        
+        agregarComponente(añadi, new JLabel("Datos direccion"), 0, 2, 2, 1);
+        
+        agregarComponente(añadi, new JLabel("Colonia: "), 0, 3, 1, 1);
+        colonia = new JTextField(10);
+        agregarComponente(añadi, colonia, 1, 3, 1, 1);
+        
+        agregarComponente(añadi, new JLabel("Calle: "), 0, 4, 1, 1);
+        calle = new JTextField(10);
+        agregarComponente(añadi, calle, 1, 4, 1, 1);
+        
+        agregarComponente(añadi, new JLabel("Numero exterior: "), 0, 5, 1, 1);
+        numExt = new JTextField(10);
+        agregarComponente(añadi, numExt, 1, 5, 1, 1);
+        
+        agregarComponente(añadi, new JLabel("Numero interior ('S/N' si no aplica):"), 0, 6, 1, 1);
+        numInt = new JTextField(10);
+        agregarComponente(añadi, numInt, 1, 6, 1, 1);
+        
+        agregarComponente(añadi, new JLabel("Teléfono de contacto:"), 0, 7, 1, 1);
+
+        try {
+            MaskFormatter formatter = new MaskFormatter("+## ##########");
+            formatter.setPlaceholderCharacter('_');
+            formatter.setAllowsInvalid(false);
+            formatter.setOverwriteMode(true); 
+            
+            telefono = new JFormattedTextField(formatter);
+            telefono.setColumns(15);
+            
+        } catch (ParseException e) {
+            telefono = new JFormattedTextField();
+            JOptionPane.showMessageDialog(this, 
+                "Error en formato de teléfono", 
+                "Error", 
+                JOptionPane.ERROR_MESSAGE);
+        }
+
+        ordenTabulacion1.add(telefono);
+        agregarComponente(añadi, telefono, 1, 7, 1, 1);
+        
+        agregarComponente(añadi, new JLabel("Email:"), 0, 8, 1, 1);
+        email = new JTextField(25);
+        agregarComponente(añadi, email, 1, 8, 1, 1);
+
+        email.setInputVerifier(new InputVerifier() {
+            @Override
+            public boolean verify(JComponent input) {
+                String email = ((JTextField) input).getText();
+                return email.isEmpty() || email.equalsIgnoreCase("S/N") || isValidEmail(email);
+            }
+            
+            @Override
+            public boolean shouldYieldFocus(JComponent input) { // metodo que hace la validacion y permite el cambiar de foco o no
+                String text = ((JTextField) input).getText();
+                
+                if (!text.isEmpty() && !isValidEmail(text)) {
+                     if (text.equalsIgnoreCase("S/N")) {
+                         input.setBackground(new Color(220, 255, 220));
+                     } else if (!isValidEmail(text)) {
+                         input.setBackground(new Color(255, 200, 200));
+                     } else {
+                         input.setBackground(Color.WHITE);
+                     }
+                } else {
+                    input.setBackground(Color.WHITE); 
+                }
+                
+                return true;
+            }
+        });
+        
+        agregarComponente(añadi, new JLabel("Relacion con la universidad (opcional): "), 0, 9, 1, 1);
+        RelacionUni = new JComboBox<String>();
+        for (String[] n : RelacionesUni) {
+            RelacionUni.addItem(n[0]);
+        }
+        agregarComponente(añadi, RelacionUni, 1, 9, 1, 1);
+        
+        agregarComponente(añadi, new JLabel("Tipo de donador"), 0, 10, 1, 1);
+        tipoDonador = new JComboBox<String>();
+        for (String[] n : tiposDonadores) {
+            tipoDonador.addItem(n[0]);
+        }
+        agregarComponente(añadi, tipoDonador, 1, 10, 1, 1);
+        
+        agregarComponente(añadi, new JLabel("Clase (opcional): "), 0, 11, 1, 1);
+        clase = new JComboBox<String>();
+        for (String[] n : clases) {
+            clase.addItem(n[0]);
+        }
+        agregarComponente(añadi, clase, 1, 11, 1, 1);
+        
+        agregarComponente(añadi, new JLabel("Programa de donacion (opcional): "), 0, 12, 1, 1);
+        progDona = new JComboBox<String>();
+        for (String[] n : programasDonacion) {
+            progDona.addItem(n[0]);
+        }
+        agregarComponente(añadi, progDona, 1, 12, 1, 1);
+        
+        añadire = new JButton("Añadir donador");
+        añadire.addActionListener(this);
+        agregarComponente(añadi, añadire, 0, 13, 3, 1);
+        
+        Restor1 = new JButton("Restablecer campos");
+        Restor1.addActionListener(new ActionListener() {
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                restablecer(ID, colonia, calle, numExt, numInt, telefono, email, tipoDonador, RelacionUni, clase, progDona);
+                
+            }
+        });
+        
+        agregarComponente(añadi, Restor1, 0, 14, 3, 1);
+        
+        
+        
+        // cardLayaout de modificar donador
+        
+        
+        JLabel tituloModi = new JLabel("Modificar Donador");
+        tituloModi.setHorizontalAlignment(SwingConstants.CENTER);
+        agregarComponente(modi, tituloModi, 0, 0, 5, 1);
+        
+        agregarComponente(modi, new JLabel("ID"), 0, 1, 1, 1);
+        try {
+            MaskFormatter formatter = new MaskFormatter("##########");
+            formatter.setPlaceholder("");
+            formatter.setAllowsInvalid(false);
+            formatter.setOverwriteMode(true); 
+            
+            ID = new JFormattedTextField(formatter);
+            ID.setColumns(10);
+            
+        } catch (ParseException e) {
+            telefono = new JFormattedTextField();
+            JOptionPane.showMessageDialog(this, 
+                "Error en formato de teléfono", 
+                "Error", 
+                JOptionPane.ERROR_MESSAGE);
+        }
+        agregarComponente(añadi, ID, 1, 1, 1, 1);
+        
+        agregarComponente(añadi, new JLabel("Datos direccion"), 0, 2, 2, 1);
+        
+        agregarComponente(añadi, new JLabel("Colonia: "), 0, 3, 1, 1);
+        colonia = new JTextField(10);
+        agregarComponente(añadi, colonia, 1, 3, 1, 1);
+        
+        agregarComponente(añadi, new JLabel("Calle: "), 0, 4, 1, 1);
+        calle = new JTextField(10);
+        agregarComponente(añadi, calle, 1, 4, 1, 1);
+        
+        agregarComponente(añadi, new JLabel("Numero exterior: "), 0, 5, 1, 1);
+        numExt = new JTextField(10);
+        agregarComponente(añadi, numExt, 1, 5, 1, 1);
+        
+        agregarComponente(añadi, new JLabel("Numero interior ('S/N' si no aplica):"), 0, 6, 1, 1);
+        numInt = new JTextField(10);
+        agregarComponente(añadi, numInt, 1, 6, 1, 1);
+        
+        agregarComponente(añadi, new JLabel("Teléfono de contacto:"), 0, 7, 1, 1);
+
+        try {
+            MaskFormatter formatter = new MaskFormatter("+## ##########");
+            formatter.setPlaceholderCharacter('_');
+            formatter.setAllowsInvalid(false);
+            formatter.setOverwriteMode(true); 
+            
+            telefono = new JFormattedTextField(formatter);
+            telefono.setColumns(15);
+            
+        } catch (ParseException e) {
+            telefono = new JFormattedTextField();
+            JOptionPane.showMessageDialog(this, 
+                "Error en formato de teléfono", 
+                "Error", 
+                JOptionPane.ERROR_MESSAGE);
+        }
+
+        ordenTabulacion1.add(telefono);
+        agregarComponente(añadi, telefono, 1, 7, 1, 1);
+        
+        agregarComponente(añadi, new JLabel("Email:"), 0, 8, 1, 1);
+        email = new JTextField(25);
+        agregarComponente(añadi, email, 1, 8, 1, 1);
+
+        email.setInputVerifier(new InputVerifier() {
+            @Override
+            public boolean verify(JComponent input) {
+                String email = ((JTextField) input).getText();
+                return email.isEmpty() || email.equalsIgnoreCase("S/N") || isValidEmail(email);
+            }
+            
+            @Override
+            public boolean shouldYieldFocus(JComponent input) { // metodo que hace la validacion y permite el cambiar de foco o no
+                String text = ((JTextField) input).getText();
+                
+                if (!text.isEmpty() && !isValidEmail(text)) {
+                     if (text.equalsIgnoreCase("S/N")) {
+                         input.setBackground(new Color(220, 255, 220));
+                     } else if (!isValidEmail(text)) {
+                         input.setBackground(new Color(255, 200, 200));
+                     } else {
+                         input.setBackground(Color.WHITE);
+                     }
+                } else {
+                    input.setBackground(Color.WHITE); 
+                }
+                
+                return true;
+            }
+        });
+        
+        agregarComponente(añadi, new JLabel("Relacion con la universidad (opcional): "), 0, 9, 1, 1);
+        RelacionUni = new JComboBox<String>();
+        for (String[] n : RelacionesUni) {
+            RelacionUni.addItem(n[0]);
+        }
+        agregarComponente(añadi, RelacionUni, 1, 9, 1, 1);
+        
+        agregarComponente(añadi, new JLabel("Tipo de donador"), 0, 10, 1, 1);
+        tipoDonador = new JComboBox<String>();
+        for (String[] n : tiposDonadores) {
+            tipoDonador.addItem(n[0]);
+        }
+        agregarComponente(añadi, tipoDonador, 1, 10, 1, 1);
+        
+        agregarComponente(añadi, new JLabel("Clase (opcional): "), 0, 11, 1, 1);
+        clase = new JComboBox<String>();
+        for (String[] n : clases) {
+            clase.addItem(n[0]);
+        }
+        agregarComponente(añadi, clase, 1, 11, 1, 1);
+        
+        agregarComponente(añadi, new JLabel("Programa de donacion (opcional): "), 0, 12, 1, 1);
+        progDona = new JComboBox<String>();
+        for (String[] n : programasDonacion) {
+            progDona.addItem(n[0]);
+        }
+        agregarComponente(añadi, progDona, 1, 12, 1, 1);
+        
+        añadire = new JButton("Añadir donador");
+        añadire.addActionListener(this);
+        agregarComponente(añadi, añadire, 0, 13, 3, 1);
+        
+        Restor1 = new JButton("Restablecer campos");
+        Restor1.addActionListener(new ActionListener() {
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                restablecer(ID, colonia, calle, numExt, numInt, telefono, email, tipoDonador, RelacionUni, clase, progDona);
+                
+            }
+        });
+        
+        
+        JLabel tituloConsultOP = new JLabel("Consultar un Donador");
+        tituloConsultOP.setHorizontalAlignment(SwingConstants.CENTER);
+        agregarComponente(consultOP, tituloConsultOP, 0, 0, 5, 1);
+        
+        JLabel tituloConsultAll = new JLabel("Consultar todos los Donadores");
+        tituloConsultAll.setHorizontalAlignment(SwingConstants.CENTER);
+        agregarComponente(consultAll, tituloConsultAll, 0, 0, 5, 1);
+        
+        JLabel tituloElimini = new JLabel("Eliminar Donador");
+        tituloElimini.setHorizontalAlignment(SwingConstants.CENTER);
+        agregarComponente(elimini, tituloElimini, 0, 0, 5, 1);
         
         frame.add(panel);
         
+	}																					
+	
+	private void restablecer(JFormattedTextField IDe, JTextField col, JTextField call, JTextField numext, JTextField numint, 
+			JFormattedTextField telefon, JTextField email5, JComboBox<String> tipoDona, JComboBox<String> RelacionUni, 
+			JComboBox<String> clase, JComboBox<String> progDona) {
+		IDe.setText("");
+		col.setText("");
+		call.setText("");
+		numext.setText("");
+		numint.setText("");
+		telefon.setText("");
+		email.setText("");
+		tipoDona.setSelectedIndex(0);
+		RelacionUni.setSelectedIndex(0);
+		clase.setSelectedIndex(0);
+		progDona.setSelectedIndex(0);
 	}
+	
 	
 	//verifica que solo los datos que no aceptan nulo extan correctamente completos
 	
@@ -376,6 +577,7 @@ class GUI extends JFrame implements ActionListener{
 		 if(hayError > 0) {
 			 return false;
 		 }
+		 
 		
 		return true;
 	}
@@ -411,6 +613,32 @@ class GUI extends JFrame implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == añadir) {
+			Donadores.setVisible(true);
+			CardLayout cardLayout = (CardLayout) opcionesPaneles.getLayout();
+		    cardLayout.show(opcionesPaneles, "Añadir");
+		}
+		else if (e.getSource() == modificar) {
+			Donadores.setVisible(true);
+			CardLayout cardLayout = (CardLayout) opcionesPaneles.getLayout();
+		    cardLayout.show(opcionesPaneles, "Modificar");
+		}
+		else if (e.getSource() == eliminar) {
+			Donadores.setVisible(true);
+			CardLayout cardLayout = (CardLayout) opcionesPaneles.getLayout();
+		    cardLayout.show(opcionesPaneles, "Eliminar");
+		}
+		else if (e.getSource() == cargaOpcion) {
+			Donadores.setVisible(true);
+			CardLayout cardLayout = (CardLayout) opcionesPaneles.getLayout();
+		    cardLayout.show(opcionesPaneles, "ConsultarOpcion");
+		}
+		else if (e.getSource() == cargaAll) {
+			Donadores.setVisible(true);
+			CardLayout cardLayout = (CardLayout) opcionesPaneles.getLayout();
+		    cardLayout.show(opcionesPaneles, "ConsultarTodo");
+		}
+		
 		if (e.getSource() == donadores) {
 			Donadores.setVisible(true);
 			CardLayout cardLayout = (CardLayout) opcionesPaneles.getLayout();
@@ -459,27 +687,18 @@ class GUI extends JFrame implements ActionListener{
 				for (String n : errores) {
 					m = m + n + "\n";
 				}
-				System.out.println(telefono.getText());
+				System.out.println("id =="+ID.getText()+ "id");
 				JOptionPane.showMessageDialog(this, 
 				        m, 
 				        "Error", 
 				        JOptionPane.ERROR_MESSAGE);
 			}else {
 				
-				
-				
-				
-				
-				//añadir funcionalidad para guardar en la base de datos
-				
-				
-				
-				
-				
-				
-				
-				
-				
+				// Código para guardar en la base de datos
+				JOptionPane.showMessageDialog(this, 
+				        "Datos correctos, el donador se guardará en la base de datos", 
+				        "Éxito", 
+				        JOptionPane.INFORMATION_MESSAGE);
 				
 			}
 			
@@ -488,7 +707,7 @@ class GUI extends JFrame implements ActionListener{
 		
 	}
 	private void añadirOpciones () {
-		setJMenuBar(menuBar);
+		frame.setJMenuBar(menuBar);
 	}
 	
 	private void agregarComponente(JInternalFrame InterFrame, JComponent componente, int x, int y, int w, int h) {
