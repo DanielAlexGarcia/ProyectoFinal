@@ -1,88 +1,98 @@
 package ConexionBD;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.sql.*;
 
 public class ConexionBD {
 
     private Connection connection;
-    private Statement stm; // PreparedStatement es mejor ya que evita SQL Injection
-    private ResultSet rs;
 
     public ConexionBD() {
         try {
             Class.forName("org.mariadb.jdbc.Driver");
 
             String URL = "jdbc:mariadb://localhost:3306/BD_Topicos_2025";
-
-
             connection = DriverManager.getConnection(URL, "root", "f44WOs%NvF");
-            System.out.println("Conexcion exitosa");
+
+            System.out.println("Conexión exitosa");
 
         } catch (ClassNotFoundException e) {
-            System.out.println("Error en el connector / driver");
+            System.out.println("Error en el conector / driver: " + e.getMessage());
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Error en la conexión a la base de datos: " + e.getMessage());
         }
-
-        //crud - create read undate delete
-        //metodo para los procesos de abc (altas, bajas y cambios)
     }
 
-    public void connecctionDatabase(String dataBase){
-        String sql = "Use "+dataBase+";";
-        ejecutarInstruccionSQL(sql);
-    }
-
-    public boolean eliminarFila(String NumControl) {
+    // Elimina un alumno por ID con PreparedStatement
+    public boolean eliminarFila(String numControl) {
         String sql = "DELETE FROM alumnos WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            // Asignar el valor del id a la consulta
-            stmt.setString(1, NumControl);
-
-            // Ejecutar la actualización (eliminación)
+            stmt.setString(1, numControl);
             int filasAfectadas = stmt.executeUpdate();
-
-            // Si se eliminó al menos una fila, la operación fue exitosa
             return filasAfectadas > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Error al eliminar fila: " + e.getMessage());
             return false;
         }
     }
 
-    public boolean ejecutarIntruccionLMD(String sql){       // modifica
-        boolean res = false;
+    // Método de ejemplo para insertar un alumno de forma segura
+    public boolean insertarAlumno(String id, String nombre, String carrera) {
+        String sql = "INSERT INTO alumnos (id, nombre, carrera) VALUES (?, ?, ?)";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, id);
+            stmt.setString(2, nombre);
+            stmt.setString(3, carrera);
+            int filasAfectadas = stmt.executeUpdate();
+            return filasAfectadas > 0;
+        } catch (SQLException e) {
+            System.out.println("Error al insertar alumno: " + e.getMessage());
+            return false;
+        }
+    }
+
+    // Método de lectura segura con PreparedStatement
+    public ResultSet buscarAlumnoPorId(String id) {
+        String sql = "SELECT * FROM alumnos WHERE id = ?";
         try {
-            stm = connection.createStatement();
-            if(stm.executeUpdate(sql) >=1){
-                res = true;
-            }else{
-                System.out.println("Error al agregar Alumno");
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, id);
+            return stmt.executeQuery();
+        } catch (SQLException e) {
+            System.out.println("Error al buscar alumno: " + e.getMessage());
+            return null;
+        }
+    }
+
+    // Método genérico para cambiar de base de datos (más seguro con validación)
+    public boolean cambiarBaseDeDatos(String nuevaBD) {
+        try {
+            String url = "jdbc:mariadb://localhost:3306/" + nuevaBD;
+            connection = DriverManager.getConnection(url, "root", "f44WOs%NvF");
+            System.out.println("Base de datos cambiada a: " + nuevaBD);
+            return true;
+        } catch (SQLException e) {
+            System.out.println("No se pudo cambiar de base de datos: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public static void main(String[] args) {
+        ConexionBD db = new ConexionBD();
+
+        // Ejemplo: Insertar alumno
+        db.insertarAlumno("123", "Juan Pérez", "Sistemas");
+
+        // Ejemplo: Buscar alumno
+        ResultSet rs = db.buscarAlumnoPorId("123");
+        try {
+            if (rs != null && rs.next()) {
+                System.out.println("Nombre: " + rs.getString("nombre"));
             }
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
-        return res;
-    }
 
-
-    public ResultSet ejecutarInstruccionSQL(String sql){
-        rs = null;
-        System.out.println("SQL => " + sql);
-        try {
-            stm = connection.createStatement();
-            rs = stm.executeQuery(sql);
-        } catch (SQLException e) {
-            System.out.println("Error en la ejecucion de la instruccion SQL");
-        }
-        return rs;
-    }
-
-
-    public static void main(String[] args){
-
+        // Ejemplo: Eliminar alumno
+        db.eliminarFila("123");
     }
 }
-

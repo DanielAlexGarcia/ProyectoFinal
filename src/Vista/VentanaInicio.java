@@ -4,8 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.PopupMenu;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -60,6 +62,7 @@ class GUI extends JFrame implements ActionListener{
 	List<JComponent> ordenTabulacion1 = new ArrayList<>();
 	JPanel opcionesPaneles = new JPanel(new CardLayout());
 	JButton añadire, eliminare, modificare, consultares, consultar;
+	JToolBar opcionesd;
 	
 	String[][] RelacionesUni = {{"Selecciona","0"},
 			{"Facultad de Ingenieria ", "1"},
@@ -88,6 +91,8 @@ class GUI extends JFrame implements ActionListener{
 	
 	public GUI() {
 		boolean Secion = false;
+		FondoPanel fondo = new FondoPanel("/imagenes/fondo.jpg");
+		fondo.setLayout(new BorderLayout());
 		
 		getContentPane().setLayout(new BorderLayout());
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -95,6 +100,8 @@ class GUI extends JFrame implements ActionListener{
         setSize(1020, 740);
         setLocationRelativeTo(null);
         setVisible(true);
+        
+        opcionesd = new JToolBar();
         
         modificar = new JMenuItem("Modificar");
         modificar.addActionListener(this);
@@ -211,29 +218,24 @@ class GUI extends JFrame implements ActionListener{
         	        "Error", 
         	        JOptionPane.ERROR_MESSAGE);
         	}
-        	ordenTabulacion1.add(ID);
         	agregarComponente(Donadores, ID, 1, 1, 1, 1);
         	
         	agregarComponente(Donadores, new JLabel("Datos direccion"), 0, 2, 2, 1);
         	
         	agregarComponente(Donadores, new JLabel("Colonia: "), 0, 3, 1, 1);
         	colonia = new JTextField(10);
-        	ordenTabulacion1.add(colonia);
         	agregarComponente(Donadores, colonia, 1, 3, 1, 1);
         	
         	agregarComponente(Donadores, new JLabel("Calle: "), 0, 4, 1, 1);
         	calle = new JTextField(10);
-        	ordenTabulacion1.add(calle);
         	agregarComponente(Donadores, calle, 1, 4, 1, 1);
         	
         	agregarComponente(Donadores, new JLabel("Numero exterior: "), 0, 5, 1, 1);
         	numExt = new JTextField(10);
-        	ordenTabulacion1.add(numExt);
         	agregarComponente(Donadores, numExt, 1, 5, 1, 1);
         	
         	agregarComponente(Donadores, new JLabel("Numero interior ('S/N' si no aplica):"), 0, 6, 1, 1);
         	numInt = new JTextField(10);
-        	ordenTabulacion1.add(numInt);
         	agregarComponente(Donadores, numInt, 1, 6, 1, 1);
         	
         	agregarComponente(Donadores, new JLabel("Teléfono de contacto:"), 0, 7, 1, 1);
@@ -260,7 +262,6 @@ class GUI extends JFrame implements ActionListener{
         	
         	agregarComponente(Donadores, new JLabel("Email:"), 0, 8, 1, 1);
         	email = new JTextField(25);
-        	ordenTabulacion1.add(email);
         	agregarComponente(Donadores, email, 1, 8, 1, 1);
 
         	email.setInputVerifier(new InputVerifier() {
@@ -295,7 +296,6 @@ class GUI extends JFrame implements ActionListener{
         	for (String[] n : RelacionesUni) {
         		RelacionUni.addItem(n[0]);
         	}
-        	ordenTabulacion1.add(RelacionUni);
         	agregarComponente(Donadores, RelacionUni, 1, 9, 1, 1);
         	
         	agregarComponente(Donadores, new JLabel("Tipo de donador"), 0, 10, 1, 1);
@@ -303,7 +303,6 @@ class GUI extends JFrame implements ActionListener{
         	for (String[] n : tiposDonadores) {
         		tipoDonador.addItem(n[0]);
         	}
-        	ordenTabulacion1.add(tipoDonador);
         	agregarComponente(Donadores, tipoDonador, 1, 10, 1, 1);
         	
         	agregarComponente(Donadores, new JLabel("Clase (opcional): "), 0, 11, 1, 1);
@@ -311,7 +310,6 @@ class GUI extends JFrame implements ActionListener{
         	for (String[] n : clases) {
         		clase.addItem(n[0]);
         	}
-        	ordenTabulacion1.add(RelacionUni);
         	agregarComponente(Donadores, clase, 1, 11, 1, 1);
         	
         	agregarComponente(Donadores, new JLabel("Programa de donacion (opcional): "), 0, 12, 1, 1);
@@ -319,7 +317,6 @@ class GUI extends JFrame implements ActionListener{
         	for (String[] n : programasDonacion) {
         		progDona.addItem(n[0]);
         	}
-        	ordenTabulacion1.add(RelacionUni);
         	agregarComponente(Donadores, progDona, 1, 12, 1, 1);
         	
         	añadire = new JButton("Añadir donador");
@@ -393,6 +390,22 @@ class GUI extends JFrame implements ActionListener{
 		gbc.gridheight = h;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		InterFrame.add(componente, gbc);
+	}
+	
+	class FondoPanel extends JPanel {
+	    private Image imagen;
+
+	    public FondoPanel(String pathImagen) {
+	        this.imagen = new ImageIcon(pathImagen).getImage();
+	    }
+
+	    @Override
+	    protected void paintComponent(Graphics g) {
+	        super.paintComponent(g);
+	        if (imagen != null) {
+	            g.drawImage(imagen, 0, 0, getWidth(), getHeight(), this);
+	        }
+	    }
 	}
 
 	@Override
@@ -509,7 +522,7 @@ public class VentanaInicio {
 	public static void main (String[] args) {
 		
 		SwingUtilities.invokeLater(new Runnable() {
-
+				ConexionBD conexion = new ConexionBD();
             @Override
             public void run() {
                 new GUI();
