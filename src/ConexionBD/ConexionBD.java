@@ -11,7 +11,7 @@ public class ConexionBD {
 	    return instancia;
 	}
 
-    private Connection connection;
+    private Connection connection; 		// es parte del API JDBC permite establecer y gestionar la conexion a una base de datos
     private Statement stm; // PreparedStatement es mejor ya que evita SQL Injection
     private ResultSet rs;
 
