@@ -8,6 +8,7 @@ import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
+import java.awt.Insets;
 import java.awt.PopupMenu;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -65,6 +66,7 @@ class GUI extends JFrame implements ActionListener{
 	JToolBar opcionesd;
 	JFrame frame = new JFrame();
 	JButton Restor1, Restor2, Restor3, Restor4;
+	JButton buscarModi, buscarConsultOP, buscarElimi;
 	
 	String[][] RelacionesUni = {{"Selecciona","0"},
 			{"Facultad de Ingenieria ", "1"},
@@ -235,9 +237,9 @@ class GUI extends JFrame implements ActionListener{
             ID.setColumns(10);
             
         } catch (ParseException e) {
-            telefono = new JFormattedTextField();
+            ID = new JFormattedTextField();
             JOptionPane.showMessageDialog(this, 
-                "Error en formato de teléfono", 
+                "Error en el formato del id", 
                 "Error", 
                 JOptionPane.ERROR_MESSAGE);
         }
@@ -374,37 +376,67 @@ class GUI extends JFrame implements ActionListener{
             formatter.setAllowsInvalid(false);
             formatter.setOverwriteMode(true); 
             
-            ID = new JFormattedTextField(formatter);
-            ID.setColumns(10);
+            ID2 = new JFormattedTextField(formatter);
+            ID2.setColumns(10);
             
         } catch (ParseException e) {
-            telefono = new JFormattedTextField();
+            ID2 = new JFormattedTextField();
             JOptionPane.showMessageDialog(this, 
-                "Error en formato de teléfono", 
+                "Error en formato del id", 
                 "Error", 
                 JOptionPane.ERROR_MESSAGE);
         }
-        agregarComponente(añadi, ID, 1, 1, 1, 1);
+        agregarComponente(modi, ID2, 1, 1, 1, 1);
         
-        agregarComponente(añadi, new JLabel("Datos direccion"), 0, 2, 2, 1);
+        buscarModi = new JButton("Buscar");
+        buscarModi.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String texto = ID2.getText().replaceAll("[^0-9]", "");
+				if (!ID2.getText().isEmpty()) {
+					if (true) {															//condicion para comprovar si el id pertenece a un donador
+						activarComponentes(colonia2, calle2, numExt2, numInt2, telefono2, email2, tipoDonador2, RelacionUni2, clase2, progDona2);
+					}
+				}
+				
+			}
+		});
+        GridBagConstraints gbcBuscar = new GridBagConstraints();
+        gbcBuscar.gridx = 2;
+        gbcBuscar.gridy = 1;
+        gbcBuscar.gridwidth = 1;
+        gbcBuscar.gridheight = 1;
+        gbcBuscar.fill = GridBagConstraints.NONE; // No se expande
+        gbcBuscar.weightx = 0; // No toma espacio extra
+        gbcBuscar.insets = new Insets(5, 5, 5, 5);
+
+        modi.add(buscarModi, gbcBuscar);
         
-        agregarComponente(añadi, new JLabel("Colonia: "), 0, 3, 1, 1);
-        colonia = new JTextField(10);
-        agregarComponente(añadi, colonia, 1, 3, 1, 1);
         
-        agregarComponente(añadi, new JLabel("Calle: "), 0, 4, 1, 1);
-        calle = new JTextField(10);
-        agregarComponente(añadi, calle, 1, 4, 1, 1);
+        agregarComponente(modi, new JLabel("Datos direccion"), 0, 2, 2, 1);
         
-        agregarComponente(añadi, new JLabel("Numero exterior: "), 0, 5, 1, 1);
-        numExt = new JTextField(10);
-        agregarComponente(añadi, numExt, 1, 5, 1, 1);
+        agregarComponente(modi, new JLabel("Colonia: "), 0, 3, 1, 1);
+        colonia2 = new JTextField(10);
+        colonia2.setEnabled(false);
+        agregarComponente(modi, colonia2, 1, 3, 2, 1);
         
-        agregarComponente(añadi, new JLabel("Numero interior ('S/N' si no aplica):"), 0, 6, 1, 1);
-        numInt = new JTextField(10);
-        agregarComponente(añadi, numInt, 1, 6, 1, 1);
+        agregarComponente(modi, new JLabel("Calle: "), 0, 4, 1, 1);
+        calle2 = new JTextField(10);
+        calle2.setEnabled(false);
+        agregarComponente(modi, calle2, 1, 4, 2, 1);
         
-        agregarComponente(añadi, new JLabel("Teléfono de contacto:"), 0, 7, 1, 1);
+        agregarComponente(modi, new JLabel("Numero exterior: "), 0, 5, 1, 1);
+        numExt2 = new JTextField(10);
+        numExt2.setEnabled(false);
+        agregarComponente(modi, numExt2, 1, 5, 2, 1);
+        
+        agregarComponente(modi, new JLabel("Numero interior ('S/N' si no aplica):"), 0, 6, 1, 1);
+        numInt2 = new JTextField(10);
+        numInt2.setEnabled(false);
+        agregarComponente(modi, numInt2, 1, 6, 2, 1);
+        
+        agregarComponente(modi, new JLabel("Teléfono de contacto:"), 0, 7, 1, 1);
 
         try {
             MaskFormatter formatter = new MaskFormatter("+## ##########");
@@ -412,25 +444,27 @@ class GUI extends JFrame implements ActionListener{
             formatter.setAllowsInvalid(false);
             formatter.setOverwriteMode(true); 
             
-            telefono = new JFormattedTextField(formatter);
-            telefono.setColumns(15);
+            telefono2 = new JFormattedTextField(formatter);
+            telefono2.setEnabled(false);
+            telefono2.setColumns(15);
             
         } catch (ParseException e) {
-            telefono = new JFormattedTextField();
+            telefono2 = new JFormattedTextField();
             JOptionPane.showMessageDialog(this, 
                 "Error en formato de teléfono", 
                 "Error", 
                 JOptionPane.ERROR_MESSAGE);
         }
 
-        ordenTabulacion1.add(telefono);
-        agregarComponente(añadi, telefono, 1, 7, 1, 1);
+        ordenTabulacion1.add(telefono2);
+        agregarComponente(modi, telefono2, 1, 7, 2, 1);
         
-        agregarComponente(añadi, new JLabel("Email:"), 0, 8, 1, 1);
-        email = new JTextField(25);
-        agregarComponente(añadi, email, 1, 8, 1, 1);
+        agregarComponente(modi, new JLabel("Email:"), 0, 8, 1, 1);
+        email2 = new JTextField(25);
+        email2.setEnabled(false);
+        agregarComponente(modi, email2, 1, 8, 2, 1);
 
-        email.setInputVerifier(new InputVerifier() {
+        email2.setInputVerifier(new InputVerifier() {
             @Override
             public boolean verify(JComponent input) {
                 String email = ((JTextField) input).getText();
@@ -457,44 +491,48 @@ class GUI extends JFrame implements ActionListener{
             }
         });
         
-        agregarComponente(añadi, new JLabel("Relacion con la universidad (opcional): "), 0, 9, 1, 1);
-        RelacionUni = new JComboBox<String>();
+        agregarComponente(modi, new JLabel("Relacion con la universidad (opcional): "), 0, 9, 1, 1);
+        RelacionUni2 = new JComboBox<String>();
+        RelacionUni2.setEnabled(false);
         for (String[] n : RelacionesUni) {
-            RelacionUni.addItem(n[0]);
+            RelacionUni2.addItem(n[0]);
         }
-        agregarComponente(añadi, RelacionUni, 1, 9, 1, 1);
+        agregarComponente(modi, RelacionUni2, 1, 9, 2, 1);
         
-        agregarComponente(añadi, new JLabel("Tipo de donador"), 0, 10, 1, 1);
-        tipoDonador = new JComboBox<String>();
+        agregarComponente(modi, new JLabel("Tipo de donador"), 0, 10, 1, 1);
+        tipoDonador2 = new JComboBox<String>();
+        tipoDonador2.setEnabled(false);
         for (String[] n : tiposDonadores) {
-            tipoDonador.addItem(n[0]);
+            tipoDonador2.addItem(n[0]);
         }
-        agregarComponente(añadi, tipoDonador, 1, 10, 1, 1);
+        agregarComponente(modi, tipoDonador2, 1, 10, 2, 1);
         
-        agregarComponente(añadi, new JLabel("Clase (opcional): "), 0, 11, 1, 1);
-        clase = new JComboBox<String>();
+        agregarComponente(modi, new JLabel("Clase (opcional): "), 0, 11, 1, 1);
+        clase2 = new JComboBox<String>();
+        clase2.setEnabled(false);
         for (String[] n : clases) {
-            clase.addItem(n[0]);
+            clase2.addItem(n[0]);
         }
-        agregarComponente(añadi, clase, 1, 11, 1, 1);
+        agregarComponente(modi, clase2, 1, 11, 2, 1);
         
-        agregarComponente(añadi, new JLabel("Programa de donacion (opcional): "), 0, 12, 1, 1);
-        progDona = new JComboBox<String>();
+        agregarComponente(modi, new JLabel("Programa de donacion (opcional): "), 0, 12, 1, 1);
+        progDona2 = new JComboBox<String>();
+        progDona2.setEnabled(false);
         for (String[] n : programasDonacion) {
-            progDona.addItem(n[0]);
+            progDona2.addItem(n[0]);
         }
-        agregarComponente(añadi, progDona, 1, 12, 1, 1);
+        agregarComponente(modi, progDona2, 1, 12, 2, 1);
         
-        añadire = new JButton("Añadir donador");
-        añadire.addActionListener(this);
-        agregarComponente(añadi, añadire, 0, 13, 3, 1);
+        modificare = new JButton("Modificar donador");
+        modificare.addActionListener(this);
+        agregarComponente(modi, modificare, 0, 13, 3, 1);
         
-        Restor1 = new JButton("Restablecer campos");
-        Restor1.addActionListener(new ActionListener() {
+        Restor2 = new JButton("Restablecer campos");
+        Restor2.addActionListener(new ActionListener() {
             
             @Override
             public void actionPerformed(ActionEvent e) {
-                restablecer(ID, colonia, calle, numExt, numInt, telefono, email, tipoDonador, RelacionUni, clase, progDona);
+                restablecer(ID2, colonia2, calle2, numExt2, numInt2, telefono2, email2, tipoDonador2, RelacionUni2, clase2, progDona2);
                 
             }
         });
@@ -514,7 +552,23 @@ class GUI extends JFrame implements ActionListener{
         
         frame.add(panel);
         
-	}																					
+	}	
+	
+	private void activarComponentes(JTextField col, JTextField call, JTextField numext, JTextField numint, 
+			JFormattedTextField telefon, JTextField email5, JComboBox<String> tipoDona, JComboBox<String> RelacionUni, 
+			JComboBox<String> clase, JComboBox<String> progDona) {
+		col.setEnabled(true);
+		call.setEnabled(true);
+		numext.setEnabled(true);
+		numint.setEnabled(true);
+		telefon.setEnabled(true);
+		email5.setEnabled(true);
+		tipoDona.setEnabled(true);
+		RelacionUni.setEnabled(true);
+		clase.setEnabled(true);
+		progDona.setEnabled(true);
+		
+	}
 	
 	private void restablecer(JFormattedTextField IDe, JTextField col, JTextField call, JTextField numext, JTextField numint, 
 			JFormattedTextField telefon, JTextField email5, JComboBox<String> tipoDona, JComboBox<String> RelacionUni, 
@@ -525,7 +579,7 @@ class GUI extends JFrame implements ActionListener{
 		numext.setText("");
 		numint.setText("");
 		telefon.setText("");
-		email.setText("");
+		email5.setText("");
 		tipoDona.setSelectedIndex(0);
 		RelacionUni.setSelectedIndex(0);
 		clase.setSelectedIndex(0);
@@ -592,6 +646,7 @@ class GUI extends JFrame implements ActionListener{
 		gbc.gridwidth = w;
 		gbc.gridheight = h;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.weightx = 1.0;
 		InterFrame.add(componente, gbc);
 	}
 	
