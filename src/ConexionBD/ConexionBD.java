@@ -84,5 +84,9 @@ public class ConexionBD {
         }
         return rs;
     }
+    
+    public Connection getConnection() {
+    	return connection;
+    }
 }
 
