@@ -631,6 +631,13 @@ class GUI extends JFrame implements ActionListener{
 		progDona.setSelectedIndex(0);
 	}
 	
+	private void ActualizarDatosGUIDonador(Donador modelDonador,
+			JFormattedTextField IDe, JTextField col, JTextField call, JTextField numext, JTextField numint, 
+			JFormattedTextField telefon, JTextField email5, JComboBox<String> tipoDona, JComboBox<String> RelacionUni, 
+			JComboBox<String> clase, JComboBox<String> progDona) {
+		
+	}
+	
 	
 	//verifica que solo los datos que no aceptan nulo extan correctamente completos
 	

@@ -22,8 +22,8 @@ public class HilosConsultaActualizarGUI {
                 // Obtener datos desde la base de datos
                 ResultSet resultado = ConexionBD.getInstancia().ejecutarInstruccionSQL(sql);
                 // Actualizar GUI en el hilo de eventos de Swing
-                SwingUtilities.invokeLater(() -> {
-                    interfaz.actualizarConDatos(resultado);
+                SwingUtilities.invokeLater(() -> {				//delega la tarea de actualizar la GUI al hilo principal (el que maneja la GUI)
+                    //interfaz.actualizarConDatos(resultado);
                 });
 
             } catch (Exception e) {
@@ -32,4 +32,4 @@ public class HilosConsultaActualizarGUI {
         }).start();
     }
 }
-}
+
