@@ -5,17 +5,19 @@ public class Donador {
 	private int ID, IDTipoDonador;
 	private Integer IDRelacionUni, IDClase, IDProgDonacion;
 	
-	public Donador(String colonia, String calle, String numExt,String numInt, String numCont, String email, int id, int idRelacion, int idtiporelacion,int idClase, int idproDonacion) {
+	public Donador(int ID, String colonia, String calle, String numExt,String numInt,
+			String numCont, String email, int idRelacion, int idtiporelacion,int idClase, int idproDonacion) {
 		this.colonia = colonia;
 		this.calle = calle;
 		this.numExt = numExt;
 		this.numInt = numInt;
 		this.numContacto = numCont;
 		this.email = email;
-		this.ID = id;
+		this.ID = ID;
 		this.IDRelacionUni = idRelacion;
 		this.IDTipoDonador = idtiporelacion;
 		this.IDClase = idClase;
+		this.IDProgDonacion = idproDonacion;
 	}
 	// Constructor sin id
 	public Donador(String colonia, String calle, String numExt,String numInt, String numCont, String email, int idRelacion, int idtiporelacion,int idClase, int idproDonacion) {

@@ -5,26 +5,35 @@ import java.sql.ResultSet;
 import javax.swing.SwingUtilities;
 
 import ConexionBD.ConexionBD;
+import Controlador.DonadorDAO;
+import Modelo.Donador;
 import Vista.VentanaInicio;
 
 public class HilosConsultaActualizarGUI {
-    private final VentanaInicio interfaz;
-    private String sql;
+	private VentanaInicio interfa;
+    private Integer id;
+    private DonadorDAO dona = new DonadorDAO();
+    private String ventana;
+    
 
-    public HilosConsultaActualizarGUI(VentanaInicio interfaz, String instruccionSQL) {
-        this.interfaz = interfaz;
-       this.sql = instruccionSQL;
+    public HilosConsultaActualizarGUI(Integer consultaID, String ventana) {
+       this.id = consultaID;
+       this.ventana = ventana;
     }
 
     public void consultarYActualizarGUI() {
         new Thread(() -> {								// Hilo que hace la consulta 
             try {
-                // Obtener datos desde la base de datos
-                ResultSet resultado = ConexionBD.getInstancia().ejecutarInstruccionSQL(sql);
-                // Actualizar GUI en el hilo de eventos de Swing
-                SwingUtilities.invokeLater(() -> {				//delega la tarea de actualizar la GUI al hilo principal (el que maneja la GUI)
-                    //interfaz.actualizarConDatos(resultado);
-                });
+            	if(id != null && id != 0) {
+            		int ID = (int) id;
+            		// Obtener datos desde la base de datos
+                    Donador donana = dona.buscarDonadorPorId(ID);
+                    // Actualizar GUI en el hilo de eventos de Swing
+                    SwingUtilities.invokeLater(() -> {				//delega la tarea de actualizar la GUI al hilo principal (el que maneja la GUI)
+                        interfa.interfaz.setDonador(donana, ventana);
+                    });
+            	}
+                
 
             } catch (Exception e) {
                 System.err.println("Error al consultar datos: " + e.getMessage());

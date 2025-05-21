@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.sql.Types;
 
 import ConexionBD.ConexionBD;
+import Modelo.Donador;
 
 
 
@@ -113,12 +114,25 @@ public class DonadorDAO {
 
 
 	 // Método de lectura segura con PreparedStatement
-	    public ResultSet buscarDonadorPorId(int donadorID) {
+	    public Donador buscarDonadorPorId(int donadorID) {
 	        String sql = "SELECT * FROM Donador WHERE DonadorID = ?";
 	        try {
 	        	PreparedStatement stmt = ConexionBD.getInstancia().getConnection().prepareStatement(sql);
 	            stmt.setInt(1, donadorID);
-	            return stmt.executeQuery();
+	            ResultSet rs = stmt.executeQuery();
+	            Donador dona = new Donador(
+	            		rs.getInt("DonadorID"), 
+	            		rs.getString("colonia"),
+	            		rs.getString("calle"),
+	            		rs.getString("numExt"),
+	            		rs.getString("numInt"),
+	            		rs.getString("TelefonoCont"),
+	            		rs.getString("email"),
+	            		rs.getInt("RelacionUnilD"),
+	            		rs.getInt("TipoDonadorID"),
+	            		rs.getInt("claseID"),
+	            		rs.getInt("ProgramaDonacionID"));
+	            return dona;
 	        } catch (SQLException e) {
 	            System.out.println("Error al buscar donador: " + e.getMessage());
 	            return null;

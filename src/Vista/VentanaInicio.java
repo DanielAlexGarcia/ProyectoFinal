@@ -27,13 +27,16 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
 
 import ConexionBD.ConexionBD;
+import Controlador.DonadorDAO;
+import Hilos.HilosConsultaActualizarGUI;
 import Modelo.Donador;
 
 
 
-class GUI extends JFrame implements ActionListener{
+public class VentanaInicio  extends JFrame implements ActionListener{
 	ArrayList<String> errores = new ArrayList<String>();
 	Donador donadona;
+	public static VentanaInicio interfaz;
 	
 	ConexionBD conexionBD;
 	GridBagLayout gbl = new GridBagLayout();
@@ -50,20 +53,16 @@ class GUI extends JFrame implements ActionListener{
 	JInternalFrame InicioSecion;
 	JInternalFrame Donadores;
 	JPanel añadi, modi, consultOP, consultAll, elimini;
-	JTextField colonia, calle, numExt, numInt, email;
-	JFormattedTextField ID;
+	JTextField colonia, calle, numExt, numInt, email, ID;
 	JFormattedTextField telefono;
 	JComboBox RelacionUni, tipoDonador, clase, progDona;
-	JTextField colonia2, calle2, numExt2, numInt2, email2;
-	JFormattedTextField ID2;
+	JTextField colonia2, calle2, numExt2, numInt2, email2, ID2;
 	JFormattedTextField telefono2;
 	JComboBox RelacionUni2, tipoDonador2, clase2, progDona2;
-	JTextField colonia3, calle3, numExt3, numInt3, email3;
-	JFormattedTextField ID3;
+	JTextField colonia3, calle3, numExt3, numInt3, email3, ID3;
 	JFormattedTextField telefono3;
 	JComboBox RelacionUni3, tipoDonador3, clase3, progDona3;
-	JTextField colonia4, calle4, numExt4, numInt4, email4;
-	JFormattedTextField ID4;
+	JTextField colonia4, calle4, numExt4, numInt4, email4,ID4;
 	JFormattedTextField telefono4;
 	JComboBox RelacionUni4, tipoDonador4, clase4, progDona4;
 	List<JComponent> ordenTabulacion1 = new ArrayList<>();
@@ -99,7 +98,7 @@ class GUI extends JFrame implements ActionListener{
 		    {"Donaciones en Especie", "4"},
 		    {"Apoyo a Infraestructura", "5"}};
 	
-	public GUI() {
+	public VentanaInicio() {
 		boolean Secion = false;
 		FondoPanel fondo = new FondoPanel("/imagenes/fondo.jpg");
 		fondo.setLayout(new BorderLayout());
@@ -233,22 +232,7 @@ class GUI extends JFrame implements ActionListener{
         agregarComponente(añadi, tituloAñadi, 0, 0, 5, 1);
         
         agregarComponente(añadi, new JLabel("ID (opcional)"), 0, 1, 1, 1);
-        try {
-            MaskFormatter formatter = new MaskFormatter("##########");
-            formatter.setPlaceholder("");
-            formatter.setAllowsInvalid(false);
-            formatter.setOverwriteMode(true); 
-            
-            ID = new JFormattedTextField(formatter);
-            ID.setColumns(10);
-            
-        } catch (ParseException e) {
-            ID = new JFormattedTextField();
-            JOptionPane.showMessageDialog(this, 
-                "Error en el formato del id", 
-                "Error", 
-                JOptionPane.ERROR_MESSAGE);
-        }
+        ID = crearCampoIDValidado();
         agregarComponente(añadi, ID, 1, 1, 1, 1);
         
         agregarComponente(añadi, new JLabel("Datos direccion"), 0, 2, 2, 1);
@@ -376,38 +360,34 @@ class GUI extends JFrame implements ActionListener{
         agregarComponente(modi, tituloModi, 0, 0, 5, 1);
         
         agregarComponente(modi, new JLabel("ID"), 0, 1, 1, 1);
-        try {
-            MaskFormatter formatter = new MaskFormatter("##########");
-            formatter.setPlaceholder("");
-            formatter.setAllowsInvalid(false);
-            formatter.setOverwriteMode(true); 
-            
-            ID2 = new JFormattedTextField(formatter);
-            ID2.setColumns(10);
-            
-        } catch (ParseException e) {
-            ID2 = new JFormattedTextField();
-            JOptionPane.showMessageDialog(this, 
-                "Error en formato del id", 
-                "Error", 
-                JOptionPane.ERROR_MESSAGE);
-        }
+        ID2 = crearCampoIDValidado();
         agregarComponente(modi, ID2, 1, 1, 1, 1);
         
         buscarModi = new JButton("Buscar");
         buscarModi.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				String texto = ID2.getText().replaceAll("[^0-9]", "");
-				if (!ID2.getText().isEmpty()) {
-					if (true) {															//condicion para comprovar si el id pertenece a un donador
-						activarComponentes(colonia2, calle2, numExt2, numInt2, telefono2, email2, tipoDonador2, RelacionUni2, clase2, progDona2);
-					}
-				}
-				
-			}
-		});
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String texto = ID2.getText().trim();
+                System.out.println("Texto ingresado: '" + texto + "'");
+                
+                if (!texto.isEmpty()) {
+                    try {
+                        int id = Integer.parseInt(texto);
+                        System.out.println("ID: " + id);
+                        
+                        HilosConsultaActualizarGUI hilos = new HilosConsultaActualizarGUI(id, "modifique");
+                        hilos.consultarYActualizarGUI();
+                        activarComponentes(colonia2, calle2, numExt2, numInt2, telefono2, 
+                                         email2, tipoDonador2, RelacionUni2, clase2, progDona2);
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(VentanaInicio.this, 
+                            "ID inválido. Ingrese solo números.", 
+                            "Error", 
+                            JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+        });
         GridBagConstraints gbcBuscar = new GridBagConstraints();
         gbcBuscar.gridx = 2;
         gbcBuscar.gridy = 1;
@@ -624,7 +604,7 @@ class GUI extends JFrame implements ActionListener{
 		
 	}
 	
-	private void restablecer(JFormattedTextField IDe, JTextField col, JTextField call, JTextField numext, JTextField numint, 
+	private void restablecer(JTextField IDe, JTextField col, JTextField call, JTextField numext, JTextField numint, 
 			JFormattedTextField telefon, JTextField email5, JComboBox<String> tipoDona, JComboBox<String> RelacionUni, 
 			JComboBox<String> clase, JComboBox<String> progDona) {
 		IDe.setText("");
@@ -642,7 +622,7 @@ class GUI extends JFrame implements ActionListener{
 	
 		// metodo para actualizar la GUI recibiendo como parametro el objeto de donador y los componentes a actualizar
 	private void ActualizarDatosGUIDonador(Donador modelDonador,
-			JFormattedTextField IDe, JTextField col, JTextField call, JTextField numext, JTextField numint, 
+			JTextField IDe, JTextField col, JTextField call, JTextField numext, JTextField numint, 
 			JFormattedTextField telefon, JTextField email5, JComboBox<String> tipoDona, JComboBox<String> RelacionUni, 
 			JComboBox<String> clase, JComboBox<String> progDona) {
 		
@@ -742,21 +722,6 @@ class GUI extends JFrame implements ActionListener{
 		InterFrame.add(componente, gbc);
 	}
 	
-	class FondoPanel extends JPanel {
-	    private Image imagen;
-
-	    public FondoPanel(String pathImagen) {
-	        this.imagen = new ImageIcon(pathImagen).getImage();
-	    }
-
-	    @Override
-	    protected void paintComponent(Graphics g) {
-	        super.paintComponent(g);
-	        if (imagen != null) {
-	            g.drawImage(imagen, 0, 0, getWidth(), getHeight(), this);
-	        }
-	    }
-	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -841,7 +806,6 @@ class GUI extends JFrame implements ActionListener{
 				        JOptionPane.ERROR_MESSAGE);
 			}else {
 				
-				// Código para guardar en la base de datos
 				JOptionPane.showMessageDialog(this, 
 				        "Datos correctos, el donador se guardará en la base de datos", 
 				        "Éxito", 
@@ -879,22 +843,72 @@ class GUI extends JFrame implements ActionListener{
 		}
 		return false;
 	}
+
 	
-}
+	public void setDonador(Donador dona, String ventana) {
+		this.donadona = dona;
+		
+		if (ventana.equalsIgnoreCase("Eliminar")) {
+			ActualizarDatosGUIDonador(dona, ID2,colonia2, calle2, numExt2, numInt2, 
+					telefono2, email2, tipoDonador2, RelacionUni2, 
+					clase2, progDona2);
+		}
+	}
 
 
 
-public class VentanaInicio {
+
 	
 	public static void main (String[] args) {
 		
 		SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new GUI();
+                interfaz = new VentanaInicio();
 
             }
         });
 	}
 
+	private JTextField crearCampoIDValidado() {
+	    JTextField campoID = new JTextField(10);
+	    
+	    // Agregar KeyListener para validación en tiempo real
+	    campoID.addKeyListener(new java.awt.event.KeyAdapter() {
+	        public void keyTyped(java.awt.event.KeyEvent evt) {
+	            char c = evt.getKeyChar();
+	            // Solo permitir dígitos y teclas de control
+	            if (!Character.isDigit(c) && c != java.awt.event.KeyEvent.VK_BACK_SPACE 
+	                && c != java.awt.event.KeyEvent.VK_DELETE) {
+	                evt.consume(); // Cancelar el evento
+	            }
+	            
+	            // Limitar a 10 caracteres
+	            if (campoID.getText().length() >= 10 && Character.isDigit(c)) {
+	                evt.consume();
+	            }
+	        }
+	    });
+	    
+	    return campoID;
+	}
+	
+}
+
+
+
+class FondoPanel extends JPanel {
+    private Image imagen;
+
+    public FondoPanel(String pathImagen) {
+        this.imagen = new ImageIcon(pathImagen).getImage();
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        if (imagen != null) {
+            g.drawImage(imagen, 0, 0, getWidth(), getHeight(), this);
+        }
+    }
 }
