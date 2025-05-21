@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class TestconexionBD {
 	Scanner ins = new Scanner(System.in);
 
-    public static void main(String[] args) {
+   /* public static void main(String[] args) {
         ConexionBD conexion = new ConexionBD();
 
         // 🔹 Paso 1: Insertar un donador
@@ -47,7 +47,7 @@ public class TestconexionBD {
         }
         
         // Probar actualización con datos de prueba
-		boolean exito = conexion.actualizarDonador(
+		/*boolean exito = conexion.actualizarDonador(
 		    13,                  // donadorID
 		    "Centro",           // colonia
 		    "Av. Reforma",      // calle
@@ -75,6 +75,9 @@ public class TestconexionBD {
         } else {
             System.out.println("❌ No se pudo eliminar el donador.");
         }
-    }
+        
+        }
+        */
+    
 }
 
