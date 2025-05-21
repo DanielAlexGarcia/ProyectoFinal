@@ -15,19 +15,25 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.beans.PropertyVetoException;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
 
 import ConexionBD.ConexionBD;
+import Modelo.Donador;
 
 
 
 class GUI extends JFrame implements ActionListener{
 	ArrayList<String> errores = new ArrayList<String>();
+	Donador donadona;
 	
 	ConexionBD conexionBD;
 	GridBagLayout gbl = new GridBagLayout();
@@ -553,6 +559,45 @@ class GUI extends JFrame implements ActionListener{
         frame.add(panel);
         
 	}	
+		//Metodo para llenar tablas en base al resultSet con los datos de la base de datos
+	private void llenarTablaDesdeResultSet(ResultSet rs, JTable tabla) {
+	    try {
+	        ResultSetMetaData metaData = rs.getMetaData();
+	        int columnas = metaData.getColumnCount();
+
+	        // Crear modelo de la tabla
+	        DefaultTableModel modelo = new DefaultTableModel();
+
+	        // Añadir nombres de columnas al modelo
+	        for (int i = 1; i <= columnas; i++) {
+	            modelo.addColumn(metaData.getColumnLabel(i));
+	        }
+
+	        // Añadir filas al modelo
+	        while (rs.next()) {
+	            Object[] fila = new Object[columnas];
+	            for (int i = 1; i <= columnas; i++) {
+	                fila[i - 1] = rs.getObject(i);
+	            }
+	            modelo.addRow(fila);
+	        }
+
+	        tabla.setModel(modelo);
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	}
+	
+	// Retorna el id != 0 para los campos de combobox
+	public Integer retornarID (String[][] lista, String valor) {
+		for (String[] m : lista) {
+			if (m[0].equalsIgnoreCase(valor)) {
+				return Integer.parseInt(m[1]);
+			}
+		}
+		
+		return null;
+	}
 	
 	private void activarComponentes(JTextField col, JTextField call, JTextField numext, JTextField numint, 
 			JFormattedTextField telefon, JTextField email5, JComboBox<String> tipoDona, JComboBox<String> RelacionUni, 

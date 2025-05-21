@@ -32,7 +32,7 @@ public class TestconexionBD {
         }
 
         // 🔹 Paso 2: Buscar el donador por ID
-        ResultSet rs = conexion.buscarDonadorPorId(13);
+        ResultSet rs = conexion.buscarDonadorPorId(14);
         try {
             if (rs != null && rs.next()) {
                 System.out.println("🔍 Donador encontrado:");
@@ -45,6 +45,27 @@ public class TestconexionBD {
         } catch (SQLException e) {
             System.out.println("❌ Error al leer los datos del donador: " + e.getMessage());
         }
+        
+        // Probar actualización con datos de prueba
+		boolean exito = conexion.actualizarDonador(
+		    13,                  // donadorID
+		    "Centro",           // colonia
+		    "Av. Reforma",      // calle
+		    "123",              // numExt
+		    "4B",               // numInt
+		    "555-1234",         // telefono
+		    "correo@ejemplo.com", // email
+		    2,                  // RelaUniOP
+		    1,                  // tipoDona
+		    13,                  // claseOP
+		    5                   // progDonaOP
+		);
+
+		if (exito) {
+		    System.out.println("Donador actualizado correctamente.");
+		} else {
+		    System.out.println("No se pudo actualizar el donador.");
+		}
 
         // 🔹 Paso 3: Eliminar el donador
         boolean eliminado = conexion.eliminarFila(11);
