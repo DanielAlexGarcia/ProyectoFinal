@@ -86,7 +86,7 @@ public class Donador {
 		ID = iD;
 	}
 
-	public int getIDRelacionUni() {
+	public Integer getIDRelacionUni() {
 		return IDRelacionUni;
 	}
 
@@ -102,7 +102,7 @@ public class Donador {
 		IDTipoDonador = iDTipoDonador;
 	}
 
-	public int getIDClase() {
+	public Integer getIDClase() {
 		return IDClase;
 	}
 
@@ -110,7 +110,7 @@ public class Donador {
 		IDClase = iDClase;
 	}
 
-	public int getIDProgDonacion() {
+	public Integer getIDProgDonacion() {
 		return IDProgDonacion;
 	}
 

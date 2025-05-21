@@ -589,10 +589,19 @@ class GUI extends JFrame implements ActionListener{
 	}
 	
 	// Retorna el id != 0 para los campos de combobox
-	public Integer retornarID (String[][] lista, String valor) {
+	private Integer retornarID (String[][] lista, String valor) {
 		for (String[] m : lista) {
 			if (m[0].equalsIgnoreCase(valor)) {
 				return Integer.parseInt(m[1]);
+			}
+		}
+		
+		return null;
+	}
+	private String retornaValor(String[][] lista, Integer id) {
+		for (String[] m : lista) {
+			if (m[1].equalsIgnoreCase(String.valueOf(id))) {
+				return m[0];
 			}
 		}
 		
@@ -631,10 +640,41 @@ class GUI extends JFrame implements ActionListener{
 		progDona.setSelectedIndex(0);
 	}
 	
+		// metodo para actualizar la GUI recibiendo como parametro el objeto de donador y los componentes a actualizar
 	private void ActualizarDatosGUIDonador(Donador modelDonador,
 			JFormattedTextField IDe, JTextField col, JTextField call, JTextField numext, JTextField numint, 
 			JFormattedTextField telefon, JTextField email5, JComboBox<String> tipoDona, JComboBox<String> RelacionUni, 
 			JComboBox<String> clase, JComboBox<String> progDona) {
+		
+		IDe.setText(String.valueOf(modelDonador.getID()));
+		col.setText(modelDonador.getColonia());
+		call.setText(modelDonador.getCalle());
+		numext.setText(modelDonador.getNumExt());
+		numint.setText(modelDonador.getNumInt());
+		telefon.setText(modelDonador.getNumContacto());
+		email5.setText(modelDonador.getEmail());
+		tipoDona.setSelectedItem(retornaValor(tiposDonadores, modelDonador.getIDTipoDonador()));
+		Integer op;
+		op = modelDonador.getIDRelacionUni();
+		if(op== null) {
+			RelacionUni.setSelectedIndex(0);
+		}else if (op != null) {
+			RelacionUni.setSelectedItem(retornaValor(RelacionesUni, op));
+		}
+		op = modelDonador.getIDClase();
+		if(op == null) {
+			clase.setSelectedIndex(0);
+		}else if(op != null) {
+			clase.setSelectedItem(retornaValor(RelacionesUni, op));
+		}
+		op = modelDonador.getIDProgDonacion();
+		if(op==null) {
+			progDona.setSelectedIndex(0);
+		}else if (op != null) {
+			progDona.setSelectedItem(retornaValor(programasDonacion, op));
+		}
+		
+		
 		
 	}
 	
