@@ -509,7 +509,7 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         agregarComponente(modi, progDona2, 1, 12, 2, 1);
         
         modificare = new JButton("Modificar donador");
-        
+        modificare.addActionListener(this);
         agregarComponente(modi, modificare, 0, 13, 3, 1);
         
         Restor2 = new JButton("Restablecer campos");
@@ -839,6 +839,36 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 				}
 			}
 			
+		}
+		
+		else if(e.getSource() == modificare) {
+			if (!verificadorDatos(colonia2, calle2, numExt2, numInt2, telefono2, email2, tipoDonador2)) {
+				String m = "";
+				for (String n : errores) {
+					m = m + n + "\n";
+				}
+				JOptionPane.showMessageDialog(this, 
+				        m, 
+				        "Error", 
+				        JOptionPane.ERROR_MESSAGE);
+			}else {
+				DonadorDAO dondao =new DonadorDAO(interfaz);
+				String RU = String.valueOf(RelacionUni2.getSelectedItem());
+				String TD = String.valueOf(tipoDonador2.getSelectedItem());
+				String CL = String.valueOf(clase2.getSelectedItem());
+				String PD = String.valueOf(progDona2.getSelectedItem());
+				boolean newDona = dondao.actualizarDonador(Integer.parseInt(ID2.getText()),
+						colonia2.getText(), calle2.getText(), numExt2.getText(), numInt2.getText(), 
+						telefono2.getText(), email2.getText(), retornarID(RelacionesUni, RU),retornarID(tiposDonadores, TD), retornarID(clases, CL), 
+						retornarID(programasDonacion, PD));
+				
+				if (newDona) {
+					JOptionPane.showMessageDialog(this, 
+					        "Datos correctos, el donador se guardaron en la base de datos", 
+					        "Éxito", 
+					        JOptionPane.INFORMATION_MESSAGE);
+				}
+			}
 		}
 		
 		
