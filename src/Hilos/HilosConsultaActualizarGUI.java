@@ -31,6 +31,7 @@ public class HilosConsultaActualizarGUI {
                     // Actualizar GUI en el hilo de eventos de Swing
                     SwingUtilities.invokeLater(() -> {				//delega la tarea de actualizar la GUI al hilo principal (el que maneja la GUI)
                         interfa.interfaz.setDonador(donana, ventana);
+                        
                     });
             	}
                 

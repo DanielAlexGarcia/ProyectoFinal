@@ -42,6 +42,7 @@ public class DonadorDAO {
 	        return filasAfectadas > 0;
 	    } catch (SQLException e) {
 	        System.out.println("Error al actualizar donador: " + e.getMessage());
+	        interfaz.ShowMessage("Error al actualizar donador: \n" + e.getMessage());
 	        return false;
 	    }
 	}
