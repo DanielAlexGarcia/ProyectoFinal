@@ -582,6 +582,8 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 		for (String[] m : lista) {
 			if (m[1].equalsIgnoreCase(String.valueOf(id))) {
 				return m[0];
+			}else {
+				return "Selecciona";
 			}
 		}
 		
@@ -626,32 +628,39 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 			JFormattedTextField telefon, JTextField email5, JComboBox<String> tipoDona, JComboBox<String> RelacionUni, 
 			JComboBox<String> clase, JComboBox<String> progDona) {
 		
-		IDe.setText(String.valueOf(modelDonador.getID()));
-		col.setText(modelDonador.getColonia());
-		call.setText(modelDonador.getCalle());
-		numext.setText(modelDonador.getNumExt());
-		numint.setText(modelDonador.getNumInt());
-		telefon.setText(modelDonador.getNumContacto());
-		email5.setText(modelDonador.getEmail());
-		tipoDona.setSelectedItem(retornaValor(tiposDonadores, modelDonador.getIDTipoDonador()));
-		Integer op;
-		op = modelDonador.getIDRelacionUni();
-		if(op== null) {
-			RelacionUni.setSelectedIndex(0);
-		}else if (op != null) {
-			RelacionUni.setSelectedItem(retornaValor(RelacionesUni, op));
-		}
-		op = modelDonador.getIDClase();
-		if(op == null) {
-			clase.setSelectedIndex(0);
-		}else if(op != null) {
-			clase.setSelectedItem(retornaValor(RelacionesUni, op));
-		}
-		op = modelDonador.getIDProgDonacion();
-		if(op==null) {
-			progDona.setSelectedIndex(0);
-		}else if (op != null) {
-			progDona.setSelectedItem(retornaValor(programasDonacion, op));
+		if (modelDonador != null) {
+			IDe.setText(String.valueOf(modelDonador.getID()));
+			col.setText(modelDonador.getColonia());
+			call.setText(modelDonador.getCalle());
+			numext.setText(modelDonador.getNumExt());
+			numint.setText(modelDonador.getNumInt());
+			telefon.setText(modelDonador.getNumContacto());
+			email5.setText(modelDonador.getEmail());
+			tipoDona.setSelectedItem(retornaValor(tiposDonadores, modelDonador.getIDTipoDonador()));
+			Integer op;
+			op = modelDonador.getIDRelacionUni();
+			if(op== null) {
+				RelacionUni.setSelectedIndex(0);
+			}else if (op != null) {
+				RelacionUni.setSelectedItem(retornaValor(RelacionesUni, op));
+			}
+			op = modelDonador.getIDClase();
+			if(op == null) {
+				clase.setSelectedIndex(0);
+			}else if(op != null) {
+				clase.setSelectedItem(retornaValor(RelacionesUni, op));
+			}
+			op = modelDonador.getIDProgDonacion();
+			if(op==null) {
+				progDona.setSelectedIndex(0);
+			}else if (op != null) {
+				progDona.setSelectedItem(retornaValor(programasDonacion, op));
+			}
+		}else {
+			JOptionPane.showMessageDialog(this, 
+	                "No se encontro ningun donador con el id "+ ID2.getText(), 
+	                "Error", 
+	                JOptionPane.ERROR_MESSAGE);
 		}
 		
 		
