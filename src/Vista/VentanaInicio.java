@@ -509,7 +509,7 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         agregarComponente(modi, progDona2, 1, 12, 2, 1);
         
         modificare = new JButton("Modificar donador");
-        modificare.addActionListener(this);
+        
         agregarComponente(modi, modificare, 0, 13, 3, 1);
         
         Restor2 = new JButton("Restablecer campos");
@@ -571,7 +571,11 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 	private Integer retornarID (String[][] lista, String valor) {
 		for (String[] m : lista) {
 			if (m[0].equalsIgnoreCase(valor)) {
-				return Integer.parseInt(m[1]);
+				if(m[1].equalsIgnoreCase("0")) {
+					return null;
+				}else {
+					return Integer.parseInt(m[1]);
+				}
 			}
 		}
 		
@@ -693,14 +697,18 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 			 errores.add("campo numero interior obligatorio, maximo 45 caracteres o 'S/N' si no aplica");
 			 hayError ++;
 		 }
-		 if (telefon.getText().equalsIgnoreCase("+__ __________")) {
+		 if (telefon.getText().contains("_")) {
 			 telefon.setBackground(new Color(255, 200, 200));
 			 errores.add("campo telefono obligatorio, numero de telefono con codigo de pais");
 			 hayError ++;
 		 }
-		 if (email5.getText().isEmpty() || email5.getText().length() > 70 || email5.getBackground().equals(rojoClaro)) {
+		 if (email5.getText().isEmpty() || !isValidEmail(email5.getText())) {
 			 email5.setBackground(new Color(255, 200, 200));
-			 errores.add("campo Email obligatorio, maximo 70 caracteres");
+			 if (!isValidEmail(email5.getText())) {
+				 errores.add("Formato de Email icorrecto debe cumplir con el formato 'alguien@dominio.com'");
+			 }else {
+				 errores.add("campo Email obligatorio, maximo 70 caracteres");
+			 }
 			 hayError ++;
 		 }
 		 if (tipoDona.getSelectedIndex() == 0) {
@@ -718,8 +726,8 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 	}
 	
 	private boolean isValidEmail(String email) {
-	    String regex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
-	    return email.matches(regex) && email.length() <= 70; // 70 es el varchar de tu tabla
+		String regex = "^[\\w.-]+@[\\w.-]+\\.[A-Za-z]{2,}$";
+	    return email.matches(regex) && email.length() <= 70;
 	}
 	private void agregarComponente(JPanel InterFrame, JComponent componente, int x, int y, int w, int h) {
 		gbc.gridx = x;
@@ -808,29 +816,27 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 				for (String n : errores) {
 					m = m + n + "\n";
 				}
-				System.out.println("id =="+ID.getText()+ "id");
 				JOptionPane.showMessageDialog(this, 
 				        m, 
 				        "Error", 
 				        JOptionPane.ERROR_MESSAGE);
 			}else {
 				DonadorDAO dondao =new DonadorDAO(interfaz);
+				String RU = String.valueOf(RelacionUni.getSelectedItem());
+				String TD = String.valueOf(tipoDonador.getSelectedItem());
+				String CL = String.valueOf(clase.getSelectedItem());
+				String PD = String.valueOf(progDona.getSelectedItem());
 				boolean newDona = dondao.insertarDonador(Integer.parseInt(ID.getText()),
 						colonia.getText(), calle.getText(), numExt.getText(), numInt.getText(), 
-						telefono.getText(), email.getText(), null, 1, null, null);
+						telefono.getText(), email.getText(), retornarID(RelacionesUni, RU),retornarID(tiposDonadores, TD), retornarID(clases, CL), 
+						retornarID(programasDonacion, PD));
 				
 				if (newDona) {
 					JOptionPane.showMessageDialog(this, 
 					        "Datos correctos, el donador se guardaron en la base de datos", 
 					        "Éxito", 
 					        JOptionPane.INFORMATION_MESSAGE);
-				}else {
-					;
 				}
-	    		
-	    		
-				
-				
 			}
 			
 		}
