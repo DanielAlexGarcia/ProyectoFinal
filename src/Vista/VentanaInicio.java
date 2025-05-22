@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -159,7 +160,9 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         frame.setFocusTraversalPolicyProvider(true);
         
         problema1.setHorizontalAlignment(SwingConstants.RIGHT);
+        problema1.setOpaque(true);
         problema2.setHorizontalAlignment(SwingConstants.RIGHT);
+        problema2.setOpaque(true);
         menuBar.add(acciones);
         
         boton1 = new JButton("Acceder");
@@ -204,11 +207,13 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         InicioSecion.setTitle("Iniciar sesion");
         
         
-        
+       // <html><u><b style='color:blue;'>Bienbenido, inicia secion para comenzar</b></u></html>
         JLabel tituloinicioSecion = new JLabel("Bienbenido, inicia secion para comenzar");
+        tituloinicioSecion.setOpaque(true);
         agregarComponente(InicioSecion, tituloinicioSecion, 0, 0, 2, 1);
         
         JLabel txtUsu = new JLabel("Usuario: ");
+        txtUsu.setOpaque(true);
         agregarComponente(InicioSecion, txtUsu, 0, 1, 1, 1);
         
         
@@ -218,6 +223,7 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         agregarComponente(InicioSecion, problema1, 0, 2, 2, 1);
         
         JLabel txtContra = new JLabel("Contraseña: ");
+        txtContra.setOpaque(true);
         agregarComponente(InicioSecion, txtContra, 0, 3, 1, 1);
         
         contraseña = new JPasswordField(10);
@@ -235,7 +241,7 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         Donadores = new JInternalFrame();
         Donadores.setResizable(true);  
         Donadores.setSize(500,500);
-        Donadores.setLayout(new BorderLayout()); // ¡Cambiado a BorderLayout!
+        Donadores.setLayout(new BorderLayout());
         int x1 = (panel.getHeight() - InicioSecion.getHeight());
         int y1 = (panel.getWidth() - InicioSecion.getWidth());
         int yy1 = (y * (-1)) /5;
@@ -246,19 +252,28 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         Donadores.setIconifiable(true);
         Donadores.setDefaultCloseOperation(HIDE_ON_CLOSE);
         Donadores.setJMenuBar(menubar);
+        Donadores.setOpaque(false);
+        JLabel fondoLabel3 = new JLabel();
+        
+        
         
         panel.add(Donadores);
         
         // Preparamos los paneles para CardLayout
         añadi = new JPanel();
+        añadi.setOpaque(false);
         añadi.setLayout(gbl);
         modi = new JPanel();
+        modi.setOpaque(false);
         modi.setLayout(gbl);
         consultOP = new JPanel();
+        consultOP.setOpaque(false);
         consultOP.setLayout(gbl);
         consultAll = new JPanel();
+        consultAll.setOpaque(false);
         consultAll.setLayout(gbl);
         elimini = new JPanel();
+        elimini.setOpaque(false);
         elimini.setLayout(gbl);
         
         // Añadir todos los paneles al CardLayout
@@ -267,11 +282,14 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         opcionesPaneles.add(consultOP, "ConsultarOpcion");
         opcionesPaneles.add(consultAll, "ConsultarTodo");
         opcionesPaneles.add(elimini, "Eliminar");
+        opcionesPaneles.setOpaque(false);
         
         // Agregar el panel de opciones al frame Donadores
         Donadores.add(opcionesPaneles, BorderLayout.CENTER);
         
         // CardLayout de añadir
+        
+        añadi.setBackground(new Color(173, 216, 230));
         JLabel tituloAñadi = new JLabel("Añadir Donador");
         tituloAñadi.setHorizontalAlignment(SwingConstants.CENTER);
         agregarComponente(añadi, tituloAñadi, 0, 0, 5, 1);
@@ -379,11 +397,50 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         }
         agregarComponente(añadi, progDona, 1, 12, 1, 1);
         
-        añadire = new JButton("Añadir donador");
-        añadire.addActionListener(this);
-        agregarComponente(añadi, añadire, 0, 13, 3, 1);
+        JPanel paneles = new JPanel();
+        paneles.setLayout(gbl);
+        agregarComponente(añadi, paneles, 0, 13, 5, 1);
         
-        Restor1 = new JButton("Restablecer campos");
+
+        GridBagConstraints gbcAñadi = new GridBagConstraints();
+        gbcAñadi.gridx = 0;
+        gbcAñadi.gridy = 0;
+        gbcAñadi.gridwidth = 1;
+        gbcAñadi.gridheight = 1;
+        gbcAñadi.fill = GridBagConstraints.NONE; // No se expande
+        gbcAñadi.weightx = 0; // No toma espacio extra
+        gbcAñadi.insets = new Insets(5, 5, 5, 5);
+        ImageIcon icono = new ImageIcon("imagenes/icon save.jpg");
+        Image scaledImage = icono.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH); // Tamaño deseado
+        ImageIcon setIcono = new ImageIcon(scaledImage);
+        añadire = new JButton(setIcono);
+        añadire.setPreferredSize(new Dimension(40, 40));
+        añadire.setMaximumSize(new Dimension(40, 40));
+        añadire.setMinimumSize(new Dimension(40, 40));
+        añadire.setSize(new Dimension(40, 40));
+        añadire.addActionListener(this);
+        
+        paneles.add(añadire, gbcAñadi);
+        
+        
+        
+       
+        GridBagConstraints gbcDelet = new GridBagConstraints();
+        gbcDelet.gridx = 1;
+        gbcDelet.gridy = 0;
+        gbcDelet.gridwidth = 1;
+        gbcDelet.gridheight = 1;
+        gbcDelet.fill = GridBagConstraints.NONE; // No se expande
+        gbcDelet.weightx = 0; // No toma espacio extra
+        gbcDelet.insets = new Insets(5, 5, 5, 5);
+        ImageIcon icono1 = new ImageIcon("imagenes/icono restablecer.jpg");
+        Image scaledImage1 = icono1.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH); // Tamaño deseado
+        ImageIcon setIcono1 = new ImageIcon(scaledImage1);
+        Restor1 = new JButton(setIcono1);
+        Restor1.setPreferredSize(new Dimension(40, 40));
+        Restor1.setMaximumSize(new Dimension(40, 40));
+        Restor1.setMinimumSize(new Dimension(40, 40));
+        Restor1.setSize(new Dimension(40, 40));
         Restor1.addActionListener(new ActionListener() {
             
             @Override
@@ -392,8 +449,16 @@ public class VentanaInicio  extends JFrame implements ActionListener{
                 
             }
         });
+        GridBagConstraints gbcRB = new GridBagConstraints();
+        gbcRB.gridx = 1;
+        gbcRB.gridy = 0;
+        gbcRB.gridwidth = 1;
+        gbcRB.gridheight = 1;
+        gbcRB.fill = GridBagConstraints.NONE; // No se expande
+        gbcRB.weightx = 0; // No toma espacio extra
+        gbcRB.insets = new Insets(5, 5, 5, 5);
+        paneles.add(Restor1, gbcRB);
         
-        agregarComponente(añadi, Restor1, 0, 14, 3, 1);
         
         
         
@@ -408,7 +473,14 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         ID2 = crearCampoIDValidado();
         agregarComponente(modi, ID2, 1, 1, 1, 1);
         
-        buscarModi = new JButton("Buscar");
+        ImageIcon icono2 = new ImageIcon("imagenes/icon buscar.png");
+        Image scaledImage2 = icono2.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH); // Tamaño deseado
+        ImageIcon setIcono2 = new ImageIcon(scaledImage2);
+        buscarModi = new JButton(setIcono2);
+        buscarModi.setPreferredSize(new Dimension(20, 20));
+        buscarModi.setMaximumSize(new Dimension(20, 20));
+        buscarModi.setMinimumSize(new Dimension(20, 20));
+        buscarModi.setSize(new Dimension(20, 20));
         buscarModi.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -428,6 +500,11 @@ public class VentanaInicio  extends JFrame implements ActionListener{
                             "Error", 
                             JOptionPane.ERROR_MESSAGE);
                     }
+                }else {
+                	JOptionPane.showMessageDialog(VentanaInicio.this, 
+                            "Campo de ID vacio.", 
+                            "Error", 
+                            JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
@@ -551,9 +628,17 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         }
         agregarComponente(modi, progDona2, 1, 12, 2, 1);
         
-        modificare = new JButton("Modificar donador");
+        
+        ImageIcon icono3 = new ImageIcon("imagenes/icon save.jpg");
+        Image scaledImage3 = icono3.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH); // Tamaño deseado
+        ImageIcon setIcono3 = new ImageIcon(scaledImage3);
+        modificare = new JButton(setIcono3);
+        modificare.setPreferredSize(new Dimension(40, 40));
+        modificare.setMaximumSize(new Dimension(40, 40));
+        modificare.setMinimumSize(new Dimension(40, 40));
+        modificare.setSize(new Dimension(40, 40));
         modificare.addActionListener(this);
-        agregarComponente(modi, modificare, 0, 13, 3, 1);
+        agregarBotonIcon(modi, modificare, 0, 13, 3, 1);
         
         Restor2 = new JButton("Restablecer campos");
         Restor2.addActionListener(new ActionListener() {
@@ -739,24 +824,24 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 		int hayError = 0;
 		errores.clear();
 		Color rojoClaro = new Color(220, 255, 220);
-		 if (col.getText().isEmpty() || col.getText().length() >45) {
+		 if (col.getText().isEmpty() || col.getText().length() >40) {
 			 col.setBackground(new Color(255, 200, 200));
-			 errores.add("campo colonia obligatorio, maximo 45 caracteres");
+			 errores.add("campo colonia obligatorio, maximo 40 caracteres");
 			 hayError ++;
 		 }
-		 if(call.getText().isEmpty() || call.getText().length() > 45) {
+		 if(call.getText().isEmpty() || call.getText().length() > 40) {
 			 call.setBackground(new Color(255, 200, 200));
-			 errores.add("campo calle obligatorio, maximo 45 caracteres");
+			 errores.add("campo calle obligatorio, maximo 40 caracteres");
 			 hayError ++;
 		 }
-		 if (numext.getText().isEmpty() || numext.getText().length() >45) {
+		 if (numext.getText().isEmpty() || numext.getText().length() >10) {
 			 numext.setBackground(new Color(255, 200, 200));
-			 errores.add("campo numero exterior obligatorio, maximo 45 caracteres");
+			 errores.add("campo numero exterior obligatorio, maximo 10 caracteres");
 			 hayError ++;
 		 }
-		 if (numint.getText().isEmpty() || numint.getText().length() > 45) {
+		 if (numint.getText().isEmpty() || numint.getText().length() > 10) {
 			 numint.setBackground(new Color(255, 200, 200));
-			 errores.add("campo numero interior obligatorio, maximo 45 caracteres o 'S/N' si no aplica");
+			 errores.add("campo numero interior obligatorio, maximo 10 caracteres o 'S/N' si no aplica");
 			 hayError ++;
 		 }
 		 if (telefon.getText().contains("_")) {
@@ -769,7 +854,7 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 			 if (!isValidEmail(email5.getText())) {
 				 errores.add("Formato de Email icorrecto debe cumplir con el formato 'alguien@dominio.com'");
 			 }else {
-				 errores.add("campo Email obligatorio, maximo 70 caracteres");
+				 errores.add("campo Email obligatorio, maximo 60 caracteres");
 			 }
 			 hayError ++;
 		 }
@@ -789,7 +874,7 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 	
 	private boolean isValidEmail(String email) {
 		String regex = "^[\\w.-]+@[\\w.-]+\\.[A-Za-z]{2,}$";
-	    return email.matches(regex) && email.length() <= 70;
+	    return email.matches(regex) && email.length() <= 60;
 	}
 	private void agregarComponente(JPanel InterFrame, JComponent componente, int x, int y, int w, int h) {
 		gbc.gridx = x;
@@ -922,32 +1007,40 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 		}
 		
 		else if(e.getSource() == modificare) {
-			if (!verificadorDatos(colonia2, calle2, numExt2, numInt2, telefono2, email2, tipoDonador2)) {
-				String m = "";
-				for (String n : errores) {
-					m = m + n + "\n";
-				}
-				JOptionPane.showMessageDialog(this, 
-				        m, 
-				        "Error", 
-				        JOptionPane.ERROR_MESSAGE);
-			}else {
-				DonadorDAO dondao =new DonadorDAO(interfaz);
-				String RU = String.valueOf(RelacionUni2.getSelectedItem());
-				String TD = String.valueOf(tipoDonador2.getSelectedItem());
-				String CL = String.valueOf(clase2.getSelectedItem());
-				String PD = String.valueOf(progDona2.getSelectedItem());
-				boolean newDona = dondao.actualizarDonador(Integer.parseInt(ID2.getText()),
-						colonia2.getText(), calle2.getText(), numExt2.getText(), numInt2.getText(), 
-						telefono2.getText(), email2.getText(), retornarID(RelacionesUni, RU),retornarID(tiposDonadores, TD), retornarID(clases, CL), 
-						retornarID(programasDonacion, PD));
-				
-				if (newDona) {
+			String v = ID2.getText().trim();
+			if(!v.isEmpty()) {
+				if (!verificadorDatos(colonia2, calle2, numExt2, numInt2, telefono2, email2, tipoDonador2)) {
+					String m = "";
+					for (String n : errores) {
+						m = m + n + "\n";
+					}
 					JOptionPane.showMessageDialog(this, 
-					        "Datos correctos, el donador se guardaron en la base de datos", 
-					        "Éxito", 
-					        JOptionPane.INFORMATION_MESSAGE);
+					        m, 
+					        "Error", 
+					        JOptionPane.ERROR_MESSAGE);
+				}else {
+					DonadorDAO dondao =new DonadorDAO(interfaz);
+					String RU = String.valueOf(RelacionUni2.getSelectedItem());
+					String TD = String.valueOf(tipoDonador2.getSelectedItem());
+					String CL = String.valueOf(clase2.getSelectedItem());
+					String PD = String.valueOf(progDona2.getSelectedItem());
+					boolean newDona = dondao.actualizarDonador(Integer.parseInt(ID2.getText()),
+							colonia2.getText(), calle2.getText(), numExt2.getText(), numInt2.getText(), 
+							telefono2.getText(), email2.getText(), retornarID(RelacionesUni, RU),retornarID(tiposDonadores, TD), retornarID(clases, CL), 
+							retornarID(programasDonacion, PD));
+					
+					if (newDona) {
+						JOptionPane.showMessageDialog(this, 
+						        "Datos correctos, el donador se guardaron en la base de datos", 
+						        "Éxito", 
+						        JOptionPane.INFORMATION_MESSAGE);
+					}
 				}
+			}else {
+				JOptionPane.showMessageDialog(this, 
+				        "Ingresa no hay ningun id, haz primero la busqueda para poder actualiza al donador", 
+				        "Error", 
+				        JOptionPane.INFORMATION_MESSAGE);
 			}
 		}
 		
@@ -976,6 +1069,17 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		InterFrame.add(componente, gbc);
 	}
+	
+	private void agregarBotonIcon(JPanel modi2, JComponent componente, int x, int y, int w, int h) {
+		gbc.gridx = x;
+		gbc.gridy = y;
+		gbc.gridwidth = w;
+		gbc.gridheight = h;
+		gbc.fill = GridBagConstraints.NONE;
+	    gbc.weightx = 0;
+		modi2.add(componente, gbc);
+	}
+	
 	
 	private boolean comprovarUsuario(String usuario){
 		
