@@ -10,6 +10,7 @@ import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.PopupMenu;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -69,7 +70,7 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 	JPanel opcionesPaneles = new JPanel(new CardLayout());
 	JButton añadire, eliminare, modificare, consultares, consultar;
 	JToolBar opcionesd;
-	JFrame frame = new JFrame();
+	static JFrame frame = new JFrame();
 	JButton Restor1, Restor2, Restor3, Restor4;
 	JButton buscarModi, buscarConsultOP, buscarElimi;
 	
@@ -98,10 +99,10 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 		    {"Donaciones en Especie", "4"},
 		    {"Apoyo a Infraestructura", "5"}};
 	
+	
+	
 	public VentanaInicio() {
 		boolean Secion = false;
-		FondoPanel fondo = new FondoPanel("/imagenes/fondo.jpg");
-		fondo.setLayout(new BorderLayout());
 		
 		
 		frame.getContentPane().setLayout(new BorderLayout());
@@ -110,6 +111,25 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         frame.setSize(1020, 740);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+        
+        JLabel fondoLabel = new JLabel();
+        
+        // Buscar la imagen en diferentes ubicaciones
+        ImageIcon imagenFondo = new ImageIcon("imagenes/fondo.jpg");
+        if (imagenFondo != null) {
+            // Escalar la imagen al tamaño de la ventana
+            Image img = imagenFondo.getImage();
+            Image imgEscalada = img.getScaledInstance(1020, 740, Image.SCALE_SMOOTH);
+            imagenFondo = new ImageIcon(imgEscalada);
+            fondoLabel.setIcon(imagenFondo);
+        } else {
+            // Si no se encuentra la imagen, usar un color de fondo
+            fondoLabel.setOpaque(true);
+            fondoLabel.setBackground(new Color(200, 220, 240));
+            System.out.println("✗ No se encontró imagen, usando color de fondo");
+        }
+        fondoLabel.setLayout(new BorderLayout());
+        frame.setContentPane(fondoLabel); // Establecer como contenido principal
         
         opcionesd = new JToolBar();
         
@@ -145,8 +165,31 @@ public class VentanaInicio  extends JFrame implements ActionListener{
        
         
         JDesktopPane panel = new JDesktopPane();
-        
+        panel.setOpaque(false);
        InicioSecion = new JInternalFrame();
+
+
+       JLabel fondoLabel2 = new JLabel();
+       
+       // Buscar la imagen en diferentes ubicaciones
+       ImageIcon imagenFondo2 = new ImageIcon("imagenes/Fondo Login.jpg");
+       if (imagenFondo2 != null) {
+           // Escalar la imagen al tamaño de la ventana
+           Image img = imagenFondo2.getImage();
+           Image imgEscalada = img.getScaledInstance(500, 500, Image.SCALE_SMOOTH);
+           imagenFondo2 = new ImageIcon(imgEscalada);
+           fondoLabel2.setIcon(imagenFondo2);
+       } else {
+           // Si no se encuentra la imagen, usar un color de fondo
+           fondoLabel2.setOpaque(true);
+           fondoLabel2.setBackground(new Color(200, 220, 240));
+           System.out.println("✗ No se encontró imagen, usando color de fondo");
+       }
+       fondoLabel2.setLayout(new BorderLayout());
+       InicioSecion.setContentPane(fondoLabel2); // Establecer como contenido principal
+       
+       
+       
        
         InicioSecion.setSize(500,500);
         InicioSecion.setLayout(gbl);
@@ -161,9 +204,11 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         
         
         JLabel tituloinicioSecion = new JLabel("Bienbenido, inicia secion para comenzar");
+        tituloinicioSecion.setForeground(new Color(21,21,21));
         agregarComponente(InicioSecion, tituloinicioSecion, 0, 0, 2, 1);
         
         JLabel txtUsu = new JLabel("Usuario: ");
+        txtUsu.setForeground(new Color(51,51,51));
         agregarComponente(InicioSecion, txtUsu, 0, 1, 1, 1);
         
         
@@ -183,8 +228,8 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         agregarComponente(InicioSecion, boton1, 0, 5, 2, 1);
         
         
-        
         panel.add(InicioSecion);
+        
         
         // ventana Donadores
         Donadores = new JInternalFrame();
@@ -928,6 +973,7 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 	
 	public static void main (String[] args) {
 		
+		
 		SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -960,22 +1006,4 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 	    return campoID;
 	}
 	
-}
-
-
-
-class FondoPanel extends JPanel {
-    private Image imagen;
-
-    public FondoPanel(String pathImagen) {
-        this.imagen = new ImageIcon(pathImagen).getImage();
-    }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        if (imagen != null) {
-            g.drawImage(imagen, 0, 0, getWidth(), getHeight(), this);
-        }
-    }
 }
