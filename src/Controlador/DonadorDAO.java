@@ -65,7 +65,7 @@ public class DonadorDAO {
 	 // Método de ejemplo para insertar un alumno de forma segura
 	    public boolean insertarDonador(Integer idOP, String col, String calle, String numExt,
 	    		String numInt, String telefon, String email, Integer RelaUniOP, Integer tipoDona, Integer claseOP, Integer progDonaOP) {
-
+	    		
 	        String sql;
 	        if (idOP == null) {
 	            sql = "INSERT INTO Donador (colonia, calle, numExt, numInt, TelefonoCont, email, RelacionUnilD, tipoDonadorID, claseID, ProgramaDonacionID) " +
@@ -118,7 +118,14 @@ public class DonadorDAO {
 	        } catch (SQLException e) {
 	        	
 	            System.out.println("Error al insertar Donador: " + e.getMessage());
-	            interfaz.ShowMessage("Error al insertar Donador: \n" + e.getMessage());
+	            String n = e.getMessage();
+	            if (n.contains("Duplicate") && n.contains("entry")) {
+	            	interfaz.ShowMessage("Error al insertar Donador: \n" + 
+	            "Ya existe un donador con el mismo ID");
+	            }else {
+	            	interfaz.ShowMessage("Error al insertar Donador: \n" + e.getMessage());
+	            }
+	            
 	            return false;
 	        }
 	    }

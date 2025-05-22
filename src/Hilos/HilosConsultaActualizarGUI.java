@@ -16,12 +16,14 @@ public class HilosConsultaActualizarGUI {
     private String ventana;
     
 
-    public HilosConsultaActualizarGUI(Integer consultaID, String ventana) {
+    public HilosConsultaActualizarGUI(Integer consultaID, String ventana, VentanaInicio interfaces) {
        this.id = consultaID;
        this.ventana = ventana;
+       this.interfa = interfaces;
     }
 
     public void consultarYActualizarGUI() {
+    	interfa.showMessageDialog(interfa.frame, "Buscando...", true);
         new Thread(() -> {								// Hilo que hace la consulta 
             try {
             	if(id != null && id != 0) {
@@ -30,7 +32,8 @@ public class HilosConsultaActualizarGUI {
                     Donador donana = dona.buscarDonadorPorId(ID);
                     // Actualizar GUI en el hilo de eventos de Swing
                     SwingUtilities.invokeLater(() -> {				//delega la tarea de actualizar la GUI al hilo principal (el que maneja la GUI)
-                        interfa.interfaz.setDonador(donana, ventana);
+                    	interfa.showMessageDialog(interfa.frame, "Buscando...", false);
+                    	interfa.interfaz.setDonador(donana, ventana);
                         
                     });
             	}

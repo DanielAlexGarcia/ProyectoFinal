@@ -39,6 +39,8 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 	Donador donadona;
 	public static VentanaInicio interfaz;
 	
+	JDialog cargando;
+	
 	ConexionBD conexionBD;
 	GridBagLayout gbl = new GridBagLayout();
 	GridBagConstraints gbc = new GridBagConstraints();
@@ -70,7 +72,7 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 	JPanel opcionesPaneles = new JPanel(new CardLayout());
 	JButton añadire, eliminare, modificare, consultares, consultar;
 	JToolBar opcionesd;
-	static JFrame frame = new JFrame();
+	public static JFrame frame = new JFrame();
 	JButton Restor1, Restor2, Restor3, Restor4;
 	JButton buscarModi, buscarConsultOP, buscarElimi;
 	
@@ -204,11 +206,9 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         
         
         JLabel tituloinicioSecion = new JLabel("Bienbenido, inicia secion para comenzar");
-        tituloinicioSecion.setForeground(new Color(21,21,21));
         agregarComponente(InicioSecion, tituloinicioSecion, 0, 0, 2, 1);
         
         JLabel txtUsu = new JLabel("Usuario: ");
-        txtUsu.setForeground(new Color(51,51,51));
         agregarComponente(InicioSecion, txtUsu, 0, 1, 1, 1);
         
         
@@ -420,10 +420,8 @@ public class VentanaInicio  extends JFrame implements ActionListener{
                         int id = Integer.parseInt(texto);
                         System.out.println("ID: " + id);
                         
-                        HilosConsultaActualizarGUI hilos = new HilosConsultaActualizarGUI(id, "modifique");
+                        HilosConsultaActualizarGUI hilos = new HilosConsultaActualizarGUI(id, "modifique", interfaz);
                         hilos.consultarYActualizarGUI();
-                        activarComponentes(colonia2, calle2, numExt2, numInt2, telefono2, 
-                                         email2, tipoDonador2, RelacionUni2, clase2, progDona2);
                     } catch (NumberFormatException ex) {
                         JOptionPane.showMessageDialog(VentanaInicio.this, 
                             "ID inválido. Ingrese solo números.", 
@@ -582,7 +580,26 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         
         frame.add(panel);
         
-	}	
+	}
+	
+	public void showMessageDialog(JFrame fame, String n, boolean activar) {
+		  // ventana = JFrame padre
+        if (activar) {
+        	cargando = new JDialog(frame, "Espere...", false);
+        	JLabel mensaje = new JLabel(n, SwingConstants.CENTER);
+            mensaje.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+            cargando.add(mensaje);
+            cargando.pack();
+            cargando.setLocationRelativeTo(this);
+            cargando.setVisible(true);
+    	}else {
+    		if(cargando != null) {
+    			cargando.dispose();
+    			cargando = null;		// libera la referencia para la proxima creacion de la ventana
+    		}
+    	}
+        }
+	
 		//Metodo para llenar tablas en base al resultSet con los datos de la base de datos
 	private void llenarTablaDesdeResultSet(ResultSet rs, JTable tabla) {
 	    try {
@@ -871,15 +888,33 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 				String TD = String.valueOf(tipoDonador.getSelectedItem());
 				String CL = String.valueOf(clase.getSelectedItem());
 				String PD = String.valueOf(progDona.getSelectedItem());
-				boolean newDona = dondao.insertarDonador(Integer.parseInt(ID.getText()),
-						colonia.getText(), calle.getText(), numExt.getText(), numInt.getText(), 
-						telefono.getText(), email.getText(), retornarID(RelacionesUni, RU),retornarID(tiposDonadores, TD), retornarID(clases, CL), 
-						retornarID(programasDonacion, PD));
-				
-				if (newDona) {
+				String nnum = ID.getText();
+				boolean num = nnum.equalsIgnoreCase("");
+				boolean newDona = false;
+				try {
+					if (!num) {
+						newDona = dondao.insertarDonador(Integer.parseInt(ID.getText()),
+								colonia.getText(), calle.getText(), numExt.getText(), numInt.getText(), 
+								telefono.getText(), email.getText(), retornarID(RelacionesUni, RU),retornarID(tiposDonadores, TD), retornarID(clases, CL), 
+								retornarID(programasDonacion, PD));
+					}else {
+						newDona = dondao.insertarDonador(null,
+								colonia.getText(), calle.getText(), numExt.getText(), numInt.getText(), 
+								telefono.getText(), email.getText(), retornarID(RelacionesUni, RU),retornarID(tiposDonadores, TD), retornarID(clases, CL), 
+								retornarID(programasDonacion, PD));
+					}
+					
+					
+					if (newDona) {
+						JOptionPane.showMessageDialog(this, 
+						        "Datos correctos, el donador se guardaron en la base de datos", 
+						        "Éxito", 
+						        JOptionPane.INFORMATION_MESSAGE);
+					}
+				} catch (Exception e2) {
 					JOptionPane.showMessageDialog(this, 
-					        "Datos correctos, el donador se guardaron en la base de datos", 
-					        "Éxito", 
+					        "Se produjo un error al añadir al donador", 
+					        "Error\n"+e2.getMessage(), 
 					        JOptionPane.INFORMATION_MESSAGE);
 				}
 			}
@@ -964,6 +999,7 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 			ActualizarDatosGUIDonador(dona, ID2,colonia2, calle2, numExt2, numInt2, 
 					telefono2, email2, tipoDonador2, RelacionUni2, 
 					clase2, progDona2);
+			activarComponentes(colonia2, calle2, numExt2, numInt2, telefono2, email2, tipoDonador2, RelacionUni2, clase2, progDona2);
 		}
 	}
 
