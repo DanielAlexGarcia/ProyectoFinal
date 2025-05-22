@@ -12,7 +12,7 @@ import Vista.VentanaInicio;
 public class HilosConsultaActualizarGUI {
 	private VentanaInicio interfa;
     private Integer id;
-    private DonadorDAO dona = new DonadorDAO();
+    private DonadorDAO dona = new DonadorDAO(null);
     private String ventana;
     
 

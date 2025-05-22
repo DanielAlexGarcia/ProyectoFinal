@@ -442,7 +442,6 @@ public class VentanaInicio  extends JFrame implements ActionListener{
                 JOptionPane.ERROR_MESSAGE);
         }
 
-        ordenTabulacion1.add(telefono2);
         agregarComponente(modi, telefono2, 1, 7, 2, 1);
         
         agregarComponente(modi, new JLabel("Email:"), 0, 8, 1, 1);
@@ -673,6 +672,7 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 	public boolean verificadorDatos(JTextField col, JTextField call, JTextField numext, JTextField numint, JFormattedTextField telefon, JTextField email5, JComboBox<String> tipoDona) {
 		int hayError = 0;
 		errores.clear();
+		Color rojoClaro = new Color(220, 255, 220);
 		 if (col.getText().isEmpty() || col.getText().length() >45) {
 			 col.setBackground(new Color(255, 200, 200));
 			 errores.add("campo colonia obligatorio, maximo 45 caracteres");
@@ -698,7 +698,7 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 			 errores.add("campo telefono obligatorio, numero de telefono con codigo de pais");
 			 hayError ++;
 		 }
-		 if (email5.getText().isEmpty() || email5.getText().length() > 70) {
+		 if (email5.getText().isEmpty() || email5.getText().length() > 70 || email5.getBackground().equals(rojoClaro)) {
 			 email5.setBackground(new Color(255, 200, 200));
 			 errores.add("campo Email obligatorio, maximo 70 caracteres");
 			 hayError ++;
@@ -814,21 +814,18 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 				        "Error", 
 				        JOptionPane.ERROR_MESSAGE);
 			}else {
-				DonadorDAO dondao =new DonadorDAO();
+				DonadorDAO dondao =new DonadorDAO(interfaz);
 				boolean newDona = dondao.insertarDonador(Integer.parseInt(ID.getText()),
 						colonia.getText(), calle.getText(), numExt.getText(), numInt.getText(), 
 						telefono.getText(), email.getText(), null, 1, null, null);
 				
 				if (newDona) {
 					JOptionPane.showMessageDialog(this, 
-					        "Datos correctos, el donador se guardará en la base de datos", 
+					        "Datos correctos, el donador se guardaron en la base de datos", 
 					        "Éxito", 
 					        JOptionPane.INFORMATION_MESSAGE);
 				}else {
-					JOptionPane.showMessageDialog(this, 
-					        "Problema al intentar añadir el donador", 
-					        "Error", 
-					        JOptionPane.INFORMATION_MESSAGE);
+					;
 				}
 	    		
 	    		
@@ -840,6 +837,17 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 		
 		
 	}
+	
+	
+	public void ShowMessage(String message) {
+		JOptionPane.showMessageDialog(this, 
+		        "Ocurrio un error\n"+
+		        		message, 
+		        "Error", 
+		        JOptionPane.INFORMATION_MESSAGE);
+	}
+	
+	
 	private void añadirOpciones () {
 		frame.setJMenuBar(menuBar);
 	}

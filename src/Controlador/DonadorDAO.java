@@ -9,10 +9,17 @@ import java.sql.Types;
 
 import ConexionBD.ConexionBD;
 import Modelo.Donador;
+import Vista.VentanaInicio;
 
 
 
 public class DonadorDAO {
+	private VentanaInicio interfaz;
+	public DonadorDAO(VentanaInicio interfas) {
+		if(interfas != null) {
+			this.interfaz = interfas;
+		}
+	}
 
 	
 	public boolean actualizarDonador(int donadorID, String col, String calle, String numExt, String numInt, String telefon, String email, Integer RelaUniOP, Integer tipoDona, Integer claseOP, Integer progDonaOP) {
@@ -108,7 +115,9 @@ public class DonadorDAO {
 	            int filasAfectadas = stmt.executeUpdate();
 	            return filasAfectadas > 0;
 	        } catch (SQLException e) {
+	        	
 	            System.out.println("Error al insertar Donador: " + e.getMessage());
+	            interfaz.ShowMessage("Error al insertar Donador: \n" + e.getMessage());
 	            return false;
 	        }
 	    }
