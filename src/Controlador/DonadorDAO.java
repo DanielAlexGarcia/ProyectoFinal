@@ -55,7 +55,8 @@ public class DonadorDAO {
 	    }
 
 	 // Método de ejemplo para insertar un alumno de forma segura
-	    public boolean insertarDonador(Integer idOP, String col, String calle, String numExt, String numInt, String telefon, String email, Integer RelaUniOP, Integer tipoDona, Integer claseOP, Integer progDonaOP) {
+	    public boolean insertarDonador(Integer idOP, String col, String calle, String numExt,
+	    		String numInt, String telefon, String email, Integer RelaUniOP, Integer tipoDona, Integer claseOP, Integer progDonaOP) {
 
 	        String sql;
 	        if (idOP == null) {
@@ -116,26 +117,49 @@ public class DonadorDAO {
 	 // Método de lectura segura con PreparedStatement
 	    public Donador buscarDonadorPorId(int donadorID) {
 	        String sql = "SELECT * FROM Donador WHERE DonadorID = ?";
+	        PreparedStatement stmt = null;
+	        ResultSet rs = null;
+	        
 	        try {
-	        	PreparedStatement stmt = ConexionBD.getInstancia().getConnection().prepareStatement(sql);
+	            stmt = ConexionBD.getInstancia().getConnection().prepareStatement(sql);
 	            stmt.setInt(1, donadorID);
-	            ResultSet rs = stmt.executeQuery();
-	            Donador dona = new Donador(
-	            		rs.getInt("DonadorID"), 
-	            		rs.getString("colonia"),
-	            		rs.getString("calle"),
-	            		rs.getString("numExt"),
-	            		rs.getString("numInt"),
-	            		rs.getString("TelefonoCont"),
-	            		rs.getString("email"),
-	            		rs.getInt("RelacionUnilD"),
-	            		rs.getInt("TipoDonadorID"),
-	            		rs.getInt("claseID"),
-	            		rs.getInt("ProgramaDonacionID"));
-	            return dona;
+	            rs = stmt.executeQuery();
+	            
+	            // IMPORTANTE: Verificar si existe una fila antes de leer los datos
+	            if (rs.next()) {
+	                // Ahora sí podemos leer los datos de la fila
+	                Donador dona = new Donador(
+	                    rs.getInt("DonadorID"),
+	                    rs.getString("colonia"),
+	                    rs.getString("calle"),
+	                    rs.getString("numExt"),
+	                    rs.getString("numInt"),
+	                    rs.getString("TelefonoCont"),
+	                    rs.getString("email"),
+	                    rs.getInt("RelacionUnilD"),
+	                    rs.getInt("TipoDonadorID"),
+	                    rs.getInt("claseID"),
+	                    rs.getInt("ProgramaDonacionID")
+	                );
+	                return dona;
+	            } else {
+	                // No se encontró ningún donador con ese ID
+	                System.out.println("No se encontró un donador con ID: " + donadorID);
+	                return null;
+	            }
+	            
 	        } catch (SQLException e) {
 	            System.out.println("Error al buscar donador: " + e.getMessage());
+	            e.printStackTrace(); // Para más detalles del error
 	            return null;
+	        } finally {
+	            // Cerrar recursos para evitar memory leaks
+	            try {
+	                if (rs != null) rs.close();
+	                if (stmt != null) stmt.close();
+	            } catch (SQLException e) {
+	                System.out.println("Error al cerrar recursos: " + e.getMessage());
+	            }
 	        }
 	    }
 	    

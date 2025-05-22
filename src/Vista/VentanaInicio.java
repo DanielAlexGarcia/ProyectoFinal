@@ -805,11 +805,25 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 				        "Error", 
 				        JOptionPane.ERROR_MESSAGE);
 			}else {
+				DonadorDAO dondao =new DonadorDAO();
+				boolean newDona = dondao.insertarDonador(Integer.parseInt(ID.getText()),
+						colonia.getText(), calle.getText(), numExt.getText(), numInt.getText(), 
+						telefono.getText(), email.getText(), null, 1, null, null);
 				
-				JOptionPane.showMessageDialog(this, 
-				        "Datos correctos, el donador se guardará en la base de datos", 
-				        "Éxito", 
-				        JOptionPane.INFORMATION_MESSAGE);
+				if (newDona) {
+					JOptionPane.showMessageDialog(this, 
+					        "Datos correctos, el donador se guardará en la base de datos", 
+					        "Éxito", 
+					        JOptionPane.INFORMATION_MESSAGE);
+				}else {
+					JOptionPane.showMessageDialog(this, 
+					        "Problema al intentar añadir el donador", 
+					        "Error", 
+					        JOptionPane.INFORMATION_MESSAGE);
+				}
+	    		
+	    		
+				
 				
 			}
 			
@@ -848,7 +862,7 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 	public void setDonador(Donador dona, String ventana) {
 		this.donadona = dona;
 		
-		if (ventana.equalsIgnoreCase("Eliminar")) {
+		if (ventana.equalsIgnoreCase("modifique")) {
 			ActualizarDatosGUIDonador(dona, ID2,colonia2, calle2, numExt2, numInt2, 
 					telefono2, email2, tipoDonador2, RelacionUni2, 
 					clase2, progDona2);
