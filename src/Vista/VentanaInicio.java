@@ -585,12 +585,10 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 		for (String[] m : lista) {
 			if (m[1].equalsIgnoreCase(String.valueOf(id))) {
 				return m[0];
-			}else {
-				return "Selecciona";
 			}
 		}
 		
-		return null;
+		return "Selecciona";
 	}
 	
 	private void activarComponentes(JTextField col, JTextField call, JTextField numext, JTextField numint, 
@@ -642,6 +640,8 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 			tipoDona.setSelectedItem(retornaValor(tiposDonadores, modelDonador.getIDTipoDonador()));
 			Integer op;
 			op = modelDonador.getIDRelacionUni();
+			System.out.println(modelDonador.getIDRelacionUni());
+			System.out.println(retornaValor(RelacionesUni, op));
 			if(op== null) {
 				RelacionUni.setSelectedIndex(0);
 			}else if (op != null) {
