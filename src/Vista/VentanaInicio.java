@@ -718,51 +718,76 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         ID4 = crearCampoIDValidado();
         agregarComponente(elimini, ID4, 1, 1, 1, 1);
         
+        GridBagConstraints gbcBuscaElimini = new GridBagConstraints();
+        gbcBuscaElimini.gridx = 2;
+        gbcBuscaElimini.gridy = 1;
+        gbcBuscaElimini.gridwidth = 1;
+        gbcBuscaElimini.gridheight = 1;
+        gbcBuscaElimini.fill = GridBagConstraints.NONE; // No se expande
+        gbcBuscaElimini.weightx = 0; // No toma espacio extra
+        gbcBuscaElimini.insets = new Insets(5, 5, 5, 5);
+        ImageIcon icono7 = new ImageIcon("imagenes/icon buscar.png");
+        Image scaledImage7 = icono7.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH); // Tamaño deseado
+        ImageIcon setIcono7 = new ImageIcon(scaledImage7);
+        buscarElimi = new JButton(setIcono7);
+        buscarElimi.setPreferredSize(new Dimension(20, 20));
+        buscarElimi.setMaximumSize(new Dimension(20, 20));
+        buscarElimi.setMinimumSize(new Dimension(20, 20));
+        buscarElimi.setSize(new Dimension(20, 20));
+        
+        agregarBotonIcon(elimini, buscarElimi, 2, 1, 1, 1);
+        
         agregarComponente(elimini, new JLabel("Colonia: "), 0, 3, 1, 1);
         colonia4 = new JTextField(10);
         colonia4.setEnabled(false);
-        agregarComponente(elimini, colonia4, 1, 3, 1, 1);
+        agregarComponente(elimini, colonia4, 1, 3, 2, 1);
         
         agregarComponente(elimini, new JLabel("Calle: "), 0, 4, 1, 1);
         calle4 = new JTextField(10);
         calle4.setEnabled(false);
-        agregarComponente(elimini, calle4, 1, 4, 1, 1);
+        agregarComponente(elimini, calle4, 1, 4, 2, 1);
         agregarComponente(elimini, new JLabel("Numero exterior: "), 0, 5, 1, 1);
         numExt4 = new JTextField(10);
-        
-        agregarComponente(elimini, numExt4, 1, 5, 1, 1);
+        numExt4.setEnabled(false);
+        agregarComponente(elimini, numExt4, 1, 5, 2, 1);
         
         agregarComponente(elimini, new JLabel("Numero interior ('S/N' si no aplica):"), 0, 6, 1, 1);
         numInt4 = new JTextField(10);
         numInt4.setEnabled(false);
-        agregarComponente(elimini, numInt4, 1, 6, 1, 1);
+        agregarComponente(elimini, numInt4, 1, 6, 2, 1);
         
         agregarComponente(elimini, new JLabel("Teléfono de contacto:"), 0, 7, 1, 1);
         telefono4 = new JTextField(10);
-        agregarComponente(elimini, telefono4, 1, 7, 1, 1);
+        telefono4.setEnabled(false);
+        agregarComponente(elimini, telefono4, 1, 7, 2, 1);
         
         agregarComponente(elimini, new JLabel("Email:"), 0, 8, 1, 1);
         email4 = new JTextField(25);
-        agregarComponente(elimini, email4, 1, 8, 1, 1);
-        agregarComponente(elimini, new JLabel("Relacion con la universidad (opcional): "), 0, 9, 1, 1);
+        email4.setEnabled(false);
+        agregarComponente(elimini, email4, 1, 8, 2, 1);
+        
+        agregarComponente(elimini, new JLabel("Relacion con la universidad: "), 0, 9, 1, 1);
         RelacionUni4 = new JTextField(10);
-        agregarComponente(elimini, RelacionUni4, 1, 9, 1, 1);
+        RelacionUni4.setEnabled(false);
+        agregarComponente(elimini, RelacionUni4, 1, 9, 2, 1);
         
         agregarComponente(elimini, new JLabel("Tipo de donador"), 0, 10, 1, 1);
         tipoDonador4 = new JTextField(10);
-        agregarComponente(elimini, tipoDonador4, 1, 10, 1, 1);
+        tipoDonador4.setEnabled(false);
+        agregarComponente(elimini, tipoDonador4, 1, 10, 2, 1);
         
-        agregarComponente (elimini, new JLabel("Clase (opcional): "), 0, 11, 1, 1);
+        agregarComponente (elimini, new JLabel("Clase: "), 0, 11, 1, 1);
         clase4 = new JTextField(10);
-        agregarComponente(elimini, clase4, 1, 11, 1, 1);
+        clase4.setEnabled(false);
+        agregarComponente(elimini, clase4, 1, 11, 2, 1);
         
-        agregarComponente(elimini, new JLabel("Programa de donacion (opcional): "), 0, 12, 1, 1);
+        agregarComponente(elimini, new JLabel("Programa de donacion: "), 0, 12, 1, 1);
         progDona4 = new JTextField(4);
-        agregarComponente(elimini, progDona4, 1, 12, 1, 1);
+        progDona4.setEnabled(false);
+        agregarComponente(elimini, progDona4, 1, 12, 2, 1);
         
         JPanel paneless = new JPanel();
         paneless.setLayout(gbl);
-        agregarComponente(elimini, paneless, 0, 13, 5, 1);
         
 
         GridBagConstraints gbcElimini = new GridBagConstraints();
@@ -790,7 +815,8 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 			}
 		});
         
-        elimini.add(paneless, gbcElimini);
+        agregarBotonIcon(elimini, confirmElimini, 0, 14, 5, 1);
+        
         
         frame.add(panel);
         
