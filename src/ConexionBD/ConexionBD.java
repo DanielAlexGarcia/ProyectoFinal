@@ -64,7 +64,7 @@ public class ConexionBD {
             if(stm.executeUpdate(sql) >=1){
                 res = true;
             }else{
-                System.out.println("Error al agregar Alumno");
+                System.out.println("Error al agregar Donador");
             }
         }catch (SQLException e){
             e.printStackTrace();

@@ -23,6 +23,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -69,13 +70,17 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 	JTextField colonia4, calle4, numExt4, numInt4, email4,ID4;
 	JFormattedTextField telefono4;
 	JComboBox RelacionUni4, tipoDonador4, clase4, progDona4;
+	JTable tablaDonadores = new JTable();
+	JScrollPane ScrollPanelDonadores = new JScrollPane(tablaDonadores);
+	ResultSet listaDonadores;
+	
 	List<JComponent> ordenTabulacion1 = new ArrayList<>();
 	JPanel opcionesPaneles = new JPanel(new CardLayout());
 	JButton añadire, eliminare, modificare, consultares, consultar;
 	JToolBar opcionesd;
 	public static JFrame frame = new JFrame();
 	JButton Restor1, Restor2, Restor3, Restor4;
-	JButton buscarModi, buscarConsultOP, buscarElimi;
+	JButton buscarModi, buscarConsultOP, buscarElimi, btnActualizarTabla;
 	
 	String[][] RelacionesUni = {{"Selecciona","0"},
 			{"Facultad de Ingenieria ", "1"},
@@ -102,6 +107,9 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 		    {"Donaciones en Especie", "4"},
 		    {"Apoyo a Infraestructura", "5"}};
 	
+	public void setListadonadores(ResultSet donadores) {
+		listaDonadores = donadores;
+	}
 	
 	
 	public VentanaInicio() {
@@ -138,8 +146,8 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         
         modificar = new JMenuItem("Modificar");
         modificar.addActionListener(this);
-        cargaOpcion = new JMenuItem("Consultar");
-        cargaOpcion.addActionListener(this);
+        //cargaOpcion = new JMenuItem("Consultar");
+        //cargaOpcion.addActionListener(this);
         cargaAll = new JMenuItem("Cargar todos");
         cargaAll.addActionListener(this);
         eliminar = new JMenuItem("Eliminar");
@@ -154,7 +162,6 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         Opciones.add(añadir);
         Opciones.add(eliminar);
         Opciones.add(modificar);
-        Opciones.add(cargaOpcion);
         Opciones.add(cargaAll);
         menubar.add(Opciones);
         frame.setFocusTraversalPolicyProvider(true);
@@ -240,10 +247,10 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         // ventana Donadores
         Donadores = new JInternalFrame();
         Donadores.setResizable(true);  
-        Donadores.setSize(500,500);
+        Donadores.setSize(810,700);
         Donadores.setLayout(new BorderLayout());
-        int x1 = (panel.getHeight() - InicioSecion.getHeight());
-        int y1 = (panel.getWidth() - InicioSecion.getWidth());
+        int x1 = (panel.getHeight() - Donadores.getHeight());
+        int y1 = (panel.getWidth() - Donadores.getWidth());
         int yy1 = (y * (-1)) /5;
         int xx1 = (x * (-1)) / 2;
         Donadores.setLocation(xx1, yy1);
@@ -266,9 +273,6 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         modi = new JPanel();
         modi.setOpaque(false);
         modi.setLayout(gbl);
-        consultOP = new JPanel();
-        consultOP.setOpaque(false);
-        consultOP.setLayout(gbl);
         consultAll = new JPanel();
         consultAll.setOpaque(false);
         consultAll.setLayout(gbl);
@@ -279,7 +283,7 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         // Añadir todos los paneles al CardLayout
         opcionesPaneles.add(añadi, "Añadir");
         opcionesPaneles.add(modi, "Modificar");
-        opcionesPaneles.add(consultOP, "ConsultarOpcion");
+        //opcionesPaneles.add(consultOP, "ConsultarOpcion");
         opcionesPaneles.add(consultAll, "ConsultarTodo");
         opcionesPaneles.add(elimini, "Eliminar");
         opcionesPaneles.setOpaque(false);
@@ -628,6 +632,8 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         }
         agregarComponente(modi, progDona2, 1, 12, 2, 1);
         
+        JPanel botones = new JPanel();
+        botones.setLayout(gbl);
         
         ImageIcon icono3 = new ImageIcon("imagenes/icon save.jpg");
         Image scaledImage3 = icono3.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH); // Tamaño deseado
@@ -638,9 +644,16 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         modificare.setMinimumSize(new Dimension(40, 40));
         modificare.setSize(new Dimension(40, 40));
         modificare.addActionListener(this);
-        agregarBotonIcon(modi, modificare, 0, 13, 3, 1);
+        agregarBotonIcon(botones, modificare, 0, 0, 1, 1);
         
-        Restor2 = new JButton("Restablecer campos");
+        ImageIcon icono4 = new ImageIcon("imagenes/icono restablecer.jpg");
+        Image scaledImage4 = icono4.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH); // Tamaño deseado
+        ImageIcon setIcono4 = new ImageIcon(scaledImage4);
+        Restor2 = new JButton(setIcono4);
+        Restor2.setPreferredSize(new Dimension(40, 40));
+        Restor2.setMaximumSize(new Dimension(40, 40));
+        Restor2.setMinimumSize(new Dimension(40, 40));
+        Restor2.setSize(new Dimension(40, 40));
         Restor2.addActionListener(new ActionListener() {
             
             @Override
@@ -650,14 +663,50 @@ public class VentanaInicio  extends JFrame implements ActionListener{
             }
         });
         
+        agregarBotonIcon(botones, Restor2, 1, 0, 1, 1);
+        agregarComponente(modi, botones, 0, 13, 5, 1);
         
-        JLabel tituloConsultOP = new JLabel("Consultar un Donador");
+        
+        // CardLayaout de consultar donadores
+        /*
+        JLabel tituloConsultOP = new JLabel("Consultar Donador");
         tituloConsultOP.setHorizontalAlignment(SwingConstants.CENTER);
         agregarComponente(consultOP, tituloConsultOP, 0, 0, 5, 1);
+        */
+        
+        
+        // CardLayaout de consultar todos los Donadores
         
         JLabel tituloConsultAll = new JLabel("Consultar todos los Donadores");
         tituloConsultAll.setHorizontalAlignment(SwingConstants.CENTER);
         agregarComponente(consultAll, tituloConsultAll, 0, 0, 5, 1);
+        
+
+        agregarComponente(consultAll, ScrollPanelDonadores, 0, 2, 5, 1);
+        
+        
+        
+        ImageIcon icono5 = new ImageIcon("imagenes/icono restablecer.jpg");
+        Image scaledImage5 = icono5.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH); // Tamaño deseado
+        ImageIcon setIcono5 = new ImageIcon(scaledImage5);
+        btnActualizarTabla = new JButton(setIcono5);
+        btnActualizarTabla.setPreferredSize(new Dimension(40, 40));
+        btnActualizarTabla.setMaximumSize(new Dimension(40, 40));
+        btnActualizarTabla.setMinimumSize(new Dimension(40, 40));
+        btnActualizarTabla.setSize(new Dimension(40, 40)); 
+        btnActualizarTabla.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				HilosConsultaActualizarGUI hilosGUI = new HilosConsultaActualizarGUI(null, null, interfaz);
+				hilosGUI.consultarYActualizarGUI();
+				
+			}
+		});
+        
+        agregarBotonIcon(consultAll, btnActualizarTabla, 0, 1, 5, 1);
+        
+        
         
         JLabel tituloElimini = new JLabel("Eliminar Donador");
         tituloElimini.setHorizontalAlignment(SwingConstants.CENTER);
@@ -666,6 +715,94 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         frame.add(panel);
         
 	}
+	
+	public void setResultSet(ResultSet rsd) {
+		if (rsd != null) {
+			try {
+				tablaDonadores.setModel(modeloTabla(rsd));
+				tablaDonadores.setPreferredScrollableViewportSize(new Dimension(600, 300));
+			} catch (SQLException e) {
+				ShowMessage("Ocurrio un problema al adquirir los datos\n"+
+			e.getMessage());
+			}
+		}else {
+			ShowMessage("No se pudieron obtener los datos");
+		}
+		
+	}
+	
+	public DefaultTableModel modeloTabla(ResultSet rs) throws SQLException {
+		ResultSetMetaData metaData = rs.getMetaData();
+		int cantColumns = metaData.getColumnCount();
+		
+		Vector<String> columnNames = new Vector<String>();
+		Vector<Vector<Object>> datos = new Vector<Vector<Object>>();
+	    
+	    ArrayList<Integer> cambios = new ArrayList<Integer>();
+	    int clase =0, relacionUni=0, TipoDona=0, progDonacion=0;
+	    
+	    for (int i = 1; i<= cantColumns; i++) {
+	    	String nom = metaData.getColumnName(i);
+	    	if (nom.equalsIgnoreCase("RelacionUnilD")) {
+	    		columnNames.add("RelacionUniversidad");
+	    		cambios.add(i);
+	    		relacionUni = i;
+	    	}else if (nom.equalsIgnoreCase("TipoDonadorID")) {
+	    		columnNames.add("Tipo de donador");
+	    		cambios.add(i);
+	    		TipoDona = i;
+	    	}else if (nom.equalsIgnoreCase("claseID")) {
+	    		columnNames.add("Clase");
+	    		cambios.add(i);
+	    		clase = i;
+	    	}else if (nom.equalsIgnoreCase("ProgramaDonacionID")) {
+	    		columnNames.add("Programa de donacion");
+	    		cambios.add(i);
+	    		progDonacion = i;
+	    	}else {
+	    		columnNames.add(nom);
+	    	}
+	    }
+	    
+	    while(rs.next()) {
+	    	Vector<Object> fila = new Vector<Object>();
+	    	for(int i = 1; i<=cantColumns; i++) {
+	    		Object valor = rs.getObject(i);
+	    		
+	    		if (cambios.contains(i)) {
+	                String cambio = "Selecciona";
+	                if (valor != null) {
+	                    try {
+	                        int val = Integer.parseInt(valor.toString());
+	                        if (i == clase) {
+	                            cambio = retornaValor(clases, val);
+	                        } else if (i == relacionUni) {
+	                            cambio = retornaValor(RelacionesUni, val);
+	                        } else if (i == TipoDona) {
+	                            cambio = retornaValor(tiposDonadores, val);
+	                        } else if (i == progDonacion) {
+	                            cambio = retornaValor(programasDonacion, val);
+	                        }
+	                    } catch (NumberFormatException e) {
+	                        cambio = "No aplica";
+	                    }
+	                } else {
+	                    cambio = "No aplica";
+	                }
+
+	                fila.add(cambio);
+	            } else {
+	                fila.add(valor);
+	            }
+	    	}
+	    	datos.add(fila);
+	    }
+	    
+		
+		
+		return new DefaultTableModel(datos, columnNames);
+	}
+
 	
 	public void showMessageDialog(JFrame fame, String n, boolean activar) {
 		  // ventana = JFrame padre
@@ -685,34 +822,6 @@ public class VentanaInicio  extends JFrame implements ActionListener{
     	}
         }
 	
-		//Metodo para llenar tablas en base al resultSet con los datos de la base de datos
-	private void llenarTablaDesdeResultSet(ResultSet rs, JTable tabla) {
-	    try {
-	        ResultSetMetaData metaData = rs.getMetaData();
-	        int columnas = metaData.getColumnCount();
-
-	        // Crear modelo de la tabla
-	        DefaultTableModel modelo = new DefaultTableModel();
-
-	        // Añadir nombres de columnas al modelo
-	        for (int i = 1; i <= columnas; i++) {
-	            modelo.addColumn(metaData.getColumnLabel(i));
-	        }
-
-	        // Añadir filas al modelo
-	        while (rs.next()) {
-	            Object[] fila = new Object[columnas];
-	            for (int i = 1; i <= columnas; i++) {
-	                fila[i - 1] = rs.getObject(i);
-	            }
-	            modelo.addRow(fila);
-	        }
-
-	        tabla.setModel(modelo);
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
-	}
 	
 	// Retorna el id != 0 para los campos de combobox
 	private Integer retornarID (String[][] lista, String valor) {
@@ -912,6 +1021,8 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 		else if (e.getSource() == cargaAll) {
 			Donadores.setVisible(true);
 			CardLayout cardLayout = (CardLayout) opcionesPaneles.getLayout();
+			HilosConsultaActualizarGUI hilosGUI = new HilosConsultaActualizarGUI(null, null, interfaz);
+			hilosGUI.consultarYActualizarGUI();
 		    cardLayout.show(opcionesPaneles, "ConsultarTodo");
 		}
 		
@@ -1004,9 +1115,7 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 				}
 			}
 			
-		}
-		
-		else if(e.getSource() == modificare) {
+		}else if(e.getSource() == modificare) {
 			String v = ID2.getText().trim();
 			if(!v.isEmpty()) {
 				if (!verificadorDatos(colonia2, calle2, numExt2, numInt2, telefono2, email2, tipoDonador2)) {

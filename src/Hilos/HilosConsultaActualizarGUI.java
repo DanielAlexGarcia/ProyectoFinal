@@ -37,6 +37,11 @@ public class HilosConsultaActualizarGUI {
                         
                     });
             	}
+            	else {
+            		ResultSet donana = dona.listarDonadores();
+            		interfa.showMessageDialog(interfa.frame, "Buscando...", false);
+            		interfa.interfaz.setResultSet(donana);
+            	}
                 
 
             } catch (Exception e) {

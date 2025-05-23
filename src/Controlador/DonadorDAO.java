@@ -185,9 +185,10 @@ public class DonadorDAO {
 	        String sql = "SELECT * FROM Donador";
 	        try {
 	        	PreparedStatement stmt = ConexionBD.getInstancia().getConnection().prepareStatement(sql);
-	            return stmt.executeQuery(sql);
+	            return stmt.executeQuery();
 	        } catch (SQLException e) {
 	            System.out.println("Error al listar donadores: " + e.getMessage());
+	            
 	            return null;
 	        }
 	    }
