@@ -68,8 +68,8 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 	JFormattedTextField telefono3;
 	JComboBox RelacionUni3, tipoDonador3, clase3, progDona3;
 	JTextField colonia4, calle4, numExt4, numInt4, email4,ID4;
-	JFormattedTextField telefono4;
-	JComboBox RelacionUni4, tipoDonador4, clase4, progDona4;
+	JTextField telefono4;
+	JTextField RelacionUni4, tipoDonador4, clase4, progDona4;
 	JTable tablaDonadores = new JTable();
 	JScrollPane ScrollPanelDonadores = new JScrollPane(tablaDonadores);
 	ResultSet listaDonadores;
@@ -79,8 +79,8 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 	JButton añadire, eliminare, modificare, consultares, consultar;
 	JToolBar opcionesd;
 	public static JFrame frame = new JFrame();
-	JButton Restor1, Restor2, Restor3, Restor4;
-	JButton buscarModi, buscarConsultOP, buscarElimi, btnActualizarTabla;
+	JButton Restor1, Restor2, Restor3;
+	JButton buscarModi, buscarConsultOP, buscarElimi, btnActualizarTabla, confirmElimini;
 	
 	String[][] RelacionesUni = {{"Selecciona","0"},
 			{"Facultad de Ingenieria ", "1"},
@@ -707,10 +707,90 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         agregarBotonIcon(consultAll, btnActualizarTabla, 0, 1, 5, 1);
         
         
+        //CardLayaout eliminar Donador
         
         JLabel tituloElimini = new JLabel("Eliminar Donador");
         tituloElimini.setHorizontalAlignment(SwingConstants.CENTER);
         agregarComponente(elimini, tituloElimini, 0, 0, 5, 1);
+        
+        
+        agregarComponente(elimini, new JLabel("ID"), 0, 1, 1, 1);
+        ID4 = crearCampoIDValidado();
+        agregarComponente(elimini, ID4, 1, 1, 1, 1);
+        
+        agregarComponente(elimini, new JLabel("Colonia: "), 0, 3, 1, 1);
+        colonia4 = new JTextField(10);
+        colonia4.setEnabled(false);
+        agregarComponente(elimini, colonia4, 1, 3, 1, 1);
+        
+        agregarComponente(elimini, new JLabel("Calle: "), 0, 4, 1, 1);
+        calle4 = new JTextField(10);
+        calle4.setEnabled(false);
+        agregarComponente(elimini, calle4, 1, 4, 1, 1);
+        agregarComponente(elimini, new JLabel("Numero exterior: "), 0, 5, 1, 1);
+        numExt4 = new JTextField(10);
+        
+        agregarComponente(elimini, numExt4, 1, 5, 1, 1);
+        
+        agregarComponente(elimini, new JLabel("Numero interior ('S/N' si no aplica):"), 0, 6, 1, 1);
+        numInt4 = new JTextField(10);
+        numInt4.setEnabled(false);
+        agregarComponente(elimini, numInt4, 1, 6, 1, 1);
+        
+        agregarComponente(elimini, new JLabel("Teléfono de contacto:"), 0, 7, 1, 1);
+        telefono4 = new JTextField(10);
+        agregarComponente(elimini, telefono4, 1, 7, 1, 1);
+        
+        agregarComponente(elimini, new JLabel("Email:"), 0, 8, 1, 1);
+        email4 = new JTextField(25);
+        agregarComponente(elimini, email4, 1, 8, 1, 1);
+        agregarComponente(elimini, new JLabel("Relacion con la universidad (opcional): "), 0, 9, 1, 1);
+        RelacionUni4 = new JTextField(10);
+        agregarComponente(elimini, RelacionUni4, 1, 9, 1, 1);
+        
+        agregarComponente(elimini, new JLabel("Tipo de donador"), 0, 10, 1, 1);
+        tipoDonador4 = new JTextField(10);
+        agregarComponente(elimini, tipoDonador4, 1, 10, 1, 1);
+        
+        agregarComponente (elimini, new JLabel("Clase (opcional): "), 0, 11, 1, 1);
+        clase4 = new JTextField(10);
+        agregarComponente(elimini, clase4, 1, 11, 1, 1);
+        
+        agregarComponente(elimini, new JLabel("Programa de donacion (opcional): "), 0, 12, 1, 1);
+        progDona4 = new JTextField(4);
+        agregarComponente(elimini, progDona4, 1, 12, 1, 1);
+        
+        JPanel paneless = new JPanel();
+        paneless.setLayout(gbl);
+        agregarComponente(elimini, paneless, 0, 13, 5, 1);
+        
+
+        GridBagConstraints gbcElimini = new GridBagConstraints();
+        gbcElimini.gridx = 0;
+        gbcElimini.gridy = 0;
+        gbcElimini.gridwidth = 1;
+        gbcElimini.gridheight = 1;
+        gbcElimini.fill = GridBagConstraints.NONE; // No se expande
+        gbcElimini.weightx = 0; // No toma espacio extra
+        gbcElimini.insets = new Insets(5, 5, 5, 5);
+        ImageIcon icono6 = new ImageIcon("imagenes/iconEliminar.png");
+        Image scaledImage6 = icono6.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH); // Tamaño deseado
+        ImageIcon setIcono6 = new ImageIcon(scaledImage6);
+        confirmElimini = new JButton(setIcono6);
+        confirmElimini.setPreferredSize(new Dimension(40, 40));
+        confirmElimini.setMaximumSize(new Dimension(40, 40));
+        confirmElimini.setMinimumSize(new Dimension(40, 40));
+        confirmElimini.setSize(new Dimension(40, 40));
+        confirmElimini.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+        
+        elimini.add(paneless, gbcElimini);
         
         frame.add(panel);
         
