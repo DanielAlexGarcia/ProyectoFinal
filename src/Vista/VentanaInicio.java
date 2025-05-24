@@ -247,7 +247,7 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         // ventana Donadores
         Donadores = new JInternalFrame();
         Donadores.setResizable(true);  
-        Donadores.setSize(810,700);
+        Donadores.setSize(500,500);
         Donadores.setLayout(new BorderLayout());
         int x1 = (panel.getHeight() - Donadores.getHeight());
         int y1 = (panel.getWidth() - Donadores.getWidth());
@@ -707,6 +707,9 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         agregarBotonIcon(consultAll, btnActualizarTabla, 0, 1, 5, 1);
         
         
+        
+        
+        
         //CardLayaout eliminar Donador
         
         JLabel tituloElimini = new JLabel("Eliminar Donador");
@@ -734,6 +737,23 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         buscarElimi.setMaximumSize(new Dimension(20, 20));
         buscarElimi.setMinimumSize(new Dimension(20, 20));
         buscarElimi.setSize(new Dimension(20, 20));
+        buscarElimi.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					String n = ID4.getText().trim();
+					Integer in  = Integer.parseInt(n);
+					
+					HilosConsultaActualizarGUI GUI = new HilosConsultaActualizarGUI(in, "Eliminar", interfaz);
+					GUI.consultarYActualizarGUI();
+					
+				} catch (Exception e2) {
+					System.out.println("none");
+				}
+				
+			}
+		});
         
         agregarBotonIcon(elimini, buscarElimi, 2, 1, 1, 1);
         
@@ -988,8 +1008,8 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 		// metodo para actualizar la GUI recibiendo como parametro el objeto de donador y los componentes a actualizar
 	private void ActualizarDatosGUIDonador(Donador modelDonador,
 			JTextField IDe, JTextField col, JTextField call, JTextField numext, JTextField numint, 
-			JFormattedTextField telefon, JTextField email5, JComboBox<String> tipoDona, JComboBox<String> RelacionUni, 
-			JComboBox<String> clase, JComboBox<String> progDona) {
+			JFormattedTextField telefon, JTextField email5, JComponent tipoDona, JComponent RelacionUni, 
+			JComponent clase, JComponent progDona) {
 		
 		if (modelDonador != null) {
 			IDe.setText(String.valueOf(modelDonador.getID()));
@@ -999,28 +1019,62 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 			numint.setText(modelDonador.getNumInt());
 			telefon.setText(modelDonador.getNumContacto());
 			email5.setText(modelDonador.getEmail());
-			tipoDona.setSelectedItem(retornaValor(tiposDonadores, modelDonador.getIDTipoDonador()));
+			if (tipoDona instanceof JComboBox) {
+				JComboBox<String> tipoDonas = (JComboBox<String>) tipoDona;
+				tipoDonas.setSelectedItem(retornaValor(tiposDonadores, modelDonador.getIDTipoDonador()));
+			}else if (tipoDona instanceof JTextField){
+				JTextField tipoDonas = (JTextField) tipoDona;
+				tipoDonas.setText(retornaValor(tiposDonadores, modelDonador.getIDTipoDonador()));
+			}
+			
 			Integer op;
 			op = modelDonador.getIDRelacionUni();
 			System.out.println(modelDonador.getIDRelacionUni());
 			System.out.println(retornaValor(RelacionesUni, op));
-			if(op== null) {
-				RelacionUni.setSelectedIndex(0);
-			}else if (op != null) {
-				RelacionUni.setSelectedItem(retornaValor(RelacionesUni, op));
+			
+			if (RelacionUni instanceof JComboBox) {
+				JComboBox<String> relacionUni = (JComboBox<String>) RelacionUni;
+				if(op== null) {
+					relacionUni.setSelectedIndex(0);
+				}else if (op != null) {
+					relacionUni.setSelectedItem(retornaValor(RelacionesUni, op));
+				}
+						
+			}else if (RelacionUni instanceof JTextField) {
+				JTextField relacionUni = (JTextField) RelacionUni;
+				relacionUni.setText(retornaValor(RelacionesUni, op));
 			}
+			
 			op = modelDonador.getIDClase();
-			if(op == null) {
-				clase.setSelectedIndex(0);
-			}else if(op != null) {
-				clase.setSelectedItem(retornaValor(RelacionesUni, op));
+			
+			if (RelacionUni instanceof JComboBox) {
+				JComboBox<String> clasess = (JComboBox<String>) clase;
+				if(op == null) {
+					clasess.setSelectedIndex(0);
+				}else if(op != null) {
+					clasess.setSelectedItem(retornaValor(RelacionesUni, op));
+				}
+						
+			}else if (RelacionUni instanceof JTextField) {
+				JTextField clasess = (JTextField) clase;
+				clasess.setText(retornaValor(clases, op));
 			}
+			
 			op = modelDonador.getIDProgDonacion();
-			if(op==null) {
-				progDona.setSelectedIndex(0);
-			}else if (op != null) {
-				progDona.setSelectedItem(retornaValor(programasDonacion, op));
+			
+			if (RelacionUni instanceof JComboBox) {
+				JComboBox<String> progDOna = (JComboBox<String>) progDona;
+				if(op==null) {
+					progDOna.setSelectedIndex(0);
+				}else if (op != null) {
+					progDOna.setSelectedItem(retornaValor(programasDonacion, op));
+				}
+						
+			}else if (RelacionUni instanceof JTextField) {
+				JTextField progDOna = (JTextField) progDona;
+				progDOna.setText(retornaValor(programasDonacion, op));
 			}
+			
 		}else {
 			JOptionPane.showMessageDialog(this, 
 	                "No se encontro ningun donador con el id "+ ID2.getText(), 
@@ -1125,11 +1179,25 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 		    cardLayout.show(opcionesPaneles, "ConsultarOpcion");
 		}
 		else if (e.getSource() == cargaAll) {
+			Donadores.setLocation(100, 100);
+	        Donadores.setSize(750, 500);
 			Donadores.setVisible(true);
+			
 			CardLayout cardLayout = (CardLayout) opcionesPaneles.getLayout();
 			HilosConsultaActualizarGUI hilosGUI = new HilosConsultaActualizarGUI(null, null, interfaz);
 			hilosGUI.consultarYActualizarGUI();
 		    cardLayout.show(opcionesPaneles, "ConsultarTodo");
+
+		    SwingUtilities.invokeLater(() ->{
+		    	Donadores.revalidate();
+			    Donadores.repaint();
+			    
+			    tablaDonadores.revalidate();
+		        tablaDonadores.repaint();
+		    });
+		    
+		    
+	        
 		}
 		
 		if (e.getSource() == donadores) {
