@@ -47,9 +47,16 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 	GridBagLayout gbl = new GridBagLayout();
 	GridBagConstraints gbc = new GridBagConstraints();
 	JMenuBar menubar = new JMenuBar();
-	JMenu acciones, Opciones;
+	JMenu añady, elimina, modifica, consultarTodos, 	//opciones ventana principal
+	Opciones;	// opciones ventana donadores
 	JMenuBar menuBar = new JMenuBar();
-	JMenuItem donadores, añadir, eliminar, modificar, cargaAll, cargaOpcion;
+	JMenuItem donaAñadi, donaElim, donaModi, donaConsult;	// opciones de ventana principal
+	JMenuItem donadores, 	// ventana donadores
+	añadir, eliminar, modificar, cargaAll, cargaOpcion;		//opciones ventana donadores
+	
+	JButton donador, clas, tipoDonante;
+	
+	
 	JPasswordField contraseña;
 	JTextField Usuario;
 	JLabel problema1 = new JLabel();
@@ -68,7 +75,7 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 	JFormattedTextField telefono3;
 	JComboBox RelacionUni3, tipoDonador3, clase3, progDona3;
 	JTextField colonia4, calle4, numExt4, numInt4, email4,ID4;
-	JTextField telefono4;
+	JFormattedTextField telefono4;
 	JTextField RelacionUni4, tipoDonador4, clase4, progDona4;
 	JTable tablaDonadores = new JTable();
 	JScrollPane ScrollPanelDonadores = new JScrollPane(tablaDonadores);
@@ -76,11 +83,16 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 	
 	List<JComponent> ordenTabulacion1 = new ArrayList<>();
 	JPanel opcionesPaneles = new JPanel(new CardLayout());
+	
+	
 	JButton añadire, eliminare, modificare, consultares, consultar;
 	JToolBar opcionesd;
 	public static JFrame frame = new JFrame();
 	JButton Restor1, Restor2, Restor3;
 	JButton buscarModi, buscarConsultOP, buscarElimi, btnActualizarTabla, confirmElimini;
+	
+	JToolBar toolBar;
+	JButton Donador;
 	
 	String[][] RelacionesUni = {{"Selecciona","0"},
 			{"Facultad de Ingenieria ", "1"},
@@ -114,7 +126,7 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 	
 	public VentanaInicio() {
 		boolean Secion = false;
-		
+		opcionesPaneles.setOpaque(false);
 		
 		frame.getContentPane().setLayout(new BorderLayout());
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -154,10 +166,25 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         eliminar.addActionListener(this);
         añadir = new JMenuItem("añadir nuevo");
         añadir.addActionListener(this);
+        
+        
         donadores = new JMenuItem("donadores");
         donadores.addActionListener(this);
-        acciones = new JMenu("abrir");
-        acciones.add(donadores);
+        donaAñadi = new JMenuItem("Donador");
+        donaAñadi.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Donadores.setVisible(true);
+				CardLayout cardLayout = (CardLayout) opcionesPaneles.getLayout();
+			    cardLayout.show(opcionesPaneles, "Añadir");
+				
+			}
+		});
+        
+        añady = new JMenu("Añadir");
+        añady.add(donadores);
+        
         Opciones = new JMenu("Opciones");
         Opciones.add(añadir);
         Opciones.add(eliminar);
@@ -170,7 +197,7 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         problema1.setOpaque(true);
         problema2.setHorizontalAlignment(SwingConstants.RIGHT);
         problema2.setOpaque(true);
-        menuBar.add(acciones);
+        menuBar.add(añady);
         
         boton1 = new JButton("Acceder");
         boton1.addActionListener(this);
@@ -268,7 +295,6 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         
         // Preparamos los paneles para CardLayout
         añadi = new JPanel();
-        añadi.setOpaque(false);
         añadi.setLayout(gbl);
         modi = new JPanel();
         modi.setOpaque(false);
@@ -293,7 +319,8 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         
         // CardLayout de añadir
         
-        añadi.setBackground(new Color(173, 216, 230));
+        añadi.setBackground(Color.WHITE);
+        añadi.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         JLabel tituloAñadi = new JLabel("Añadir Donador");
         tituloAñadi.setHorizontalAlignment(SwingConstants.CENTER);
         agregarComponente(añadi, tituloAñadi, 0, 0, 5, 1);
@@ -403,6 +430,7 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         
         JPanel paneles = new JPanel();
         paneles.setLayout(gbl);
+        paneles.setBackground(Color.WHITE);
         agregarComponente(añadi, paneles, 0, 13, 5, 1);
         
 
@@ -418,6 +446,7 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         Image scaledImage = icono.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH); // Tamaño deseado
         ImageIcon setIcono = new ImageIcon(scaledImage);
         añadire = new JButton(setIcono);
+        añadire.setToolTipText("Guardar");
         añadire.setPreferredSize(new Dimension(40, 40));
         añadire.setMaximumSize(new Dimension(40, 40));
         añadire.setMinimumSize(new Dimension(40, 40));
@@ -426,9 +455,6 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         
         paneles.add(añadire, gbcAñadi);
         
-        
-        
-       
         GridBagConstraints gbcDelet = new GridBagConstraints();
         gbcDelet.gridx = 1;
         gbcDelet.gridy = 0;
@@ -441,6 +467,7 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         Image scaledImage1 = icono1.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH); // Tamaño deseado
         ImageIcon setIcono1 = new ImageIcon(scaledImage1);
         Restor1 = new JButton(setIcono1);
+        Restor1.setToolTipText("restablecer");
         Restor1.setPreferredSize(new Dimension(40, 40));
         Restor1.setMaximumSize(new Dimension(40, 40));
         Restor1.setMinimumSize(new Dimension(40, 40));
@@ -468,6 +495,9 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         
         // cardLayaout de modificar donador
         
+        modi.setBackground(Color.WHITE);
+        modi.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        
         
         JLabel tituloModi = new JLabel("Modificar Donador");
         tituloModi.setHorizontalAlignment(SwingConstants.CENTER);
@@ -481,6 +511,7 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         Image scaledImage2 = icono2.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH); // Tamaño deseado
         ImageIcon setIcono2 = new ImageIcon(scaledImage2);
         buscarModi = new JButton(setIcono2);
+        buscarModi.setToolTipText("Buscar");
         buscarModi.setPreferredSize(new Dimension(20, 20));
         buscarModi.setMaximumSize(new Dimension(20, 20));
         buscarModi.setMinimumSize(new Dimension(20, 20));
@@ -639,6 +670,7 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         Image scaledImage3 = icono3.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH); // Tamaño deseado
         ImageIcon setIcono3 = new ImageIcon(scaledImage3);
         modificare = new JButton(setIcono3);
+        modificare.setToolTipText("Guardar");
         modificare.setPreferredSize(new Dimension(40, 40));
         modificare.setMaximumSize(new Dimension(40, 40));
         modificare.setMinimumSize(new Dimension(40, 40));
@@ -650,6 +682,7 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         Image scaledImage4 = icono4.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH); // Tamaño deseado
         ImageIcon setIcono4 = new ImageIcon(scaledImage4);
         Restor2 = new JButton(setIcono4);
+        Restor2.setToolTipText("Restablecer");
         Restor2.setPreferredSize(new Dimension(40, 40));
         Restor2.setMaximumSize(new Dimension(40, 40));
         Restor2.setMinimumSize(new Dimension(40, 40));
@@ -677,6 +710,9 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         
         // CardLayaout de consultar todos los Donadores
         
+        consultAll.setBackground(Color.WHITE);
+        consultAll.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        
         JLabel tituloConsultAll = new JLabel("Consultar todos los Donadores");
         tituloConsultAll.setHorizontalAlignment(SwingConstants.CENTER);
         agregarComponente(consultAll, tituloConsultAll, 0, 0, 5, 1);
@@ -690,6 +726,7 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         Image scaledImage5 = icono5.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH); // Tamaño deseado
         ImageIcon setIcono5 = new ImageIcon(scaledImage5);
         btnActualizarTabla = new JButton(setIcono5);
+        btnActualizarTabla.setToolTipText("Recargar");
         btnActualizarTabla.setPreferredSize(new Dimension(40, 40));
         btnActualizarTabla.setMaximumSize(new Dimension(40, 40));
         btnActualizarTabla.setMinimumSize(new Dimension(40, 40));
@@ -712,6 +749,9 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         
         //CardLayaout eliminar Donador
         
+        elimini.setBackground(Color.WHITE);
+        elimini.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        
         JLabel tituloElimini = new JLabel("Eliminar Donador");
         tituloElimini.setHorizontalAlignment(SwingConstants.CENTER);
         agregarComponente(elimini, tituloElimini, 0, 0, 5, 1);
@@ -733,6 +773,7 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         Image scaledImage7 = icono7.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH); // Tamaño deseado
         ImageIcon setIcono7 = new ImageIcon(scaledImage7);
         buscarElimi = new JButton(setIcono7);
+        buscarElimi.setToolTipText("Buscar");
         buscarElimi.setPreferredSize(new Dimension(20, 20));
         buscarElimi.setMaximumSize(new Dimension(20, 20));
         buscarElimi.setMinimumSize(new Dimension(20, 20));
@@ -748,8 +789,11 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 					HilosConsultaActualizarGUI GUI = new HilosConsultaActualizarGUI(in, "Eliminar", interfaz);
 					GUI.consultarYActualizarGUI();
 					
-				} catch (Exception e2) {
-					System.out.println("none");
+				} catch (NumberFormatException e2) {
+					JOptionPane.showMessageDialog(interfaz, 
+			                "Ingresa un id para poder buscar al donador", 
+			                "Error", 
+			                JOptionPane.ERROR_MESSAGE);
 				}
 				
 			}
@@ -777,7 +821,7 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         agregarComponente(elimini, numInt4, 1, 6, 2, 1);
         
         agregarComponente(elimini, new JLabel("Teléfono de contacto:"), 0, 7, 1, 1);
-        telefono4 = new JTextField(10);
+        telefono4 = new JFormattedTextField();
         telefono4.setEnabled(false);
         agregarComponente(elimini, telefono4, 1, 7, 2, 1);
         
@@ -822,6 +866,7 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         Image scaledImage6 = icono6.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH); // Tamaño deseado
         ImageIcon setIcono6 = new ImageIcon(scaledImage6);
         confirmElimini = new JButton(setIcono6);
+        confirmElimini.setToolTipText("Confirmar eliminacion");
         confirmElimini.setPreferredSize(new Dimension(40, 40));
         confirmElimini.setMaximumSize(new Dimension(40, 40));
         confirmElimini.setMinimumSize(new Dimension(40, 40));
@@ -830,7 +875,33 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
+				String n = ID4.getText().trim();
+				if(n!=null || !n.equalsIgnoreCase("")) {
+					try {
+						int id = Integer.parseInt(n);
+						DonadorDAO dondao = new DonadorDAO(interfaz);
+						Donador don = dondao.buscarDonadorPorId(id);
+						if (don != null) {
+							dondao.eliminarFila(id);
+							JOptionPane.showMessageDialog(interfaz, 
+					                "Donador con el id "+id+" eliminador con exito", 
+					                "Correcto", 
+					                JOptionPane.ERROR_MESSAGE);
+							restablecer(ID4, colonia4, calle4, numExt4, numInt4, telefono4, email4, tipoDonador4, RelacionUni4, clase4, progDona4);
+						}else {
+							JOptionPane.showMessageDialog(interfaz, 
+					                "No existe ningun donador con ese id", 
+					                "Error", 
+					                JOptionPane.ERROR_MESSAGE);
+						}
+						
+					} catch (NumberFormatException e2) {
+						JOptionPane.showMessageDialog(interfaz, 
+				                "Ingresa un id para poder eliminar al donador", 
+				                "Error", 
+				                JOptionPane.ERROR_MESSAGE);
+					}
+				}
 				
 			}
 		});
@@ -990,8 +1061,8 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 	}
 	
 	private void restablecer(JTextField IDe, JTextField col, JTextField call, JTextField numext, JTextField numint, 
-			JFormattedTextField telefon, JTextField email5, JComboBox<String> tipoDona, JComboBox<String> RelacionUni, 
-			JComboBox<String> clase, JComboBox<String> progDona) {
+			JFormattedTextField telefon, JTextField email5, JComponent tipoDona, JComponent RelacionUni, 
+			JComponent clase, JComponent progDona) {
 		IDe.setText("");
 		col.setText("");
 		call.setText("");
@@ -999,10 +1070,34 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 		numint.setText("");
 		telefon.setText("");
 		email5.setText("");
-		tipoDona.setSelectedIndex(0);
-		RelacionUni.setSelectedIndex(0);
-		clase.setSelectedIndex(0);
-		progDona.setSelectedIndex(0);
+		if (tipoDona instanceof JComboBox) {
+			JComboBox<String> tipDona = (JComboBox<String>) tipoDona;
+			tipDona.setSelectedIndex(0);
+		}else if (tipoDona instanceof JTextField) {
+			JTextField tipDona = (JTextField) tipoDona;
+			tipDona.setText("");
+		}
+		if (RelacionUni instanceof JComboBox) {
+			JComboBox<String> tipDona = (JComboBox<String>) RelacionUni;
+			tipDona.setSelectedIndex(0);
+		}else if (RelacionUni instanceof JTextField) {
+			JTextField tipDona = (JTextField) RelacionUni;
+			tipDona.setText("");
+		}
+		if (clase instanceof JComboBox) {
+			JComboBox<String> tipDona = (JComboBox<String>) clase;
+			tipDona.setSelectedIndex(0);
+		}else if (clase instanceof JTextField) {
+			JTextField tipDona = (JTextField) clase;
+			tipDona.setText("");
+		}
+		if (progDona instanceof JComboBox) {
+			JComboBox<String> tipDona = (JComboBox<String>) progDona;
+			tipDona.setSelectedIndex(0);
+		}else if (progDona instanceof JTextField) {
+			JTextField tipDona = (JTextField) progDona;
+			tipDona.setText("");
+		}
 	}
 	
 		// metodo para actualizar la GUI recibiendo como parametro el objeto de donador y los componentes a actualizar
@@ -1077,7 +1172,7 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 			
 		}else {
 			JOptionPane.showMessageDialog(this, 
-	                "No se encontro ningun donador con el id "+ ID2.getText(), 
+	                "No se encontro ningun donador con ese id "+ ID2.getText(), 
 	                "Error", 
 	                JOptionPane.ERROR_MESSAGE);
 		}
@@ -1387,6 +1482,9 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 					telefono2, email2, tipoDonador2, RelacionUni2, 
 					clase2, progDona2);
 			activarComponentes(colonia2, calle2, numExt2, numInt2, telefono2, email2, tipoDonador2, RelacionUni2, clase2, progDona2);
+		}else if (ventana.equalsIgnoreCase("Eliminar")) {
+			ActualizarDatosGUIDonador(dona, ID4, colonia4,calle4, numExt4, numInt4, telefono4, email4, tipoDonador4,
+					RelacionUni4, clase4,progDona4);
 		}
 	}
 

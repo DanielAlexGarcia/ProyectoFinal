@@ -161,7 +161,7 @@ public class DonadorDAO {
 	                return dona;
 	            } else {
 	                // No se encontró ningún donador con ese ID
-	                System.out.println("No se encontró un donador con ID: " + donadorID);
+	                System.out.println("No se encontró un donador con ese ID: " + donadorID);
 	                return null;
 	            }
 	            
