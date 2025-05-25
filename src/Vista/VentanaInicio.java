@@ -47,14 +47,12 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 	GridBagLayout gbl = new GridBagLayout();
 	GridBagConstraints gbc = new GridBagConstraints();
 	JMenuBar menubar = new JMenuBar();
-	JMenu añady, elimina, modifica, consultarTodos, 	//opciones ventana principal
-	Opciones;	// opciones ventana donadores
+	JMenu añady, elimina, modifica, consultarTodos;	// opciones ventana donadores
+	JToolBar Opciones;
 	JMenuBar menuBar = new JMenuBar();
 	JMenuItem donaAñadi, donaElim, donaModi, donaConsult;	// opciones de ventana principal
-	JMenuItem donadores, 	// ventana donadores
-	añadir, eliminar, modificar, cargaAll, cargaOpcion;		//opciones ventana donadores
-	
-	JButton donador, clas, tipoDonante;
+	JMenuItem donadores; 	// ventana donadores
+	JButton añadir, eliminar, modificar, cargaAll, cargaOpcion;		//opciones ventana donadores
 	
 	
 	JPasswordField contraseña;
@@ -156,15 +154,49 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         
         opcionesd = new JToolBar();
         
-        modificar = new JMenuItem("Modificar");
+        ImageIcon iconoG = new ImageIcon("imagenes/icon editar.jpg");
+        Image scaledImg = iconoG.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH); // Tamaño deseado
+        ImageIcon setIconoG = new ImageIcon(scaledImg);
+        modificar = new JButton(setIconoG);
+        modificar.setToolTipText("Modificar un donador");
+        modificar.setPreferredSize(new Dimension(40, 40));
+        modificar.setMaximumSize(new Dimension(40, 40));
+        modificar.setMinimumSize(new Dimension(40, 40));
+        modificar.setSize(new Dimension(40, 40));
         modificar.addActionListener(this);
         //cargaOpcion = new JMenuItem("Consultar");
         //cargaOpcion.addActionListener(this);
-        cargaAll = new JMenuItem("Cargar todos");
+        ImageIcon iconoC = new ImageIcon("imagenes/icon editar.jpg");
+        Image scaledimg = iconoC.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH); // Tamaño deseado
+        ImageIcon setIconoC = new ImageIcon(scaledimg);
+        cargaAll = new JButton(setIconoC);
+        cargaAll.setToolTipText("Cargar todos los donadores");
+        cargaAll.setPreferredSize(new Dimension(40, 40));
+        cargaAll.setMaximumSize(new Dimension(40, 40));
+        cargaAll.setMinimumSize(new Dimension(40, 40));
+        cargaAll.setSize(new Dimension(40, 40));
         cargaAll.addActionListener(this);
-        eliminar = new JMenuItem("Eliminar");
+        
+        ImageIcon ico = new ImageIcon("imagenes/iconEliminar.png");
+        Image scal= ico.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH); // Tamaño deseado
+        ImageIcon setIco = new ImageIcon(scal);
+        eliminar = new JButton(setIco);
+        eliminar.setToolTipText("Eliminar un Donador");
+        eliminar.setPreferredSize(new Dimension(40, 40));
+        eliminar.setMaximumSize(new Dimension(40, 40));
+        eliminar.setMinimumSize(new Dimension(40, 40));
+        eliminar.setSize(new Dimension(40, 40));
         eliminar.addActionListener(this);
-        añadir = new JMenuItem("añadir nuevo");
+        
+        ImageIcon icon = new ImageIcon("imagenes/iconEliminar.png");
+        Image scale = icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH); // Tamaño deseado
+        ImageIcon setIcon = new ImageIcon(scale);
+        añadir = new JButton(setIcon);
+        añadir.setToolTipText("Añadir nuevo donador");
+        añadir.setPreferredSize(new Dimension(40, 40));
+        añadir.setMaximumSize(new Dimension(40, 40));
+        añadir.setMinimumSize(new Dimension(40, 40));
+        añadir.setSize(new Dimension(40, 40));
         añadir.addActionListener(this);
         
         
@@ -185,7 +217,7 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         añady = new JMenu("Añadir");
         añady.add(donadores);
         
-        Opciones = new JMenu("Opciones");
+        Opciones = new JToolBar();
         Opciones.add(añadir);
         Opciones.add(eliminar);
         Opciones.add(modificar);
@@ -296,15 +328,16 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         // Preparamos los paneles para CardLayout
         añadi = new JPanel();
         añadi.setLayout(gbl);
+        añadi.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
         modi = new JPanel();
-        modi.setOpaque(false);
         modi.setLayout(gbl);
+        modi.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
         consultAll = new JPanel();
-        consultAll.setOpaque(false);
         consultAll.setLayout(gbl);
+        consultAll.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
         elimini = new JPanel();
-        elimini.setOpaque(false);
         elimini.setLayout(gbl);
+        elimini.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
         
         // Añadir todos los paneles al CardLayout
         opcionesPaneles.add(añadi, "Añadir");
@@ -320,7 +353,6 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         // CardLayout de añadir
         
         añadi.setBackground(Color.WHITE);
-        añadi.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         JLabel tituloAñadi = new JLabel("Añadir Donador");
         tituloAñadi.setHorizontalAlignment(SwingConstants.CENTER);
         agregarComponente(añadi, tituloAñadi, 0, 0, 5, 1);
@@ -496,7 +528,6 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         // cardLayaout de modificar donador
         
         modi.setBackground(Color.WHITE);
-        modi.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         
         
         JLabel tituloModi = new JLabel("Modificar Donador");
@@ -664,6 +695,7 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         agregarComponente(modi, progDona2, 1, 12, 2, 1);
         
         JPanel botones = new JPanel();
+        botones.setBackground(Color.WHITE);
         botones.setLayout(gbl);
         
         ImageIcon icono3 = new ImageIcon("imagenes/icon save.jpg");
@@ -711,7 +743,6 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         // CardLayaout de consultar todos los Donadores
         
         consultAll.setBackground(Color.WHITE);
-        consultAll.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         
         JLabel tituloConsultAll = new JLabel("Consultar todos los Donadores");
         tituloConsultAll.setHorizontalAlignment(SwingConstants.CENTER);
@@ -750,7 +781,6 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         //CardLayaout eliminar Donador
         
         elimini.setBackground(Color.WHITE);
-        elimini.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         
         JLabel tituloElimini = new JLabel("Eliminar Donador");
         tituloElimini.setHorizontalAlignment(SwingConstants.CENTER);
@@ -851,6 +881,8 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         agregarComponente(elimini, progDona4, 1, 12, 2, 1);
         
         JPanel paneless = new JPanel();
+        paneless.setBackground(Color.WHITE);
+        paneless.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         paneless.setLayout(gbl);
         
 
