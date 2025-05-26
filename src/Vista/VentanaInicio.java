@@ -288,8 +288,56 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         txtUsu.setOpaque(true);
         agregarComponente(InicioSecion, txtUsu, 0, 1, 1, 1);
         
-        
+        contraseña = new JPasswordField(10);
         Usuario = new JTextField(10);
+        Usuario.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				char[] contra = contraseña.getPassword();
+				if (contra.length == 0)contraseña.requestFocusInWindow();
+				else {
+					problema1.setText("");
+					problema2.setText("");
+					String usuarios = Usuario.getText();
+					String contrs = new String(contraseña.getPassword());
+
+					boolean usuarioValido = false;
+					boolean passwordValido = false;
+
+					// Validación de usuario
+					if (usuarios.isEmpty()) {
+					    problema1.setText("Ingresa el usuario");
+					} else if (!comprovarUsuario(usuarios)) {
+					    problema1.setText("Usuario incorrecto");
+					} else {
+					    usuarioValido = true;
+					}
+
+					// Validación de contraseña
+					if (contrs.isEmpty()) {
+					    problema2.setText("Ingresa la contraseña");
+					} else if (!comprovarPassword(contrs)) {
+					    problema2.setText("Contraseña incorrecta");
+					} else {
+					    passwordValido = true;
+					}
+
+					if (usuarioValido && passwordValido) {
+						JOptionPane.showMessageDialog(null, "¡Bienvenido, " + usuarios + "!","Login Exitoso", // Título del diálogo
+						        JOptionPane.INFORMATION_MESSAGE );
+						try {
+							InicioSecion.setClosed(true);
+						} catch (PropertyVetoException e1) {
+							e1.printStackTrace();
+						}
+						añadirOpciones();
+					}
+				}
+				
+			}
+		});
+        
         agregarComponente(InicioSecion, Usuario, 1, 1, 2, 1);
         
         agregarComponente(InicioSecion, problema1, 0, 2, 3, 1);
@@ -298,7 +346,53 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         txtContra.setOpaque(true);
         agregarComponente(InicioSecion, txtContra, 0, 3, 1, 1);
         
-        contraseña = new JPasswordField(10);
+        contraseña.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (Usuario.getText().length() == 0)Usuario.requestFocusInWindow();
+				else {
+					problema1.setText("");
+					problema2.setText("");
+					String usuarios = Usuario.getText();
+					String contrs = new String(contraseña.getPassword());
+
+					boolean usuarioValido = false;
+					boolean passwordValido = false;
+
+					// Validación de usuario
+					if (usuarios.isEmpty()) {
+					    problema1.setText("Ingresa el usuario");
+					} else if (!comprovarUsuario(usuarios)) {
+					    problema1.setText("Usuario incorrecto");
+					} else {
+					    usuarioValido = true;
+					}
+
+					// Validación de contraseña
+					if (contrs.isEmpty()) {
+					    problema2.setText("Ingresa la contraseña");
+					} else if (!comprovarPassword(contrs)) {
+					    problema2.setText("Contraseña incorrecta");
+					} else {
+					    passwordValido = true;
+					}
+
+					if (usuarioValido && passwordValido) {
+						JOptionPane.showMessageDialog(null, "¡Bienvenido, " + usuarios + "!","Login Exitoso", // Título del diálogo
+						        JOptionPane.INFORMATION_MESSAGE );
+						try {
+							InicioSecion.setClosed(true);
+						} catch (PropertyVetoException e1) {
+							e1.printStackTrace();
+						}
+						añadirOpciones();
+					}
+				}
+				
+			}
+		});
+        
         agregarComponente(InicioSecion, contraseña, 1, 3, 1, 1);
         
         ImageIcon iconshowPasword = new ImageIcon("imagenes/showPasword.png");
@@ -333,6 +427,7 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 				ShowPassword = !ShowPassword;
 			}
 		});
+        
         agregarComponente(InicioSecion, showPasword, 2, 3, 1, 1);
         
         agregarComponente(InicioSecion, problema2, 0, 4, 3, 1);
