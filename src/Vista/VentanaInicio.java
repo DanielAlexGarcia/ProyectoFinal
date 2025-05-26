@@ -79,6 +79,8 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 	JTable tablaDonadores = new JTable();
 	JScrollPane ScrollPanelDonadores = new JScrollPane(tablaDonadores);
 	ResultSet listaDonadores;
+	JButton showPasword;
+	boolean ShowPassword = false;
 	
 	List<JComponent> ordenTabulacion1 = new ArrayList<>();
 	JPanel opcionesPaneles = new JPanel(new CardLayout());
@@ -277,7 +279,7 @@ public class VentanaInicio  extends JFrame implements ActionListener{
        // <html><u><b style='color:blue;'>Bienbenido, inicia secion para comenzar</b></u></html>
         JLabel tituloinicioSecion = new JLabel("Bienbenido, inicia secion para comenzar");
         tituloinicioSecion.setOpaque(true);
-        agregarComponente(InicioSecion, tituloinicioSecion, 0, 0, 2, 1);
+        agregarComponente(InicioSecion, tituloinicioSecion, 0, 0, 3, 1);
         
         JLabel txtUsu = new JLabel("Usuario: ");
         txtUsu.setOpaque(true);
@@ -285,9 +287,9 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         
         
         Usuario = new JTextField(10);
-        agregarComponente(InicioSecion, Usuario, 1, 1, 1, 1);
+        agregarComponente(InicioSecion, Usuario, 1, 1, 2, 1);
         
-        agregarComponente(InicioSecion, problema1, 0, 2, 2, 1);
+        agregarComponente(InicioSecion, problema1, 0, 2, 3, 1);
         
         JLabel txtContra = new JLabel("Contraseña: ");
         txtContra.setOpaque(true);
@@ -296,7 +298,19 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         contraseña = new JPasswordField(10);
         agregarComponente(InicioSecion, contraseña, 1, 3, 1, 1);
         
-        agregarComponente(InicioSecion, problema2, 0, 4, 2, 1);
+        ImageIcon iconPas = new ImageIcon("imagenes/icon save.jpg");
+        Image scaledImage3 = icono3.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH); // Tamaño deseado
+        ImageIcon setIcono3 = new ImageIcon(scaledImage3);
+        modificare = new JButton(setIcono3);
+        modificare.setToolTipText("Guardar");
+        modificare.setPreferredSize(new Dimension(40, 40));
+        modificare.setMaximumSize(new Dimension(40, 40));
+        modificare.setMinimumSize(new Dimension(40, 40));
+        modificare.setSize(new Dimension(40, 40));
+        modificare.addActionListener(this);
+        agregarBotonIcon(botones, modificare, 0, 0, 1, 1);
+        
+        agregarComponente(InicioSecion, problema2, 0, 4, 3, 1);
         
         agregarComponente(InicioSecion, boton1, 0, 5, 2, 1);
         
@@ -309,10 +323,10 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         Donadores.setResizable(true);  
         Donadores.setSize(750, 500);
         Donadores.setLayout(new BorderLayout());
-        int x1 = (panel.getHeight() - Donadores.getHeight());
-        int y1 = (panel.getWidth() - Donadores.getWidth());
-        int yy1 = (y * (-1)) /5;
-        int xx1 = (x * (-1)) / 2;
+        int x1 = (frame.getHeight() - Donadores.getHeight());
+        int y1 = (frame.getWidth() - Donadores.getWidth());
+        int yy1 = (y1) /3;
+        int xx1 = (x1) / 2;
         Donadores.setLocation(xx1, yy1);
         Donadores.setTitle("Gestion Donadores");
         Donadores.setClosable(true);
@@ -482,7 +496,7 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         }
         agregarComponente(añadi, RelacionUni, 1, 11, 1, 1);
         
-        JLabel i7 = new JLabel("Relacion con la universidad (opcional): ");
+        JLabel i7 = new JLabel("Tipo de donador: ");
         i7.setHorizontalAlignment(SwingConstants.RIGHT);
         agregarComponente(añadi,i7, 0, 12, 1, 1);
         tipoDonador = new JComboBox<String>();
@@ -1368,7 +1382,7 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 			
 		}else {
 			JOptionPane.showMessageDialog(this, 
-	                "No se encontro ningun donador con ese id "+ ID2.getText(), 
+	                "No se encontro ningun donador con el id "+ ID2.getText(), 
 	                "Error", 
 	                JOptionPane.ERROR_MESSAGE);
 		}
@@ -1675,7 +1689,9 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 			ActualizarDatosGUIDonador(dona, ID2,colonia2, calle2, numExt2, numInt2, 
 					telefono2, email2, tipoDonador2, RelacionUni2, 
 					clase2, progDona2);
-			activarComponentes(colonia2, calle2, numExt2, numInt2, telefono2, email2, tipoDonador2, RelacionUni2, clase2, progDona2);
+			if (dona != null) {
+				activarComponentes(colonia2, calle2, numExt2, numInt2, telefono2, email2, tipoDonador2, RelacionUni2, clase2, progDona2);
+			}
 		}else if (ventana.equalsIgnoreCase("Eliminar")) {
 			ActualizarDatosGUIDonador(dona, ID4, colonia4,calle4, numExt4, numInt4, telefono4, email4, tipoDonador4,
 					RelacionUni4, clase4,progDona4);
