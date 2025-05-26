@@ -403,6 +403,7 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         ImageIcon setIhidePasword = new ImageIcon(scalehidePasword);
         showPasword = new JButton(setIshowPasword);
         showPasword.setContentAreaFilled(false);
+        showPasword.setBorder(null);
         showPasword.setToolTipText("Mostrar contraseña");
         showPasword.setPreferredSize(new Dimension(20, 20));
         showPasword.setMaximumSize(new Dimension(20, 20));
@@ -418,11 +419,11 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 				if (ShowPassword) {		// si esta mostrando la contraseña
 					contraseña.setEchoChar(defaultEcho);
 					showPasword.setIcon(setIshowPasword);
-					showPasword.setToolTipText("Ocultar contraseña");
+					showPasword.setToolTipText("mostrar contraseña"); 	// estrañamente lo muestra cuando se oculta la contraseña
 				}else {
 					contraseña.setEchoChar((char) 0);
 					showPasword.setIcon(setIhidePasword);
-					showPasword.setToolTipText("Ocultar contraseña");
+					showPasword.setToolTipText("ocultar contraseña");	// estrañamente lo muestra cuando se muestra la contraseña
 				}
 				ShowPassword = !ShowPassword;
 			}
@@ -432,7 +433,7 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         
         agregarComponente(InicioSecion, problema2, 0, 4, 3, 1);
         
-        agregarComponente(InicioSecion, boton1, 0, 5, 2, 1);
+        agregarComponente(InicioSecion, boton1, 0, 5, 5, 1);
         
         
         panel.add(InicioSecion);
