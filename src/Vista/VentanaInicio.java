@@ -125,6 +125,9 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 	}
 	
 	
+	/**
+	 * 
+	 */
 	public VentanaInicio() {
 		boolean Secion = false;
 		opcionesPaneles.setOpaque(false);
@@ -298,17 +301,39 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         contraseña = new JPasswordField(10);
         agregarComponente(InicioSecion, contraseña, 1, 3, 1, 1);
         
-        ImageIcon iconPas = new ImageIcon("imagenes/icon save.jpg");
-        Image scaledImage3 = icono3.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH); // Tamaño deseado
-        ImageIcon setIcono3 = new ImageIcon(scaledImage3);
-        modificare = new JButton(setIcono3);
-        modificare.setToolTipText("Guardar");
-        modificare.setPreferredSize(new Dimension(40, 40));
-        modificare.setMaximumSize(new Dimension(40, 40));
-        modificare.setMinimumSize(new Dimension(40, 40));
-        modificare.setSize(new Dimension(40, 40));
-        modificare.addActionListener(this);
-        agregarBotonIcon(botones, modificare, 0, 0, 1, 1);
+        ImageIcon iconshowPasword = new ImageIcon("imagenes/showPasword.png");
+        ImageIcon iconhidePasword = new ImageIcon("imagenes/hidePasword.png");
+        Image scaledsowPasword = iconshowPasword.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        Image scalehidePasword = iconhidePasword.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        ImageIcon setIshowPasword = new ImageIcon(scaledsowPasword);
+        ImageIcon setIhidePasword = new ImageIcon(scalehidePasword);
+        showPasword = new JButton(setIshowPasword);
+        showPasword.setContentAreaFilled(false);
+        showPasword.setToolTipText("Mostrar contraseña");
+        showPasword.setPreferredSize(new Dimension(20, 20));
+        showPasword.setMaximumSize(new Dimension(20, 20));
+        showPasword.setMinimumSize(new Dimension(20, 20));
+        showPasword.setSize(new Dimension(20, 20));
+        
+        char defaultEcho = contraseña.getEchoChar();
+        
+        showPasword.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (ShowPassword) {		// si esta mostrando la contraseña
+					contraseña.setEchoChar(defaultEcho);
+					showPasword.setIcon(setIshowPasword);
+					showPasword.setToolTipText("Ocultar contraseña");
+				}else {
+					contraseña.setEchoChar((char) 0);
+					showPasword.setIcon(setIhidePasword);
+					showPasword.setToolTipText("Ocultar contraseña");
+				}
+				ShowPassword = !ShowPassword;
+			}
+		});
+        agregarComponente(InicioSecion, showPasword, 2, 3, 1, 1);
         
         agregarComponente(InicioSecion, problema2, 0, 4, 3, 1);
         
