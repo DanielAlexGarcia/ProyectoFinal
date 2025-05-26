@@ -5,6 +5,7 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -166,7 +167,7 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         modificar.addActionListener(this);
         //cargaOpcion = new JMenuItem("Consultar");
         //cargaOpcion.addActionListener(this);
-        ImageIcon iconoC = new ImageIcon("imagenes/icon editar.jpg");
+        ImageIcon iconoC = new ImageIcon("imagenes/iconShowAll.jpg");
         Image scaledimg = iconoC.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH); // Tamaño deseado
         ImageIcon setIconoC = new ImageIcon(scaledimg);
         cargaAll = new JButton(setIconoC);
@@ -188,7 +189,7 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         eliminar.setSize(new Dimension(40, 40));
         eliminar.addActionListener(this);
         
-        ImageIcon icon = new ImageIcon("imagenes/iconEliminar.png");
+        ImageIcon icon = new ImageIcon("imagenes/iconAñadir.jpg");
         Image scale = icon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH); // Tamaño deseado
         ImageIcon setIcon = new ImageIcon(scale);
         añadir = new JButton(setIcon);
@@ -214,7 +215,7 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 			}
 		});
         
-        añady = new JMenu("Añadir");
+        añady = new JMenu("Abrir");
         añady.add(donadores);
         
         Opciones = new JToolBar();
@@ -306,7 +307,7 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         // ventana Donadores
         Donadores = new JInternalFrame();
         Donadores.setResizable(true);  
-        Donadores.setSize(500,500);
+        Donadores.setSize(750, 500);
         Donadores.setLayout(new BorderLayout());
         int x1 = (panel.getHeight() - Donadores.getHeight());
         int y1 = (panel.getWidth() - Donadores.getWidth());
@@ -352,34 +353,64 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         
         // CardLayout de añadir
         
-        añadi.setBackground(Color.WHITE);
+        añadi.setBackground(new Color(165, 220, 240));
         JLabel tituloAñadi = new JLabel("Añadir Donador");
         tituloAñadi.setHorizontalAlignment(SwingConstants.CENTER);
         agregarComponente(añadi, tituloAñadi, 0, 0, 5, 1);
         
-        agregarComponente(añadi, new JLabel("ID (opcional)"), 0, 1, 1, 1);
+        JLabel i = new JLabel("ID (opcional):");
+        i.setHorizontalAlignment(SwingConstants.RIGHT);
+        agregarComponente(añadi,i, 0, 1, 1, 1);
         ID = crearCampoIDValidado();
+        ID.setOpaque(false);
+        ID.setBackground(new Color(0,0,0));
         agregarComponente(añadi, ID, 1, 1, 1, 1);
         
-        agregarComponente(añadi, new JLabel("Datos direccion"), 0, 2, 2, 1);
+        JLabel i14 = new JLabel("Datos de la direccion");
+        i14.setHorizontalAlignment(SwingConstants.CENTER);
+        i14.setFont(new Font("Serif", Font.PLAIN, 18));
+        agregarComponente(añadi, i14, 0, 2, 2, 1);
         
-        agregarComponente(añadi, new JLabel("Colonia: "), 0, 3, 1, 1);
+        JLabel i1 = new JLabel("Colonia:");
+        i1.setHorizontalAlignment(SwingConstants.RIGHT);
+        agregarComponente(añadi, i1, 0, 3, 1, 1);
         colonia = new JTextField(10);
+        colonia.setOpaque(false);
+        colonia.setBackground(new Color(0,0,0));
         agregarComponente(añadi, colonia, 1, 3, 1, 1);
         
-        agregarComponente(añadi, new JLabel("Calle: "), 0, 4, 1, 1);
+        JLabel i2 = new JLabel("Calle:");
+        i2.setHorizontalAlignment(SwingConstants.RIGHT);
+        agregarComponente(añadi,i2, 0, 4, 1, 1);
         calle = new JTextField(10);
+        calle.setOpaque(false);
+        calle.setBackground(new Color(0,0,0));
         agregarComponente(añadi, calle, 1, 4, 1, 1);
         
-        agregarComponente(añadi, new JLabel("Numero exterior: "), 0, 5, 1, 1);
+        JLabel i3 = new JLabel("Numero exterior");
+        i3.setHorizontalAlignment(SwingConstants.RIGHT);
+        agregarComponente(añadi,i3, 0, 5, 1, 1);
         numExt = new JTextField(10);
+        numExt.setOpaque(false);
+        numExt.setBackground(new Color(0,0,0));
         agregarComponente(añadi, numExt, 1, 5, 1, 1);
         
-        agregarComponente(añadi, new JLabel("Numero interior ('S/N' si no aplica):"), 0, 6, 1, 1);
+        JLabel i4 = new JLabel("Numero interior ('S/N' si no aplica):");
+        i4.setHorizontalAlignment(SwingConstants.RIGHT);
+        agregarComponente(añadi, i4, 0, 6, 1, 1);
         numInt = new JTextField(10);
+        numInt.setOpaque(false);
+        numInt.setBackground(new Color(0,0,0));
         agregarComponente(añadi, numInt, 1, 6, 1, 1);
         
-        agregarComponente(añadi, new JLabel("Teléfono de contacto:"), 0, 7, 1, 1);
+        JLabel i11 = new JLabel("Datos de contacto");
+        i11.setHorizontalAlignment(SwingConstants.CENTER);
+        i11.setFont(new Font("Serif", Font.PLAIN, 18));
+        agregarComponente(añadi, i11, 0, 7, 2, 1);
+        
+        JLabel i5 = new JLabel("Telefono:");
+        i5.setHorizontalAlignment(SwingConstants.RIGHT);
+        agregarComponente(añadi, i5, 0, 8, 1, 1);
 
         try {
             MaskFormatter formatter = new MaskFormatter("+## ##########");
@@ -389,6 +420,8 @@ public class VentanaInicio  extends JFrame implements ActionListener{
             
             telefono = new JFormattedTextField(formatter);
             telefono.setColumns(15);
+            telefono.setOpaque(false);
+            telefono.setBackground(new Color(0,0,0,0));
             
         } catch (ParseException e) {
             telefono = new JFormattedTextField();
@@ -398,12 +431,15 @@ public class VentanaInicio  extends JFrame implements ActionListener{
                 JOptionPane.ERROR_MESSAGE);
         }
 
-        ordenTabulacion1.add(telefono);
-        agregarComponente(añadi, telefono, 1, 7, 1, 1);
+        agregarComponente(añadi, telefono, 1, 8, 1, 1);
         
-        agregarComponente(añadi, new JLabel("Email:"), 0, 8, 1, 1);
+        JLabel i10 = new JLabel("Email:");
+        i10.setHorizontalAlignment(SwingConstants.RIGHT);
+        agregarComponente(añadi,i10, 0, 9, 1, 1);
         email = new JTextField(25);
-        agregarComponente(añadi, email, 1, 8, 1, 1);
+        email.setOpaque(false);
+        email.setBackground(new Color(0,0,0));
+        agregarComponente(añadi, email, 1, 9, 1, 1);
 
         email.setInputVerifier(new InputVerifier() {
             @Override
@@ -432,38 +468,51 @@ public class VentanaInicio  extends JFrame implements ActionListener{
             }
         });
         
-        agregarComponente(añadi, new JLabel("Relacion con la universidad (opcional): "), 0, 9, 1, 1);
+        JLabel i12 = new JLabel("Especificasiones del donador");
+        i12.setHorizontalAlignment(SwingConstants.CENTER);
+        i12.setFont(new Font("Serif", Font.PLAIN, 18));
+        agregarComponente(añadi, i12, 0, 10, 2, 1);
+        
+        JLabel i6 = new JLabel("Relacion con la universidad (opcional): ");
+        i6.setHorizontalAlignment(SwingConstants.RIGHT);
+        agregarComponente(añadi,i6, 0, 11, 1, 1);
         RelacionUni = new JComboBox<String>();
         for (String[] n : RelacionesUni) {
             RelacionUni.addItem(n[0]);
         }
-        agregarComponente(añadi, RelacionUni, 1, 9, 1, 1);
+        agregarComponente(añadi, RelacionUni, 1, 11, 1, 1);
         
-        agregarComponente(añadi, new JLabel("Tipo de donador"), 0, 10, 1, 1);
+        JLabel i7 = new JLabel("Relacion con la universidad (opcional): ");
+        i7.setHorizontalAlignment(SwingConstants.RIGHT);
+        agregarComponente(añadi,i7, 0, 12, 1, 1);
         tipoDonador = new JComboBox<String>();
         for (String[] n : tiposDonadores) {
             tipoDonador.addItem(n[0]);
         }
-        agregarComponente(añadi, tipoDonador, 1, 10, 1, 1);
+        agregarComponente(añadi, tipoDonador, 1, 12, 1, 1);
         
-        agregarComponente(añadi, new JLabel("Clase (opcional): "), 0, 11, 1, 1);
+        JLabel i8 = new JLabel("Clase (opcional)");
+        i8.setHorizontalAlignment(SwingConstants.RIGHT);
+        agregarComponente(añadi,i8, 0, 13, 1, 1);
         clase = new JComboBox<String>();
         for (String[] n : clases) {
             clase.addItem(n[0]);
         }
-        agregarComponente(añadi, clase, 1, 11, 1, 1);
+        agregarComponente(añadi, clase, 1, 13, 1, 1);
         
-        agregarComponente(añadi, new JLabel("Programa de donacion (opcional): "), 0, 12, 1, 1);
+        JLabel i9 = new JLabel("Programa de donacion (opcional): ");
+        i9.setHorizontalAlignment(SwingConstants.RIGHT);
+        agregarComponente(añadi, i9, 0, 14, 1, 1);
         progDona = new JComboBox<String>();
         for (String[] n : programasDonacion) {
             progDona.addItem(n[0]);
         }
-        agregarComponente(añadi, progDona, 1, 12, 1, 1);
+        agregarComponente(añadi, progDona, 1, 14, 1, 1);
         
         JPanel paneles = new JPanel();
         paneles.setLayout(gbl);
-        paneles.setBackground(Color.WHITE);
-        agregarComponente(añadi, paneles, 0, 13, 5, 1);
+        paneles.setBackground(new Color(165, 220, 240));
+        agregarComponente(añadi, paneles, 0, 15, 5, 1);
         
 
         GridBagConstraints gbcAñadi = new GridBagConstraints();
@@ -527,15 +576,19 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         
         // cardLayaout de modificar donador
         
-        modi.setBackground(Color.WHITE);
+        modi.setBackground(new Color(165, 220, 240));
         
         
         JLabel tituloModi = new JLabel("Modificar Donador");
         tituloModi.setHorizontalAlignment(SwingConstants.CENTER);
         agregarComponente(modi, tituloModi, 0, 0, 5, 1);
         
-        agregarComponente(modi, new JLabel("ID"), 0, 1, 1, 1);
+        JLabel i15 = new JLabel("ID:");
+        i15.setHorizontalAlignment(SwingConstants.RIGHT);
+        agregarComponente(modi, i15, 0, 1, 1, 1);
         ID2 = crearCampoIDValidado();
+        ID2.setOpaque(false);
+        ID2.setBackground(new Color(0,0,0,0));
         agregarComponente(modi, ID2, 1, 1, 1, 1);
         
         ImageIcon icono2 = new ImageIcon("imagenes/icon buscar.png");
@@ -585,30 +638,55 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 
         modi.add(buscarModi, gbcBuscar);
         
+        JLabel i16 = new JLabel("Datos de la dirección");
+        i16.setHorizontalAlignment(SwingConstants.CENTER);
+        i16.setFont(new Font("Serif", Font.PLAIN, 18));
+        agregarComponente(modi, i16, 0, 2, 2, 1);
         
-        agregarComponente(modi, new JLabel("Datos direccion"), 0, 2, 2, 1);
-        
-        agregarComponente(modi, new JLabel("Colonia: "), 0, 3, 1, 1);
+        JLabel i17 = new JLabel("Colonia:");
+        i17.setHorizontalAlignment(SwingConstants.RIGHT);
+        agregarComponente(modi, i17, 0, 3, 1, 1);
         colonia2 = new JTextField(10);
         colonia2.setEnabled(false);
+        colonia2.setOpaque(false);
+        colonia2.setBackground(new Color(0,0,0,0));
         agregarComponente(modi, colonia2, 1, 3, 2, 1);
         
-        agregarComponente(modi, new JLabel("Calle: "), 0, 4, 1, 1);
+        JLabel i18 = new JLabel("Calle:");
+        i18.setHorizontalAlignment(SwingConstants.RIGHT);
+        agregarComponente(modi,i18, 0, 4, 1, 1);
         calle2 = new JTextField(10);
         calle2.setEnabled(false);
+        calle2.setOpaque(false);
+        calle2.setBackground(new Color(0,0,0,0));
         agregarComponente(modi, calle2, 1, 4, 2, 1);
         
-        agregarComponente(modi, new JLabel("Numero exterior: "), 0, 5, 1, 1);
+        JLabel i19 = new JLabel("Número exterior:");
+        i19.setHorizontalAlignment(SwingConstants.RIGHT);
+        agregarComponente(modi, i19, 0, 5, 1, 1);
         numExt2 = new JTextField(10);
         numExt2.setEnabled(false);
+        numExt2.setOpaque(false);
+        numExt2.setBackground(new Color(0,0,0,0));
         agregarComponente(modi, numExt2, 1, 5, 2, 1);
         
-        agregarComponente(modi, new JLabel("Numero interior ('S/N' si no aplica):"), 0, 6, 1, 1);
+        JLabel i20 = new JLabel("Número interior ('S/N' si no aplica):");
+        i20.setHorizontalAlignment(SwingConstants.RIGHT);
+        agregarComponente(modi, i20, 0, 6, 1, 1);
         numInt2 = new JTextField(10);
         numInt2.setEnabled(false);
+        numInt2.setOpaque(false);
+        numInt2.setBackground(new Color(0,0,0,0));
         agregarComponente(modi, numInt2, 1, 6, 2, 1);
         
-        agregarComponente(modi, new JLabel("Teléfono de contacto:"), 0, 7, 1, 1);
+        JLabel i21 = new JLabel("Datos de contacto");
+        i21.setHorizontalAlignment(SwingConstants.CENTER);
+        i21.setFont(new Font("Serif", Font.PLAIN, 18));
+        agregarComponente(modi, i21, 0, 7, 2, 1);
+        
+        JLabel i22 = new JLabel("Teléfono:");
+        i22.setHorizontalAlignment(SwingConstants.RIGHT);
+        agregarComponente(modi, i22, 0, 8, 1, 1);
 
         try {
             MaskFormatter formatter = new MaskFormatter("+## ##########");
@@ -619,6 +697,8 @@ public class VentanaInicio  extends JFrame implements ActionListener{
             telefono2 = new JFormattedTextField(formatter);
             telefono2.setEnabled(false);
             telefono2.setColumns(15);
+            telefono2.setOpaque(false);
+            telefono2.setBackground(new Color(0,0,0,0));
             
         } catch (ParseException e) {
             telefono2 = new JFormattedTextField();
@@ -628,12 +708,17 @@ public class VentanaInicio  extends JFrame implements ActionListener{
                 JOptionPane.ERROR_MESSAGE);
         }
 
-        agregarComponente(modi, telefono2, 1, 7, 2, 1);
+        agregarComponente(modi, telefono2, 1, 8, 2, 1);
         
-        agregarComponente(modi, new JLabel("Email:"), 0, 8, 1, 1);
+        JLabel i23 = new JLabel("Email:");
+        i23.setHorizontalAlignment(SwingConstants.RIGHT);
+        agregarComponente(modi, i23, 0, 9, 1, 1);
         email2 = new JTextField(25);
         email2.setEnabled(false);
-        agregarComponente(modi, email2, 1, 8, 2, 1);
+        email2.setOpaque(false);
+        email2.setBackground(new Color(0,0,0,0));
+     
+        agregarComponente(modi, email2, 1, 9, 2, 1);
 
         email2.setInputVerifier(new InputVerifier() {
             @Override
@@ -662,40 +747,53 @@ public class VentanaInicio  extends JFrame implements ActionListener{
             }
         });
         
-        agregarComponente(modi, new JLabel("Relacion con la universidad (opcional): "), 0, 9, 1, 1);
+        JLabel i24 = new JLabel("Especificaciones del donador");
+        i24.setHorizontalAlignment(SwingConstants.CENTER);
+        i24.setFont(new Font("Serif", Font.PLAIN, 18));
+        agregarComponente(modi, i24, 0, 10, 2, 1);
+        
+        JLabel i25 = new JLabel("Relación con la universidad (opcional):");
+        i25.setHorizontalAlignment(SwingConstants.RIGHT);
+        agregarComponente(modi, i25, 0, 11, 1, 1);
         RelacionUni2 = new JComboBox<String>();
         RelacionUni2.setEnabled(false);
         for (String[] n : RelacionesUni) {
             RelacionUni2.addItem(n[0]);
         }
-        agregarComponente(modi, RelacionUni2, 1, 9, 2, 1);
+        agregarComponente(modi, RelacionUni2, 1, 11, 2, 1);
         
-        agregarComponente(modi, new JLabel("Tipo de donador"), 0, 10, 1, 1);
+        JLabel i26 = new JLabel("Tipo de donador:");
+        i26.setHorizontalAlignment(SwingConstants.RIGHT);
+        agregarComponente(modi, i26, 0, 12, 1, 1);
         tipoDonador2 = new JComboBox<String>();
         tipoDonador2.setEnabled(false);
         for (String[] n : tiposDonadores) {
             tipoDonador2.addItem(n[0]);
         }
-        agregarComponente(modi, tipoDonador2, 1, 10, 2, 1);
+        agregarComponente(modi, tipoDonador2, 1, 12, 2, 1);
         
-        agregarComponente(modi, new JLabel("Clase (opcional): "), 0, 11, 1, 1);
+        JLabel i27 = new JLabel("Clase (opcional):");
+        i27.setHorizontalAlignment(SwingConstants.RIGHT);
+        agregarComponente(modi, i27, 0, 13, 1, 1);
         clase2 = new JComboBox<String>();
         clase2.setEnabled(false);
         for (String[] n : clases) {
             clase2.addItem(n[0]);
         }
-        agregarComponente(modi, clase2, 1, 11, 2, 1);
+        agregarComponente(modi, clase2, 1, 13, 2, 1);
         
-        agregarComponente(modi, new JLabel("Programa de donacion (opcional): "), 0, 12, 1, 1);
+        JLabel i28 = new JLabel("Programa de donación (opcional):");
+        i28.setHorizontalAlignment(SwingConstants.RIGHT);
+        agregarComponente(modi, i28, 0, 14, 1, 1);
         progDona2 = new JComboBox<String>();
         progDona2.setEnabled(false);
         for (String[] n : programasDonacion) {
             progDona2.addItem(n[0]);
         }
-        agregarComponente(modi, progDona2, 1, 12, 2, 1);
+        agregarComponente(modi, progDona2, 1, 14, 2, 1);
         
         JPanel botones = new JPanel();
-        botones.setBackground(Color.WHITE);
+        botones.setBackground(new Color(165, 220, 240));
         botones.setLayout(gbl);
         
         ImageIcon icono3 = new ImageIcon("imagenes/icon save.jpg");
@@ -729,7 +827,7 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         });
         
         agregarBotonIcon(botones, Restor2, 1, 0, 1, 1);
-        agregarComponente(modi, botones, 0, 13, 5, 1);
+        agregarComponente(modi, botones, 0, 15, 5, 1);
         
         
         // CardLayaout de consultar donadores
@@ -742,7 +840,7 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         
         // CardLayaout de consultar todos los Donadores
         
-        consultAll.setBackground(Color.WHITE);
+        consultAll.setBackground(new Color(165, 220, 240)); 
         
         JLabel tituloConsultAll = new JLabel("Consultar todos los Donadores");
         tituloConsultAll.setHorizontalAlignment(SwingConstants.CENTER);
@@ -780,14 +878,15 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         
         //CardLayaout eliminar Donador
         
-        elimini.setBackground(Color.WHITE);
+        elimini.setBackground(new Color(165, 220, 240));
         
         JLabel tituloElimini = new JLabel("Eliminar Donador");
         tituloElimini.setHorizontalAlignment(SwingConstants.CENTER);
         agregarComponente(elimini, tituloElimini, 0, 0, 5, 1);
         
-        
-        agregarComponente(elimini, new JLabel("ID"), 0, 1, 1, 1);
+        JLabel idLabel = new JLabel("ID:");
+        idLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        agregarComponente(elimini, idLabel, 0, 1, 1, 1);
         ID4 = crearCampoIDValidado();
         agregarComponente(elimini, ID4, 1, 1, 1, 1);
         
@@ -831,53 +930,94 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         
         agregarBotonIcon(elimini, buscarElimi, 2, 1, 1, 1);
         
-        agregarComponente(elimini, new JLabel("Colonia: "), 0, 3, 1, 1);
+        JLabel coloniaLabel = new JLabel("Colonia:");
+        coloniaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        agregarComponente(elimini, coloniaLabel, 0, 3, 1, 1);
         colonia4 = new JTextField(10);
-        colonia4.setEnabled(false);
+        colonia4.setOpaque(false);
+        colonia4.setBackground(new Color(0, 0, 0, 0));
+        colonia4.setEditable(false);
         agregarComponente(elimini, colonia4, 1, 3, 2, 1);
         
-        agregarComponente(elimini, new JLabel("Calle: "), 0, 4, 1, 1);
+        JLabel calleLabel = new JLabel("Calle:");
+        calleLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        agregarComponente(elimini, calleLabel, 0, 4, 1, 1);
         calle4 = new JTextField(10);
-        calle4.setEnabled(false);
+        calle4.setOpaque(false);
+        calle4.setBackground(new Color(0, 0, 0, 0));
+        calle4.setEditable(false);
         agregarComponente(elimini, calle4, 1, 4, 2, 1);
-        agregarComponente(elimini, new JLabel("Numero exterior: "), 0, 5, 1, 1);
+        
+        JLabel numExtLabel = new JLabel("Número exterior:");
+        numExtLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        agregarComponente(elimini, numExtLabel, 0, 5, 1, 1);
         numExt4 = new JTextField(10);
-        numExt4.setEnabled(false);
+        numExt4.setOpaque(false);
+        numExt4.setBackground(new Color(0, 0, 0, 0));
+        numExt4.setEditable(false);
         agregarComponente(elimini, numExt4, 1, 5, 2, 1);
         
-        agregarComponente(elimini, new JLabel("Numero interior ('S/N' si no aplica):"), 0, 6, 1, 1);
+        JLabel numIntLabel = new JLabel("Número interior ('S/N' si no aplica):");
+        numIntLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        agregarComponente(elimini, numIntLabel, 0, 6, 1, 1);
         numInt4 = new JTextField(10);
-        numInt4.setEnabled(false);
+        numInt4.setOpaque(false);
+        numInt4.setBackground(new Color(0, 0, 0, 0));
+        numInt4.setEditable(false);
         agregarComponente(elimini, numInt4, 1, 6, 2, 1);
         
-        agregarComponente(elimini, new JLabel("Teléfono de contacto:"), 0, 7, 1, 1);
+        JLabel telefonoLabel = new JLabel("Teléfono de contacto:");
+        telefonoLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        agregarComponente(elimini, telefonoLabel, 0, 7, 1, 1);
         telefono4 = new JFormattedTextField();
-        telefono4.setEnabled(false);
+        telefono4.setOpaque(false);
+        telefono4.setBackground(new Color(0, 0, 0, 0));
+        telefono4.setEditable(false);
         agregarComponente(elimini, telefono4, 1, 7, 2, 1);
         
-        agregarComponente(elimini, new JLabel("Email:"), 0, 8, 1, 1);
+        JLabel emailLabel = new JLabel("Email:");
+        emailLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        agregarComponente(elimini, emailLabel, 0, 8, 1, 1);
         email4 = new JTextField(25);
-        email4.setEnabled(false);
+        email4.setOpaque(false);
+        email4.setBackground(new Color(0, 0, 0, 0));
+        email4.setEditable(false);
         agregarComponente(elimini, email4, 1, 8, 2, 1);
         
-        agregarComponente(elimini, new JLabel("Relacion con la universidad: "), 0, 9, 1, 1);
+        JLabel relacionUniLabel = new JLabel("Relación con la universidad:");
+        relacionUniLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        agregarComponente(elimini, relacionUniLabel, 0, 9, 1, 1);
         RelacionUni4 = new JTextField(10);
-        RelacionUni4.setEnabled(false);
+        RelacionUni4.setOpaque(false);
+        RelacionUni4.setBackground(new Color(0, 0, 0, 0));
+        RelacionUni4.setEditable(false);
         agregarComponente(elimini, RelacionUni4, 1, 9, 2, 1);
         
-        agregarComponente(elimini, new JLabel("Tipo de donador"), 0, 10, 1, 1);
+        JLabel tipoDonadorLabel = new JLabel("Tipo de donador");
+        tipoDonadorLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        agregarComponente(elimini, tipoDonadorLabel, 0, 10, 1, 1);
         tipoDonador4 = new JTextField(10);
-        tipoDonador4.setEnabled(false);
+        tipoDonador4.setOpaque(false);
+        tipoDonador4.setBackground(new Color(0, 0, 0, 0));
+        tipoDonador4.setEditable(false);
         agregarComponente(elimini, tipoDonador4, 1, 10, 2, 1);
         
-        agregarComponente (elimini, new JLabel("Clase: "), 0, 11, 1, 1);
+        JLabel claseLabel = new JLabel("Clase:");
+        claseLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        agregarComponente(elimini, claseLabel, 0, 11, 1, 1);
         clase4 = new JTextField(10);
-        clase4.setEnabled(false);
+        clase4.setOpaque(false);
+        clase4.setBackground(new Color(0, 0, 0, 0));
+        clase4.setEditable(false);
         agregarComponente(elimini, clase4, 1, 11, 2, 1);
         
-        agregarComponente(elimini, new JLabel("Programa de donacion: "), 0, 12, 1, 1);
+        JLabel progDonaLabel = new JLabel("Programa de donación:");
+        progDonaLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        agregarComponente(elimini, progDonaLabel, 0, 12, 1, 1);
         progDona4 = new JTextField(4);
-        progDona4.setEnabled(false);
+        progDona4.setOpaque(false);
+        progDona4.setBackground(new Color(0, 0, 0, 0));
+        progDona4.setEditable(false);
         agregarComponente(elimini, progDona4, 1, 12, 2, 1);
         
         JPanel paneless = new JPanel();
@@ -914,13 +1054,21 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 						DonadorDAO dondao = new DonadorDAO(interfaz);
 						Donador don = dondao.buscarDonadorPorId(id);
 						if (don != null) {
-							dondao.eliminarFila(id);
-							JOptionPane.showMessageDialog(interfaz, 
+							boolean dondo = dondao.eliminarFila(id);
+							if (dondo) {
+								JOptionPane.showMessageDialog(interfaz, 
 					                "Donador con el id "+id+" eliminador con exito", 
 					                "Correcto", 
-					                JOptionPane.ERROR_MESSAGE);
+					                JOptionPane.INFORMATION_MESSAGE);
 							restablecer(ID4, colonia4, calle4, numExt4, numInt4, telefono4, email4, tipoDonador4, RelacionUni4, clase4, progDona4);
-						}else {
+							}else {
+								JOptionPane.showMessageDialog(interfaz, 
+						                "No fue posible eliminar al donador, intenta con otro donador\n"+
+						                "Segimos trabajando para corregir estos errores", 
+						                "Error", 
+						                JOptionPane.ERROR_MESSAGE);
+							}
+							}else {
 							JOptionPane.showMessageDialog(interfaz, 
 					                "No existe ningun donador con ese id", 
 					                "Error", 
@@ -944,7 +1092,23 @@ public class VentanaInicio  extends JFrame implements ActionListener{
         frame.add(panel);
         
 	}
-	
+
+	/*
+	private void configurarComboBoxTransparente(JComboBox<String> combo) {										//Metodo que falto pulir para 
+	    combo.setOpaque(false);																					// funcionar correctamente
+	    combo.setBackground(new Color(0, 0, 0, 0)); // Transparente
+	    combo.setRenderer(new DefaultListCellRenderer() {
+	        @Override
+	        public Component getListCellRendererComponent(JList<?> list, Object value, int index, 
+	                                                     boolean isSelected, boolean cellHasFocus) {
+	            super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+	            setOpaque(isSelected); // Solo opaco cuando está seleccionado
+	            setBackground(isSelected ? new Color(184, 207, 229) : new Color(0, 0, 0, 0));
+	            return this;
+	        }
+	    });
+	}
+	*/
 	public void setResultSet(ResultSet rsd) {
 		if (rsd != null) {
 			try {
@@ -1306,8 +1470,6 @@ public class VentanaInicio  extends JFrame implements ActionListener{
 		    cardLayout.show(opcionesPaneles, "ConsultarOpcion");
 		}
 		else if (e.getSource() == cargaAll) {
-			Donadores.setLocation(100, 100);
-	        Donadores.setSize(750, 500);
 			Donadores.setVisible(true);
 			
 			CardLayout cardLayout = (CardLayout) opcionesPaneles.getLayout();
